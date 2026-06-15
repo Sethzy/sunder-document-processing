@@ -2,10 +2,9 @@
  * Testimonials section with 3-column grid of customer quotes.
  * Mobile: horizontal carousel with active indicators. Desktop: 3-column grid.
  */
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Container } from '@/components/landing/Container'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
-import { useMediaQuery } from '@/hooks/use-media-query'
 
 /** Type for a single testimonial */
 interface Testimonial {
@@ -114,7 +113,7 @@ function DesktopTestimonialCard({ testimonial }: { testimonial: Testimonial }) {
 
   return (
     <li ref={cardRef}>
-      <figure className="relative rounded-2xl bg-white p-6 shadow-sm ring-1 ring-lp-border-warm transition-all hover:shadow-[0_6px_24px_rgba(45,106,79,0.05)]">
+      <figure className="relative rounded-2xl bg-zinc-50 p-6 shadow-sm ring-1 ring-zinc-900/5 transition-all hover:bg-white hover:shadow-xl hover:shadow-zinc-200/50">
         <blockquote className="relative">
           <p className="font-serif text-base tracking-tight text-foreground">
             &ldquo;{testimonial.content}&rdquo;
@@ -155,42 +154,78 @@ const testimonials = [
   [
     {
       content:
-        "I was losing leads because I couldn't follow up fast enough. Now Neo sends personalized follow-ups the moment a lead comes in and reminds me who to call. My conversion rate doubled in the first month.",
+        "Month-end close used to mean three days of matching invoices to POs. Now it's done by the time I get my morning coffee.",
       stats: [
-        { value: '2x', label: 'Conversion Rate' },
-        { value: '0', label: 'Missed Leads' },
-      ],
-      author: {
-        name: 'Rachel Ng',
-        role: 'Senior Associate, PropNex Realty',
-      },
-    },
-  ],
-  [
-    {
-      content:
-        "I used to spend 3 hours a day on paperwork — policy renewals, client updates, follow-up messages. Neo handles all of that now. I'm meeting 40% more clients every week instead of doing admin.",
-      stats: [
-        { value: '40%', label: 'More Client Meetings' },
-        { value: '3', label: 'Hours Saved/Day' },
-      ],
-      author: {
-        name: 'Marcus Loh',
-        role: 'Senior Financial Advisor, AIA',
-      },
-    },
-  ],
-  [
-    {
-      content:
-        "End-of-month used to mean 2 days buried in invoices and receipts. Neo processes everything, matches payments, and sends me a summary. I just review and approve.",
-      stats: [
-        { value: '2', label: 'Days Saved/Month' },
         { value: '90%', label: 'Faster Close' },
+        { value: '0', label: 'Manual Matching' },
+      ],
+      author: {
+        name: 'James Ong',
+        role: 'Controller',
+      },
+    },
+    {
+      content:
+        "Orders come in from emails, PDFs, Excel files—you name it. We used to have two people just re-keying data. Now it's fully automated.",
+      stats: [
+        { value: '2', label: 'FTEs Saved' },
+        { value: '100%', label: 'Real-time Sync' },
+      ],
+      author: {
+        name: 'Rachel Wong',
+        role: 'COO',
+      },
+    },
+  ],
+  [
+    {
+      content:
+        "Booking confirmations, visa documents, itineraries—all arriving in different formats. We used to manually re-key everything. Now it flows straight into our CRM.",
+      stats: [
+        { value: '80%', label: 'Less Data Entry' },
+        { value: '0', label: 'Booking Errors' },
+      ],
+      author: {
+        name: 'Michael Tan',
+        role: 'Travel Agency Director',
+      },
+    },
+    {
+      content:
+        "Progress claims require matching dozens of contractor invoices to project budgets. What took my team a full week now takes an afternoon of review.",
+      stats: [
+        { value: '85%', label: 'Faster Review' },
+        { value: '50+', label: 'Invoices/Claim' },
+      ],
+      author: {
+        name: 'Sarah Chen',
+        role: 'CEO',
+      },
+    },
+  ],
+  [
+    {
+      content:
+        "Invoices arrive from 200+ vendors in every format. We went from manual line-item entry to fully automated reconciliation.",
+      stats: [
+        { value: '200+', label: 'Vendors Automated' },
+        { value: '0', label: 'Manual Entry' },
       ],
       author: {
         name: 'David Lim',
-        role: 'Director, AutoPrime SG (8 employees)',
+        role: 'Head of Finance',
+      },
+    },
+    {
+      content:
+        "Client onboarding meant manually extracting data from contracts and IDs. Now I just drop the folder and review the output.",
+      stats: [
+        { value: '10x', label: 'Faster Onboarding' },
+        { value: '3', label: 'Doc Types/Client' },
+      ],
+      author: {
+        name: 'Linda Ng',
+        role: 'Director',
       },
     },
   ],
@@ -200,7 +235,6 @@ const testimonials = [
 const allTestimonials = testimonials.flat()
 
 export function Testimonials() {
-  const isDesktop = useMediaQuery('(min-width: 1024px)')
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal<HTMLDivElement>()
   const { ref: cardsRef, isVisible: cardsVisible } = useScrollReveal<HTMLDivElement>({
     threshold: 0.05
@@ -210,8 +244,13 @@ export function Testimonials() {
   const [activeIndex, setActiveIndex] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
 
+  // Track which cards have had their stats animated
+  const [animatedCards, setAnimatedCards] = useState<Set<number>>(new Set())
+  const markCardAnimated = useCallback((index: number) => {
+    setAnimatedCards(prev => new Set(prev).add(index))
+  }, [])
+
   useEffect(() => {
-    if (isDesktop) return
     const carousel = carouselRef.current
     if (!carousel) return
 
@@ -224,7 +263,7 @@ export function Testimonials() {
 
     carousel.addEventListener('scroll', handleScroll, { passive: true })
     return () => carousel.removeEventListener('scroll', handleScroll)
-  }, [isDesktop])
+  }, [])
 
   return (
     <section
@@ -238,94 +277,96 @@ export function Testimonials() {
           className={`mx-auto max-w-2xl md:text-center scroll-reveal ${headerVisible ? 'is-visible' : ''}`}
         >
           <h2 className="font-serif text-3xl tracking-tight text-foreground sm:text-5xl">
-            Loved by <span className="italic text-sunder-green">sales teams.</span>
+            What teams say about <span className="italic text-sunder-green">Sunder.</span>
           </h2>
           <p className="mt-6 text-lg tracking-tight text-muted-foreground">
-            Join them, and boost sales and productivity by up to 300%.
+            See how teams are getting their nights and weekends back.
           </p>
         </div>
 
         {/* Mobile carousel */}
-        {!isDesktop ? (
-          <div
-            ref={cardsRef}
-            className={`lg:hidden scroll-reveal ${cardsVisible ? 'is-visible' : ''}`}
-          >
-            <div ref={carouselRef} className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-4 -mx-4 py-4 mt-12">
-              {allTestimonials.map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="snap-center shrink-0 w-[85vw] max-w-sm"
-                >
-                  <figure className="relative rounded-2xl bg-white p-6 shadow-md ring-1 ring-lp-border-warm min-h-[280px] flex flex-col">
-                    <blockquote className="relative flex-1">
-                      <p className="font-serif text-base tracking-tight text-foreground">
-                        &ldquo;{testimonial.content}&rdquo;
-                      </p>
-                    </blockquote>
-                    <div className="mt-4 flex justify-around border-t border-zinc-100 pt-4">
-                      {testimonial.stats.map((stat) => (
-                        <div key={stat.label} className="text-center">
-                          <div className="text-xl font-bold tracking-tight text-foreground">
-                            {stat.value}
-                          </div>
-                          <div className="text-xs font-medium text-muted-foreground">
-                            {stat.label}
-                          </div>
+        <div
+          ref={cardsRef}
+          className={`lg:hidden scroll-reveal ${cardsVisible ? 'is-visible' : ''}`}
+        >
+          <div ref={carouselRef} className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-4 -mx-4 pb-4 mt-16">
+            {allTestimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="snap-center shrink-0 w-[85vw] max-w-sm"
+              >
+                <figure className="relative rounded-2xl bg-gradient-to-br from-white to-zinc-50/80 p-6 shadow-md ring-1 ring-zinc-100 min-h-[280px] flex flex-col">
+                  <blockquote className="relative flex-1">
+                    <p className="font-serif text-base tracking-tight text-foreground">
+                      &ldquo;{testimonial.content}&rdquo;
+                    </p>
+                  </blockquote>
+                  <div className="mt-4 flex justify-around border-t border-zinc-100 pt-4">
+                    {testimonial.stats.map((stat) => (
+                      <div key={stat.label} className="text-center">
+                        <div className="text-xl font-bold tracking-tight text-foreground">
+                          <AnimatedStat
+                            value={stat.value}
+                            isActive={index === activeIndex}
+                            isVisible={cardsVisible}
+                            hasAnimated={animatedCards.has(index)}
+                            onAnimated={() => markCardAnimated(index)}
+                          />
                         </div>
-                      ))}
+                        <div className="text-xs font-medium text-muted-foreground">
+                          {stat.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <figcaption className="mt-4 border-t border-zinc-100 pt-4">
+                    <div className="text-sm font-semibold text-foreground">
+                      {testimonial.author.name}
                     </div>
-                    <figcaption className="mt-4 border-t border-zinc-100 pt-4">
-                      <div className="text-sm font-semibold text-foreground">
-                        {testimonial.author.name}
-                      </div>
-                      <div className="text-xs text-muted-foreground font-medium">
-                        {testimonial.author.role}
-                      </div>
-                    </figcaption>
-                  </figure>
-                </div>
-              ))}
-            </div>
-            {/* Scroll indicators */}
-            <div className="flex justify-center gap-1.5 mt-4">
-              {allTestimonials.map((_, i) => (
-                <div
-                  key={i}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === activeIndex
-                      ? 'w-4 bg-sunder-green'
-                      : 'w-1.5 bg-zinc-300'
-                  }`}
-                />
-              ))}
-            </div>
-            <p className="text-center text-xs text-zinc-400 mt-2">
-              Swipe to see more
-            </p>
+                    <div className="text-xs text-muted-foreground font-medium">
+                      {testimonial.author.role}
+                    </div>
+                  </figcaption>
+                </figure>
+              </div>
+            ))}
           </div>
-        ) : null}
+          {/* Scroll indicators */}
+          <div className="flex justify-center gap-1.5 mt-4">
+            {allTestimonials.map((_, i) => (
+              <div
+                key={i}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === activeIndex
+                    ? 'w-4 bg-sunder-green'
+                    : 'w-1.5 bg-zinc-300'
+                }`}
+              />
+            ))}
+          </div>
+          <p className="text-center text-xs text-zinc-400 mt-2">
+            Swipe to see more
+          </p>
+        </div>
 
         {/* Desktop grid with animated stats */}
-        {isDesktop ? (
-          <ul
-            role="list"
-            className="hidden lg:grid mx-auto mt-16 max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
-          >
-            {testimonials.map((column, colIdx) => (
-              <li key={colIdx}>
-                <ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
-                  {column.map((testimonial) => (
-                    <DesktopTestimonialCard
-                      key={testimonial.author.name}
-                      testimonial={testimonial}
-                    />
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        ) : null}
+        <ul
+          role="list"
+          className="hidden lg:grid mx-auto mt-16 max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
+        >
+          {testimonials.map((column, colIdx) => (
+            <li key={colIdx}>
+              <ul role="list" className="flex flex-col gap-y-6 sm:gap-y-8">
+                {column.map((testimonial) => (
+                  <DesktopTestimonialCard
+                    key={testimonial.author.name}
+                    testimonial={testimonial}
+                  />
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
       </Container>
     </section>
   )

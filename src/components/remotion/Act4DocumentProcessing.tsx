@@ -1,6 +1,6 @@
 /**
  * Act 4: AI Agent Workflow Pipeline — 8 integration logos cycle through 4 visible
- * slots, scroll into the NeoBot processing hub, and produce action cards on the right.
+ * slots, scroll into the Sunder processing hub, and produce action cards on the right.
  */
 import React from 'react'
 import {
@@ -284,7 +284,7 @@ const ActionCard: React.FC<{
   )
 }
 
-/** NeoBot Processing Hub - dark rounded square with 3D isometric N icon */
+/** Sunder Processing Hub - dark rounded square with 3D isometric icon */
 const ProcessingHub: React.FC<{ scale: number; glowIntensity: number }> = ({ scale, glowIntensity }) => {
   const jerkPulse = glowIntensity > 0 ? Math.pow(glowIntensity, 0.5) : 0
   const pulseScale = 1 + jerkPulse * 0.12

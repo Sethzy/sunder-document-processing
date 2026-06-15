@@ -3,50 +3,56 @@
  * Mobile: collapsible accordion. Desktop: 3-column grid.
  */
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Container } from '@/components/landing/Container'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { ChevronDown } from 'lucide-react'
 
 const faqs = [
   {
-    question: 'What is NeoBot?',
+    question: 'What file formats do you support?',
     answer:
-      'An AI assistant that works for you. Tell it what to do, and it does it — follow-ups, scheduling, admin, all of it.',
-  },
-  {
-    question: 'How is this different from ChatGPT?',
-    answer:
-      'ChatGPT answers questions. Neo takes action. It doesn\'t suggest a follow-up — it sends the follow-up.',
-  },
-  {
-    question: 'How long does setup take?',
-    answer:
-      'One click. No technical setup, no integrations to configure. You\'re up and running in minutes.',
-  },
-  {
-    question: 'How do I talk to Neo?',
-    answer:
-      'Just message Neo. In a meeting, on the MRT, wherever — it\'s always available.',
+      'We support PDFs, images (PNG, JPG), scanned documents, and screenshots. Our AI can even process low-quality scans that are hard to read manually.',
   },
   {
     question: 'Is my data secure?',
     answer:
-      'Yes. Dedicated infrastructure, encrypted end-to-end. We never use your data to train models.',
+      'Your data is encrypted at rest and in transit, never used to train models, and you remain the sole data owner.',
   },
   {
-    question: 'What if Neo makes a mistake?',
+    question: 'Can I customize the reports?',
     answer:
-      'It learns. Correct it once and it remembers. After a couple weeks, it rarely gets things wrong.',
+      "We go beyond templates. Tell us what reports you manually create today—AI generates them on demand. Custom date ranges, filters, formats. If you can describe it, we can automate it.",
   },
   {
-    question: 'Can I cancel anytime?',
+    question: 'How accurate is the AI extraction?',
     answer:
-      'Yes. No contracts, no lock-in. Your data is yours.',
+      '99%+ accuracy on standard documents. Every extraction includes a confidence score, and our review interface lets you verify and correct any edge cases before export.',
   },
   {
-    question: 'What\'s the difference between Pro and Enterprise?',
+    question: 'How long does setup take?',
     answer:
-      'Pro gives you full access to Neo 24/7 with all skills. Enterprise adds SSO, audit logs, and dedicated support.',
+      "We handle everything. Our team configures your workflows, trains the AI on your documents, and gets you live—no setup fees, no DIY. Most teams are processing within days.",
+  },
+  {
+    question: 'How do I get started?',
+    answer:
+      "Book a demo with our team. We'll walk through your specific use case and build a custom plan that fits your workflow.",
+  },
+  {
+    question: 'Can I use my existing file storage?',
+    answer:
+      'Yes. We can layer on top of SharePoint, Google Drive, or local folders. No need to migrate your existing document repository.',
+  },
+  {
+    question: 'What types of documents does it support?',
+    answer:
+      'Invoices, receipts, contracts, applications, statements, and more. Our system adapts to any structured document type.',
+  },
+  {
+    question: 'What support is available?',
+    answer:
+      'All plans get priority support with same-day response. Enterprise plans include a dedicated account manager.',
   },
 ]
 
@@ -68,15 +74,19 @@ function FaqAccordion({ faqs }: { faqs: Array<{ question: string; answer: string
               }`}
             />
           </button>
-          <div
-            className={`grid overflow-hidden transition-[grid-template-rows,opacity] duration-200 ease-out ${
-              openIndex === index ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-            }`}
-          >
-            <div className="min-h-0">
-              <p className="pt-3 text-sm text-zinc-600">{faq.answer}</p>
-            </div>
-          </div>
+          <AnimatePresence>
+            {openIndex === index && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <p className="pt-3 text-sm text-zinc-600">{faq.answer}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       ))}
     </div>
@@ -124,7 +134,7 @@ export function Faqs() {
             Frequently asked <span className="italic text-sunder-green">questions.</span>
           </h2>
           <p className="mt-4 text-base leading-7 text-muted-foreground sm:mt-6 sm:text-lg sm:leading-8">
-            Everything you need to know about NeoBot.
+            Everything you need to know about Sunder and how our AI handles your sensitive documents.
           </p>
         </div>
 

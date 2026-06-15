@@ -1,6 +1,6 @@
 /**
  * Demo booking page with Calendly embed.
- * Matching landing page aesthetic with NeoBot branding.
+ * Matching landing page aesthetic with Sunder branding.
  */
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
@@ -12,19 +12,19 @@ export const Route = createFileRoute('/demo')({
   head: () => ({
     meta: [
       {
-        title: "Book a Demo | NeoBot",
+        title: "Book a Demo | Sunder",
       },
       {
         name: "description",
-        content: "See NeoBot in action. Get a personalized walkthrough and see how your AI assistant handles your real workflows.",
+        content: "See Sunder classify, extract, verify, and report on messy claim documents.",
       },
       {
         property: "og:title",
-        content: "Book a Demo | NeoBot",
+        content: "Book a Demo | Sunder",
       },
       {
         property: "og:description",
-        content: "See NeoBot in action. Get a personalized walkthrough and see how your AI assistant handles your real workflows.",
+        content: "See Sunder classify, extract, verify, and report on messy claim documents.",
       },
       {
         property: "og:image",
@@ -81,27 +81,27 @@ function DemoPage() {
             {/* Text Column - Left for better narrative flow */}
             <div className="flex flex-col justify-center order-2 lg:order-1">
               <h1 className="font-serif text-4xl font-medium tracking-tight text-zinc-900 sm:text-5xl">
-                See NeoBot Handle{' '}
-                <span className="text-sunder-green italic">Your Workflows</span>
+                See Sunder Process{' '}
+                <span className="text-sunder-green italic">Your Documents</span>
               </h1>
               <p className="mt-6 text-lg text-zinc-600 leading-relaxed">
-                Get a personalized walkthrough with your real use cases. See how
-                your AI assistant saves you hours every day.
+                Get a personalized walkthrough of the legal claim dossier flow:
+                upload, classify, verify citations, and generate reports.
               </p>
 
               <ul className="mt-10 space-y-8">
                 {[
                   {
-                    title: "See It Work on Your Tasks",
-                    desc: "Watch Neo handle your actual follow-ups, scheduling, and client comms live"
+                    title: "See It Work on Messy Files",
+                    desc: "Watch Sunder organize PDFs, scans, photos, duplicates, and combined documents"
                   },
                   {
-                    title: "Get Your Time Back",
-                    desc: "See exactly how many hours per week you'll reclaim with your specific workflows"
+                    title: "Verify Every Field",
+                    desc: "Inspect extracted values against source citations before anything is exported"
                   },
                   {
-                    title: "One-Click Setup",
-                    desc: "Walk out with a clear plan to get your AI assistant running the same day"
+                    title: "Generate The Dossier",
+                    desc: "Turn reviewed claim data into a downloadable report artifact"
                   }
                 ].map((item, i) => (
                   <li key={i} className="flex gap-4">

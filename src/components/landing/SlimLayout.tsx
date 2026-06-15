@@ -3,10 +3,10 @@
  */
 import { PaperTextureBackground } from '@/components/landing/PaperTextureBackground'
 
-function ChatBubbleIcon() {
+function ShieldIcon() {
   return (
     <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
     </svg>
   )
 }
@@ -19,10 +19,10 @@ function CheckCircleIcon() {
   )
 }
 
-function BoltIcon() {
+function LinkIcon() {
   return (
     <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
     </svg>
   )
 }
@@ -65,21 +65,21 @@ export function SlimLayout({ children }: { children: React.ReactNode }) {
             <div className="flex flex-col gap-6 w-full max-w-md">
               <FeatureItem
                 index={0}
-                icon={<ChatBubbleIcon />}
-                title="Just message. Neo handles it."
-                description="Schedule meetings, send follow-ups, update your CRM — all from one app."
+                icon={<ShieldIcon />}
+                title="Your data stays secure"
+                description="Encrypted at rest and in transit for total privacy."
               />
               <FeatureItem
                 index={1}
                 icon={<CheckCircleIcon />}
-                title="Remembers every conversation"
-                description="Transcripts, action items, client details — nothing slips through the cracks."
+                title="99%+ extraction accuracy"
+                description="AI-powered precision with expert human review."
               />
               <FeatureItem
                 index={2}
-                icon={<BoltIcon />}
-                title="Works while you sleep"
-                description="Morning briefs, proactive follow-ups, and deal alerts — before you even ask."
+                icon={<LinkIcon />}
+                title="Every field cited"
+                description="Verify any value back to its original source."
               />
             </div>
           </div>

@@ -3,6 +3,7 @@
  */
 import { Button } from '@/components/landing/Button'
 import { Container } from '@/components/landing/Container'
+import { PaperTextureBackground } from '@/components/landing/PaperTextureBackground'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 
 export function CallToAction() {
@@ -12,9 +13,8 @@ export function CallToAction() {
     <section
       id="get-started-today"
       className="relative overflow-hidden py-20 sm:py-24 md:py-32"
-      style={{ background: 'radial-gradient(ellipse 160% 140% at 50% 30%, #0A2818 0%, #040F08 100%)' }}
     >
-      <div className="lp-cta-glow absolute inset-0" />
+      <PaperTextureBackground />
 
       <Container className="relative z-10">
         <div
@@ -22,16 +22,16 @@ export function CallToAction() {
           className={`mx-auto max-w-lg text-center scroll-reveal ${isVisible ? 'is-visible' : ''}`}
         >
           <h2 className="font-serif text-2xl tracking-tight text-white sm:text-3xl md:text-4xl">
-            Everything you'd expect from a great <span className="italic">employee.</span>
+            Ready to make the <span className="italic">hire?</span>
           </h2>
-          <p className="mt-4 text-base tracking-tight text-lp-green-muted sm:mt-6 sm:text-lg">
-            Join thousands of professionals who let AI run their work. 7 days free. Set up in 60 seconds. Get 2 hours back every day.
+          <p className="mt-4 text-base tracking-tight text-emerald-100 sm:mt-6 sm:text-lg">
+            Sunder handles the document work. Your team handles the decisions.
           </p>
           <Button
             href="/demo"
-            className="press-effect mt-8 rounded-full bg-[#FAF7F2] px-8 py-3.5 text-sm font-semibold text-sunder-green-dark transition hover:bg-white shadow-xl shadow-black/10 sm:mt-10 sm:px-10 sm:py-4"
+            className="press-effect mt-8 rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-sunder-green transition hover:bg-emerald-50 shadow-xl shadow-sunder-green-dark/20 sm:mt-10 sm:px-10 sm:py-4"
           >
-            Try for free
+            Book a demo
           </Button>
         </div>
       </Container>

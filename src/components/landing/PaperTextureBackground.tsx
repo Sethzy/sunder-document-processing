@@ -6,9 +6,9 @@ import { PaperTexture } from '@paper-design/shaders-react'
 export function PaperTextureBackground() {
   return (
     <PaperTexture
-      style={{ position: 'absolute', inset: 0, backgroundColor: '#1B4332' }}
-      colorBack="#0D261C"
-      colorFront="#1B4332"
+      style={{ position: 'absolute', inset: 0, backgroundColor: '#107066' }}
+      colorBack="#0c4a44"
+      colorFront="#3a8a7e"
       contrast={0.78}
       roughness={0.3}
       fiber={0.11}

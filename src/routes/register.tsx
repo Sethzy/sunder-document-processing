@@ -15,11 +15,11 @@ export const Route = createFileRoute("/register")({
   head: () => ({
     meta: [
       {
-        title: "Sign Up | NeoBot",
+        title: "Sign Up | Sunder",
       },
       {
         name: "description",
-        content: "Create your free NeoBot account and start automating your document processing workflows today.",
+        content: "Create your Sunder account and start automating document review workflows today.",
       },
       {
         name: "robots",

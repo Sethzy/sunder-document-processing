@@ -1,53 +1,32 @@
 /**
- * Logo component — NeoBot branding.
- * 3D isometric "N" - Geometrically Perfect V3.
- * Corrected projection vector (+5, -3) for standard 31° isometric angle.
- * B&W Attio-inspired theme.
+ * Logo component - Sunder branding.
+ * Icon + wordmark using DM Sans for a bold, geometric feel.
  */
 export function Logo({
   className,
-  iconClassName,
-  invert = false,
+  iconClassName = 'text-sunder-green',
   ...props
-}: React.ComponentPropsWithoutRef<'div'> & {
-  iconClassName?: string
-  invert?: boolean
-}) {
-  const containerFill = '#2B2B2B'
-
+}: React.ComponentPropsWithoutRef<'div'> & { iconClassName?: string }) {
   return (
     <div className={`flex items-center gap-2.5 ${className ?? ''}`} {...props}>
-      {/* NeoBot 3D Isometric Icon Mark - V3 Perfect Geometry */}
+      {/* Icon */}
       <svg
         aria-hidden="true"
-        viewBox="0 0 80 80"
+        viewBox="0 0 18 15"
         fill="none"
-        className={`h-8 w-8 ${iconClassName ?? ''}`}
+        className={`h-5 w-auto ${iconClassName}`}
       >
-        <rect x="2" y="2" width="76" height="76" rx="16" fill={containerFill} />
-
-        {/* Diagonal Bar (Back Layer) */}
-        <polygon points="15.5,20 26.5,20 59.5,64 48.5,64" fill="white" />
-        <polygon points="26.5,20 31.5,17 64.5,61 59.5,64" fill="#c8c8c8" />
-
-        {/* Left Vertical Bar (Top) */}
-        <polygon points="26.5,20 31.5,17 31.5,61 26.5,64" fill="#c8c8c8" />
-        <polygon points="15.5,20 26.5,20 26.5,64 15.5,64" fill="white" />
-        <polygon points="15.5,20 26.5,20 31.5,17 20.5,17" fill="#e8e8e8" />
-
-        {/* Right Vertical Bar (Bottom) */}
-        <polygon points="59.5,20 64.5,17 64.5,61 59.5,64" fill="#c8c8c8" />
-        <polygon points="48.5,20 59.5,20 59.5,64 48.5,64" fill="white" />
-        <polygon points="48.5,20 59.5,20 64.5,17 53.5,17" fill="#e8e8e8" />
-
-
+        <path
+          d="M0.593 5.206L3.03 14.714c.041.143.227.256.465.281.237.025.475-.044.588-.175l2.623-2.982L0.593 5.206zm10.75 5.329L.221 3.758l8.251 8.952c.093.113.289.181.496.181.206 0 .402-.068.496-.181l1.879-2.175zM17.938 2.894L9.748.131c-.506-.175-1.126-.175-1.632 0L0 2.894l14.664 8.94c.145.087.372.125.568.081.196-.037.351-.144.382-.269l2.324-8.752z"
+          fill="currentColor"
+        />
       </svg>
       {/* Wordmark */}
       <span
         className="text-[19px] tracking-[-0.02em]"
-        style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800 }}
+        style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700 }}
       >
-        neobot
+        Sunder
       </span>
     </div>
   )

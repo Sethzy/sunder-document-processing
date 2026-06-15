@@ -1,78 +1,87 @@
 /**
  * Hero section with headline, CTA button, and promo video.
  */
+import { useState, useEffect, useMemo } from 'react'
 import { Link } from '@tanstack/react-router'
+import { motion } from 'framer-motion'
 import { Container } from '@/components/landing/Container'
 import { PromoVideo } from '@/components/landing/PromoVideo'
 
 export function Hero() {
+  const [taskIndex, setTaskIndex] = useState(0)
+  const tasks = useMemo(
+    () => ['processing invoices', 'extracting data', 'excel reconciliation', 'organising pdfs'],
+    []
+  )
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setTaskIndex((prev) => (prev + 1) % tasks.length)
+    }, 2000)
+    return () => clearTimeout(timeout)
+  }, [taskIndex, tasks])
+
   return (
-    <div
-      className="relative overflow-hidden pt-28 pb-0 sm:pt-36 bg-[#FAF7F2]"
-    >
-      {/* Watercolor cloud texture — masked Unsplash image (same technique as Tailark) */}
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[680px] opacity-[0.82]"
-        style={{
-          maskImage: 'radial-gradient(ellipse 100% 70% at 50% 25%, black 20%, rgba(0,0,0,0.5) 38%, transparent 58%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 100% 70% at 50% 25%, black 20%, rgba(0,0,0,0.5) 38%, transparent 58%)',
-          background: 'radial-gradient(ellipse 80% 50% at 50% 18%, rgba(210, 202, 186, 0.5), rgba(250, 247, 242, 0.35) 60%, transparent 100%)',
-        }}
-      >
-        <img
-          src="/exports/hero-watercolor.webp"
-          alt=""
-          aria-hidden="true"
-          loading="eager"
-          decoding="sync"
-          fetchPriority="high"
-          className="size-full object-cover object-top"
-        />
-      </div>
+    <div className="relative overflow-hidden bg-background pt-28 pb-0 sm:pt-36">
+      <div className="grid-pattern absolute inset-0 opacity-50" />
+      <div className="glow-accent absolute -top-24 -left-20 h-[500px] w-[500px]" />
+      <div className="glow-accent absolute top-1/2 -right-20 h-[600px] w-[600px] opacity-40" />
 
       <Container className="relative">
         <div className="flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2.5 rounded-full bg-white/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-[#2A1F17] ring-1 ring-black/[0.14] mb-5 sm:px-6 sm:py-2 sm:text-sm">
+          <div className="inline-flex items-center gap-2 rounded-full border border-sunder-green/10 bg-sunder-green/5 px-4 py-1.5 text-sm font-medium text-sunder-green mb-8 transition-colors hover:bg-sunder-green/10 sm:px-5 sm:text-base">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sunder-green opacity-75"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sunder-green-light opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-sunder-green"></span>
             </span>
-            The cheat code for B2C sales
+            Made for Singapore SMEs
           </div>
 
-          {/* Headline with soft green glow behind it */}
-          <div className="relative">
-            <div
-              className="pointer-events-none absolute inset-0 -z-10"
-              style={{
-                background: 'radial-gradient(ellipse 600px 250px at 50% 50%, rgba(45, 106, 79, 0.07), transparent)',
-                filter: 'blur(40px)',
-              }}
-            />
-            <h1 className="font-serif text-[9.5vw] font-semibold leading-[1.15] tracking-[-0.035em] text-[#2A1F17] sm:text-5xl md:text-[3.5rem] lg:text-6xl">
-              <span className="sm:hidden">Acts before you ask.<br /></span>
-              <span className="hidden sm:inline">Your AI rep acts before you ask.{' '}</span>
-              <br className="hidden sm:inline" />
-              <em className="text-sunder-green">Work already done.</em>
-            </h1>
-          </div>
+          <h1 className="max-w-5xl font-serif text-5xl font-medium tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-8xl">
+            Your assistant for
+            <span className="relative flex w-[120%] -ml-[10%] justify-center overflow-y-hidden text-center pt-1 pb-2 md:pt-2 md:pb-4">
+                &nbsp;
+                {tasks.map((task, index) => (
+                  <motion.span
+                    key={index}
+                    className="absolute italic text-sunder-green whitespace-nowrap"
+                    initial={{ opacity: 0, y: "-100" }}
+                    transition={{ type: "spring", stiffness: 50 }}
+                    animate={
+                      taskIndex === index
+                        ? {
+                            y: 0,
+                            opacity: 1,
+                          }
+                        : {
+                            y: taskIndex > index ? -150 : 150,
+                            opacity: 0,
+                          }
+                    }
+                  >
+                    {task}
+                  </motion.span>
+                ))}
+              </span>
+          </h1>
 
-          <p className="mt-6 max-w-xl text-base leading-7 text-[#6B5E54] px-2 sm:mt-6 sm:max-w-2xl sm:text-lg sm:leading-8 sm:px-0">
-            Runs your pipeline while you sleep. Review, approve, done.
+          <p className="mt-6 max-w-xl text-base leading-7 text-muted-foreground px-2 sm:mt-6 sm:max-w-2xl sm:text-lg sm:leading-8 sm:px-0">
+            Upload your documents. Invoices, receipts, contracts, anything.{' '}
+            <br className="hidden sm:inline" />
+            Come back to an organized Excel report. No prompts needed.
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-4 sm:mt-10">
             <Link
               to="/demo"
-              className="press-effect rounded-full bg-sunder-green px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-sunder-green/25 transition hover:shadow-sunder-green/35 hover:scale-[1.02] active:scale-[0.98] sm:px-10 sm:py-4 sm:text-base"
+              className="press-effect rounded-full bg-sunder-green px-10 py-4 text-base font-semibold text-white shadow-lg shadow-sunder-green/20 transition hover:shadow-sunder-green/30 hover:scale-[1.02] active:scale-[0.98]"
             >
-              Try for free
+              Book a demo
             </Link>
           </div>
-          <p className="mt-4 text-sm text-[#9C8E82]">No setup headaches &bull; AI assistants running 24/7</p>
 
-          {/* Promo video - scales with hero width */}
-          <div className="mt-16 w-full pb-16 sm:mt-20 sm:pb-24 lg:mt-24">
+          {/* Promo video - peeks at the fold */}
+          <div className="mt-16 w-full px-2 pb-16 sm:px-4 sm:mt-20 sm:pb-24 lg:mt-24">
             <PromoVideo />
           </div>
         </div>

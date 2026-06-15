@@ -90,7 +90,7 @@
 @theme inline {
   --font-sans: 'Geist', system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
-  /* Sunder green palette (NeoBot Green) */
+  /* Sunder green palette */
   --color-sunder-green: #2D6A4F;
   --color-sunder-green-light: #40916C;
   --color-sunder-green-dark: #1B4332;

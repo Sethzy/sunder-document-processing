@@ -7,49 +7,16 @@ import { Play } from 'lucide-react'
 
 export function PromoVideo() {
   const [hasInteracted, setHasInteracted] = useState(false)
-  const [isInView, setIsInView] = useState(false)
-  const [canAutoplay] = useState(() => {
-    if (typeof window === 'undefined') return true
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const connection = (navigator as Navigator & {
-      connection?: { saveData?: boolean }
-    }).connection
-    return !prefersReducedMotion && !connection?.saveData
-  })
   const videoRef = useRef<HTMLVideoElement>(null)
 
-  // Only play while the video is near the viewport.
+  // Attempt autoplay on mount
   useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInView(entry.isIntersecting)
-      },
-      { threshold: 0.4, rootMargin: '120px 0px 120px 0px' }
-    )
-
-    observer.observe(video)
-    return () => observer.disconnect()
-  }, [])
-
-  // Attempt autoplay only when visible and allowed.
-  useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
-
-    if (!isInView) {
-      video.pause()
-      return
-    }
-
-    if (!hasInteracted && canAutoplay) {
-      video.play().catch(() => {
-        // Autoplay blocked - user can start via overlay button.
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // Autoplay blocked - user will need to click
       })
     }
-  }, [canAutoplay, hasInteracted, isInView])
+  }, [])
 
   const handleUnmute = () => {
     if (videoRef.current) {
@@ -61,7 +28,7 @@ export function PromoVideo() {
   }
 
   const handleVideoEnd = () => {
-    if (videoRef.current && !hasInteracted && canAutoplay && isInView) {
+    if (videoRef.current && !hasInteracted) {
       // Loop silently if user hasn't interacted
       videoRef.current.currentTime = 0
       videoRef.current.play()
@@ -69,18 +36,18 @@ export function PromoVideo() {
   }
 
   return (
-    <div className="relative mx-auto w-full overflow-hidden rounded-2xl shadow-xl shadow-black/15">
+    <div className="relative mx-auto max-w-5xl overflow-hidden rounded-2xl shadow-2xl shadow-black/20">
       <video
         ref={videoRef}
         className="w-full aspect-video bg-zinc-100"
         poster="/exports/sunder-poster.jpg"
-        preload="metadata"
+        preload="auto"
         playsInline
         muted
         onEnded={handleVideoEnd}
         controls={hasInteracted}
       >
-        <source src="/exports/neobot-demo-1080p.mp4" type="video/mp4" />
+        <source src="/exports/final-sunder-demo-1080p.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 

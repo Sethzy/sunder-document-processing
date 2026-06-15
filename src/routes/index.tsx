@@ -6,9 +6,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Header } from '@/components/landing/Header'
 import { Hero } from '@/components/landing/Hero'
 import { PrimaryFeatures } from '@/components/landing/PrimaryFeatures'
-import { UseCases } from '@/components/landing/UseCases'
 import { SecondaryFeatures } from '@/components/landing/SecondaryFeatures'
-import { Differentiator } from '@/components/landing/Differentiator'
 import { ProductShowcase } from '@/components/landing/ProductShowcase'
 import { CallToAction } from '@/components/landing/CallToAction'
 import { Testimonials } from '@/components/landing/Testimonials'
@@ -20,27 +18,27 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "NeoBot - WhatsApp Your AI Assistant. Get Answers. Get Things Done.",
+        title: "Sunder - AI Document Processing for Singapore SMEs",
       },
       {
         name: "description",
-        content: "NeoBot gives you back two hours every day by handling your inbox, meetings, and calendar — so you can focus on the work that moves the needle.",
+        content: "Sunder: Upload your documents. Invoices, receipts, contracts, anything. Come back to an organized Excel report.",
       },
       {
         property: "og:title",
-        content: "NeoBot - WhatsApp Your AI Assistant. Get Answers. Get Things Done.",
+        content: "Sunder - AI Document Processing for Singapore SMEs",
       },
       {
         property: "og:description",
-        content: "NeoBot gives you back two hours every day by handling your inbox, meetings, and calendar — so you can focus on the work that moves the needle.",
+        content: "Sunder: Upload your documents. Invoices, receipts, contracts, anything. Come back to an organized Excel report.",
       },
       {
         property: "og:image",
-        content: "https://www.neobot.com/exports/og-image.png",
+        content: "https://www.trysunder.com/exports/og-image.png",
       },
       {
         property: "og:url",
-        content: "https://www.neobot.com/",
+        content: "https://www.trysunder.com/",
       },
       {
         property: "og:type",
@@ -52,21 +50,21 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "twitter:title",
-        content: "NeoBot - WhatsApp Your AI Assistant. Get Answers. Get Things Done.",
+        content: "Sunder - AI Document Processing for Singapore SMEs",
       },
       {
         property: "twitter:description",
-        content: "NeoBot gives you back two hours every day by handling your inbox, meetings, and calendar — so you can focus on the work that moves the needle.",
+        content: "Sunder: Upload your documents. Invoices, receipts, contracts, anything. Come back to an organized Excel report.",
       },
       {
         property: "twitter:image",
-        content: "https://www.neobot.com/exports/og-image.png",
+        content: "https://www.trysunder.com/exports/og-image.png",
       },
     ],
     links: [
       {
         rel: "canonical",
-        href: "https://www.neobot.com/",
+        href: "https://www.trysunder.com/",
       },
     ],
   }),
@@ -79,33 +77,13 @@ function LandingPage() {
       <Header />
       <main>
         <Hero />
-        <div className="lp-deferred-section">
-          <UseCases />
-        </div>
-        <div className="lp-deferred-section">
-          <PrimaryFeatures />
-        </div>
-        <div className="lp-deferred-section">
-          <SecondaryFeatures />
-        </div>
-        <div className="lp-deferred-section">
-          <ProductShowcase />
-        </div>
-        <div className="lp-deferred-section">
-          <Differentiator />
-        </div>
-        <div className="lp-deferred-section">
-          <CallToAction />
-        </div>
-        <div className="lp-deferred-section">
-          <Testimonials />
-        </div>
-        <div className="lp-deferred-section">
-          <Pricing />
-        </div>
-        <div className="lp-deferred-section">
-          <Faqs />
-        </div>
+        <PrimaryFeatures />
+        <SecondaryFeatures />
+        <ProductShowcase />
+        <CallToAction />
+        <Testimonials />
+        <Pricing />
+        <Faqs />
       </main>
       <Footer />
     </div>

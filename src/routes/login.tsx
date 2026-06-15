@@ -26,11 +26,11 @@ export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
       {
-        title: "Sign In | NeoBot",
+        title: "Sign In | Sunder",
       },
       {
         name: "description",
-        content: "Sign in to your NeoBot account to access your document processing workspace.",
+        content: "Sign in to your Sunder account to access your document processing workspace.",
       },
       {
         name: "robots",
