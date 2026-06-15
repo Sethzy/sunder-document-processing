@@ -53,6 +53,18 @@ Rules and validation - surface missing fields, payer classifications, and review
 
 Report generation - produce downstream claim/report artifacts from reviewed case data.
 
+## System Shape
+
+Sunder is easiest to understand as a five-stage evidence pipeline:
+
+1. **Ingest** - a case workspace collects source documents, stores files, records metadata, and checks duplicate hashes.
+2. **Triage** - Gemini classifies files, describes them for reviewers, and splits combined PDFs into logical document sections.
+3. **Extract** - typed document sections are routed to extraction processors for structured fields, citations, confidence metadata, and dashboard traces.
+4. **Review** - humans inspect fields beside the source documents, edit values, dismiss validation issues, and mark work as reviewed.
+5. **Generate** - reviewed case data becomes report artifacts and exportable work product.
+
+The important boundary is intentional: Sunder prepares review packs and first-draft operational artifacts. It does not replace legal judgment, decide liability, or treat AI output as final without human review.
+
 ## Demo Flow
 
 The current walkthrough uses a private seeded legal claim case:
@@ -70,17 +82,19 @@ See [DEMO.md](./DEMO.md) for the recording runbook.
 
 ```mermaid
 flowchart LR
-  Browser["React + Vite app"] --> SupabaseAuth["Supabase Auth"]
-  Browser --> SupabaseDB["Supabase Postgres"]
-  Browser --> SupabaseStorage["Supabase Storage"]
-  Browser --> VercelFunctions["Vercel Functions"]
-  VercelFunctions --> Gemini["Gemini triage"]
-  VercelFunctions --> ExtendAI["Extend AI extraction"]
-  VercelFunctions --> SupabaseDB
-  VercelFunctions --> SupabaseStorage
+  Case["Claim case"] --> Upload["Upload + duplicate check"]
+  Upload --> Storage["Supabase Storage"]
+  Upload --> DB["Supabase Postgres"]
+  Upload --> Process["Vercel processing function"]
+  Process --> Gemini["Gemini classify + split"]
+  Process --> Extend["Extend AI extract + cite"]
+  Gemini --> DB
+  Extend --> DB
+  DB --> Review["Citation-backed review UI"]
+  Review --> Reports["Report artifacts"]
 ```
 
-The frontend is a React and TanStack workspace backed by Supabase. Vercel Functions coordinate document triage and extraction. Gemini handles classification/splitting work, Extend AI handles structured extraction and citations, and Supabase stores case records, source files, status, and generated artifacts.
+The frontend is a React and TanStack workspace backed by Supabase. Vercel Functions coordinate document triage and extraction. Gemini handles classification and splitting, Extend AI handles structured extraction and citations, and Supabase stores case records, source files, split state, validation state, reviewer edits, and generated artifacts.
 
 ## Stack
 
