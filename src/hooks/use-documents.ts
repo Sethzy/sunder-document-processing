@@ -158,6 +158,9 @@ export function useCreateDocument() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: documentKeys.list(data.case_id) });
+      queryClient.invalidateQueries({
+        queryKey: documentKeys.listWithStatus(data.case_id),
+      });
     },
   });
 }
@@ -199,6 +202,9 @@ export function useDeleteDocument() {
     },
     onSuccess: ({ caseId }) => {
       queryClient.invalidateQueries({ queryKey: documentKeys.list(caseId) });
+      queryClient.invalidateQueries({
+        queryKey: documentKeys.listWithStatus(caseId),
+      });
     },
   });
 }

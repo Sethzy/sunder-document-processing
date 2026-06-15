@@ -7,6 +7,7 @@ import { useState } from "react";
 import { X, Check, Loader2, AlertCircle, ChevronUp, ChevronDown, Download, FileSpreadsheet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { FileThumbnail } from "./file-thumbnail";
 import { cn } from "@/lib/utils";
 import type { QueueItem, ReportTask } from "@/contexts/upload-context";
 
@@ -55,11 +56,20 @@ export function UploadProgressPanel({
         ? "Ready"
         : "Complete";
 
+  const subStatusText = isReportGenerating
+    ? "Preparing report artifact"
+    : isUploading
+      ? "Uploading and queuing AI processing"
+      : failedCount > 0
+        ? `${failedCount} item${failedCount !== 1 ? "s" : ""} need review`
+        : "Ready for classification review";
+
   return (
-    <div className="fixed bottom-4 right-4 w-64 bg-background border border-border/40 rounded-xl shadow-sm z-50 overflow-hidden">
+    <div className="fixed bottom-4 right-4 w-80 bg-background border border-border/40 rounded-xl shadow-lg shadow-black/10 z-50 overflow-hidden">
       {/* Header - compact with integrated progress */}
-      <div className="flex items-center justify-between px-3 py-2">
-        <div className="flex items-center gap-1.5">
+      <div className="flex items-center justify-between px-3 py-2.5">
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5">
           {isBusy ? (
             <Loader2 className="h-3 w-3 animate-spin text-muted-foreground/70" />
           ) : (
@@ -71,6 +81,10 @@ export function UploadProgressPanel({
               {completedCount}/{totalCount}
             </span>
           )}
+          </div>
+          <p className="mt-0.5 truncate text-[11px] text-muted-foreground/70">
+            {subStatusText}
+          </p>
         </div>
         <div className="flex items-center">
           <Button
@@ -114,36 +128,54 @@ export function UploadProgressPanel({
 
       {/* Content */}
       {!isCollapsed && (
-        <div className="px-3 py-2 pt-1.5 max-h-32 overflow-y-auto border-t border-border/20">
+        <div className="px-3 py-2 pt-1.5 max-h-48 overflow-y-auto border-t border-border/20">
           <div className="space-y-1">
             {/* Upload queue items */}
             {queue.map((item) => (
-              <div key={item.id} className="flex items-center gap-1.5">
-                {item.status === "complete" && (
-                  <Check className="h-3 w-3 text-emerald-500 shrink-0" />
-                )}
-                {item.status === "uploading" && (
-                  <Loader2 className="h-3 w-3 animate-spin text-muted-foreground/70 shrink-0" />
-                )}
-                {item.status === "pending" && (
-                  <div className="h-2.5 w-2.5 rounded-full border border-muted-foreground/20 shrink-0" />
-                )}
-                {item.status === "failed" && (
-                  <AlertCircle className="h-3 w-3 text-destructive shrink-0" />
-                )}
-                <span className="text-xs text-foreground/70 truncate">{item.file.name}</span>
-                {item.status === "failed" && item.error && (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="text-xs text-destructive/80 shrink-0 cursor-help">
-                        {item.error.includes("already exists") ? "Duplicate" : "Failed"}
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      {item.error}
-                    </TooltipContent>
-                  </Tooltip>
-                )}
+              <div
+                key={item.id}
+                className="flex items-center gap-2 rounded-md px-1.5 py-1"
+              >
+                <FileThumbnail
+                  filename={item.file.name}
+                  fileType={item.file.type}
+                  size="sm"
+                />
+                <div className="min-w-0 flex-1">
+                  <span className="block truncate text-xs font-medium text-foreground/75">
+                    {item.file.name}
+                  </span>
+                  <span className="block truncate text-[11px] text-muted-foreground/70">
+                    {item.status === "pending" && "Queued for upload"}
+                    {item.status === "uploading" && "Uploading to secure storage"}
+                    {item.status === "complete" && "Queued for AI processing"}
+                    {item.status === "failed" && (item.error ?? "Upload failed")}
+                  </span>
+                </div>
+                <div className="shrink-0">
+                  {item.status === "complete" && (
+                    <Check className="h-3.5 w-3.5 text-emerald-500" />
+                  )}
+                  {item.status === "uploading" && (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground/70" />
+                  )}
+                  {item.status === "pending" && (
+                    <div className="h-2.5 w-2.5 rounded-full border border-muted-foreground/30" />
+                  )}
+                  {item.status === "failed" && item.error && (
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs text-destructive/80">Failed</span>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <AlertCircle className="h-3.5 w-3.5 cursor-help text-destructive" />
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                          {item.error}
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
 

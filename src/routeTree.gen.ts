@@ -170,9 +170,9 @@ export interface FileRoutesByFullPath {
   '/cases/$caseId': typeof CasesCaseIdRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
-  '/cases': typeof CasesIndexRoute
-  '/industries': typeof IndustriesIndexRoute
-  '/use-cases': typeof UseCasesIndexRoute
+  '/cases/': typeof CasesIndexRoute
+  '/industries/': typeof IndustriesIndexRoute
+  '/use-cases/': typeof UseCasesIndexRoute
   '/cases/$caseId/documents/$docId': typeof CasesCaseIdDocumentsDocIdRoute
 }
 export interface FileRoutesByTo {
@@ -248,9 +248,9 @@ export interface FileRouteTypes {
     | '/cases/$caseId'
     | '/industries/$slug'
     | '/use-cases/$slug'
-    | '/cases'
-    | '/industries'
-    | '/use-cases'
+    | '/cases/'
+    | '/industries/'
+    | '/use-cases/'
     | '/cases/$caseId/documents/$docId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -440,21 +440,21 @@ declare module '@tanstack/react-router' {
     '/use-cases/': {
       id: '/use-cases/'
       path: '/use-cases'
-      fullPath: '/use-cases'
+      fullPath: '/use-cases/'
       preLoaderRoute: typeof UseCasesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/industries/': {
       id: '/industries/'
       path: '/industries'
-      fullPath: '/industries'
+      fullPath: '/industries/'
       preLoaderRoute: typeof IndustriesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cases/': {
       id: '/cases/'
       path: '/cases'
-      fullPath: '/cases'
+      fullPath: '/cases/'
       preLoaderRoute: typeof CasesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }

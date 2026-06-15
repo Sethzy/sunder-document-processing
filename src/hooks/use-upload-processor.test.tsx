@@ -133,7 +133,9 @@ describe("useUploadProcessor", () => {
 
     await waitFor(() => {
       expect(result.current.queue[0].status).toBe("failed");
-      expect(result.current.queue[0].error).toContain("Invalid file type");
+      expect(result.current.queue[0].error).toMatch(
+        /Unsupported file type|Invalid file type/
+      );
     });
   });
 
@@ -250,7 +252,9 @@ describe("triggerGeminiProcessing", () => {
       json: async () => ({ success: true }),
     } as Response);
 
-    await triggerGeminiProcessing("doc-123", "access-token-xyz");
+    await triggerGeminiProcessing("doc-123", "access-token-xyz", {
+      isEnabled: true,
+    });
 
     expect(fetch).toHaveBeenCalledWith("/api/gemini/process", {
       method: "POST",
@@ -267,7 +271,13 @@ describe("triggerGeminiProcessing", () => {
 
     // Should not throw
     await expect(
-      triggerGeminiProcessing("doc-123", "token")
+      triggerGeminiProcessing("doc-123", "token", { isEnabled: true })
     ).resolves.toBeUndefined();
+  });
+
+  it("skips processing when disabled", async () => {
+    await triggerGeminiProcessing("doc-123", "token", { isEnabled: false });
+
+    expect(fetch).not.toHaveBeenCalled();
   });
 });

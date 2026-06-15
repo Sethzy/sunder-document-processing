@@ -2,7 +2,7 @@
  * @file Single extraction field display with optional editing
  * @description Shows field value with confidence badge, reasoning, citations, and hover support
  */
-import { Lightbulb, X } from "lucide-react";
+import { Lightbulb, LocateFixed, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -152,6 +152,12 @@ export function ExtractionField({
 
       {/* Status badges + OCR confidence */}
       <div className="flex items-center gap-2 mt-3">
+        {citations.length > 0 && (
+          <Badge variant="outline" className="gap-1 text-[10px] transition-none">
+            <LocateFixed className="h-3 w-3" />
+            Source linked
+          </Badge>
+        )}
         {showNotFound && <Badge variant="warning" className="text-[10px] transition-none">Not found</Badge>}
         {showLowConfidence && <Badge variant="warning" className="text-[10px] transition-none">Low confidence</Badge>}
         {showCorrected && <Badge variant="success" className="text-[10px] transition-none">Corrected</Badge>}
@@ -298,7 +304,8 @@ export function ExtractionField({
       {/* Citations section */}
       {citationTexts.length > 0 && (
         <div className="mt-3 p-3 bg-white rounded-lg border border-border/40">
-          <Badge className="text-[10px] mb-2 bg-[#F9FAFB] text-muted-foreground border-0 hover:bg-[#F9FAFB]">
+          <Badge className="text-[10px] mb-2 gap-1 bg-[#F9FAFB] text-muted-foreground border-0 hover:bg-[#F9FAFB]">
+            <LocateFixed className="h-3 w-3" />
             Citations
           </Badge>
           <div className="px-3 py-2 bg-[#F9FAFB] rounded-md space-y-1">

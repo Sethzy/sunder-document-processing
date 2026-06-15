@@ -213,10 +213,10 @@ export function CaseHeader({
 
   // Read mode - slim single row
   return (
-    <div className="flex items-center justify-between py-1">
+    <div className="flex flex-col gap-3 py-1 sm:flex-row sm:items-center sm:justify-between">
       {/* Title + edit button */}
-      <div className="flex items-center gap-3">
-        <h1 className="text-2xl font-bold text-foreground tracking-tight">{caseData.case_name}</h1>
+      <div className="flex min-w-0 items-start gap-2 sm:items-center sm:gap-3">
+        <h1 className="min-w-0 text-2xl font-bold tracking-tight text-foreground">{caseData.case_name}</h1>
         <Button
           variant="ghost"
           size="icon-sm"
@@ -229,7 +229,7 @@ export function CaseHeader({
       </div>
 
       {/* Right side: CREATED + REVIEWED */}
-      <div className="flex items-center gap-8">
+      <div className="flex w-full items-center justify-between gap-4 sm:w-auto sm:justify-end sm:gap-8">
         <div className="flex flex-col items-end gap-0.5">
           <span className="uppercase tracking-[0.15em] text-[9px] font-bold text-muted-foreground/50 leading-none">Created</span>
           <span className="text-[12px] font-semibold text-foreground/70 tabular-nums">

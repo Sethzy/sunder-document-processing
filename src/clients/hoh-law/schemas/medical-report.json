@@ -1,6 +1,8 @@
 {
   "_meta": {
-    "pulledAt": "2026-01-02T09:15:00.000Z"
+    "pulledAt": "2026-01-02T09:15:00.000Z",
+    "patchedForDemoAt": "2026-06-15",
+    "note": "Demo-safe medical report schema aligned with the Hoh Law intake brief and app validation fields."
   },
   "id": "dpv_jMfeYKRXvfyCnNiJDMHZu",
   "version": "1.4",
@@ -24,119 +26,89 @@
     "schema": {
       "type": "object",
       "required": [
+        "patient_name",
+        "diagnosis",
+        "doctor_name",
+        "facility_name",
+        "report_date",
+        "type_of_injury",
         "summary_findings",
         "anatomical_findings",
-        "type of injury",
-        "patient name",
-        "list of all company names mentioned",
-        "list of all numbers with a decimal",
-        "exam test scores",
-        "high school test scores",
-        "list of all numbers with without a  decimal",
-        "list of all injuries mentioned"
+        "medical_leave_days",
+        "recommendations"
       ],
       "properties": {
-        "patient name": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "what is the patient name"
+        "patient_name": {
+          "type": ["string", "null"],
+          "description": "The full name of the patient who received medical services or examination. Found in the patient information section, typically near the top of the report. May be labeled as 'Patient', 'Patient Name', 'Name', 'Client Name', or appear in a demographic information block."
         },
-        "type of injury": {
-          "enum": [
-            "leg",
-            "hand",
-            "others",
-            null
-          ],
-          "description": "where the injury affects the body part",
+        "diagnosis": {
+          "type": ["string", "null"],
+          "description": "The primary medical finding, condition, or diagnosis documented in the report. This is the main clinical conclusion. Found in the body of the report, often in a section labeled 'Diagnosis', 'Impression', 'Clinical Diagnosis', 'Assessment', or 'Conclusion'."
+        },
+        "doctor_name": {
+          "type": ["string", "null"],
+          "description": "The name of the doctor, physician, specialist, or medical professional who authored, signed, or issued the report. Usually appears near the signature block, letterhead, or report footer."
+        },
+        "facility_name": {
+          "type": ["string", "null"],
+          "description": "The hospital, clinic, imaging center, or healthcare facility that issued the report. May appear in the letterhead, logo, address block, or report footer."
+        },
+        "report_date": {
+          "type": ["string", "null"],
+          "description": "The date of the medical report, examination, consultation, discharge, scan, or certificate. May be labeled as 'Date', 'Report Date', 'Visit Date', 'Exam Date', 'Discharge Date', or appear near the report header.",
+          "extend:type": "date"
+        },
+        "type_of_injury": {
+          "enum": ["leg", "hand", "others", null],
+          "description": "The broad body area affected by the injury. Use 'leg' for knee, foot, ankle, thigh, hip, or lower-limb injuries. Use 'hand' for hand, wrist, arm, finger, or upper-limb injuries. Use 'others' only when the report does not fit these categories.",
           "extend:descriptions": [
-            "",
-            "",
-            "",
+            "Lower-limb injury such as knee, foot, ankle, thigh, or hip.",
+            "Upper-limb injury such as hand, wrist, arm, or finger.",
+            "Any other injury location or unclear body region.",
             ""
           ]
-        },
-        "exam test scores": {
-          "type": "array",
-          "items": {
-            "type": "integer"
-          }
         },
         "summary_findings": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "A concise summary of the main findings or impressions from the examination. This section may be labeled as 'Summary', 'Impression', or similar, and provides a high-level overview of the results."
+          "description": "A concise list of the main clinical findings, impressions, diagnoses, restrictions, certificates, or treatment outcomes in the report. Include the most important facts a claims reviewer would need."
         },
         "anatomical_findings": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": [
-              "region",
-              "finding",
-              "is serious"
-            ],
+            "required": ["region", "finding", "is_serious"],
             "properties": {
               "region": {
-                "type": [
-                  "string",
-                  "null"
-                ],
-                "description": "The anatomical region or structure being described, such as 'Bones', 'Medial Compartment', 'Patellofemoral Compartment', etc."
+                "type": ["string", "null"],
+                "description": "The anatomical region or body part being discussed, such as knee, wrist, ankle, shoulder, spine, ligament, bone, tendon, or soft tissue."
               },
               "finding": {
-                "type": [
-                  "string",
-                  "null"
-                ],
-                "description": "The specific findings or observations related to this anatomical region. May include normal findings, abnormalities, measurements, or other relevant details."
+                "type": ["string", "null"],
+                "description": "The specific clinical finding for that region, including fractures, tears, swelling, tenderness, reduced range of motion, degeneration, imaging results, or normal findings."
               },
-              "is serious": {
-                "type": [
-                  "boolean",
-                  "null"
-                ],
-                "description": "is the person going to die in the next 6 months"
+              "is_serious": {
+                "type": ["boolean", "null"],
+                "description": "True when the finding suggests significant injury, fracture, tear, surgery, disability, long medical leave, permanent impairment, or escalation-worthy clinical concern."
               }
             },
             "additionalProperties": false
           },
-          "description": "An array of findings for specific anatomical regions or structures described in the report. Each item represents a distinct anatomical area (e.g., bones, ligaments, menisci) and summarizes the findings for that area. This structure allows for extraction of structured data from narrative reports."
+          "description": "Structured findings for specific anatomical regions described in the report. Each item represents a body part or structure and the relevant clinical observation."
         },
-        "high school test scores": {
-          "type": "array",
-          "items": {
-            "type": "number"
-          }
+        "medical_leave_days": {
+          "type": ["integer", "null"],
+          "description": "The number of medical leave days, hospitalization leave days, or certified rest days stated in the report or medical certificate. Use null if no duration is stated."
         },
-        "list of all injuries mentioned": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "list of all numbers with a decimal": {
-          "type": "array",
-          "items": {
-            "type": "number"
-          }
-        },
-        "list of all company names mentioned": {
+        "recommendations": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "just all the companuy names in the document that were metnioned"
-        },
-        "list of all numbers with without a  decimal": {
-          "type": "array",
-          "items": {
-            "type": "integer"
-          }
+          "description": "Recommended follow-up actions, treatment plans, referrals, physiotherapy, medication, specialist review, surgery, rest, or monitoring instructions mentioned in the report."
         }
       },
       "additionalProperties": false

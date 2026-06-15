@@ -10,8 +10,8 @@ describe("UploadDropZone", () => {
   it("renders empty state message", () => {
     render(<UploadDropZone onFilesSelected={vi.fn()} />);
 
-    expect(screen.getByText("No documents yet")).toBeInTheDocument();
-    expect(screen.getByText(/Drag and drop files/)).toBeInTheDocument();
+    expect(screen.getByText("Drop claim documents here")).toBeInTheDocument();
+    expect(screen.getByText(/Upload medical expenses/)).toBeInTheDocument();
   });
 
   it("calls onFilesSelected when files are dropped", () => {

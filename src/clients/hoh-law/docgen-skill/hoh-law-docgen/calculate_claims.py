@@ -161,11 +161,18 @@ class ClaimCalculator:
         serious_findings = False
 
         for report in self.reports:
-            injury_type = report.get("type of injury")
+            injury_type = report.get("type_of_injury") or report.get("type of injury")
             if injury_type:
                 injury_types.add(injury_type)
 
-            injuries = report.get("list of all injuries mentioned") or []
+            injuries = (
+                report.get("list_of_all_injuries_mentioned")
+                or report.get("list of all injuries mentioned")
+                or []
+            )
+            diagnosis = report.get("diagnosis")
+            if diagnosis:
+                injuries.append(diagnosis)
             for injury in injuries:
                 if injury:
                     all_injuries.add(injury)
@@ -176,7 +183,7 @@ class ClaimCalculator:
                     region = finding.get("region")
                     if region:
                         anatomical_regions.add(region)
-                    if finding.get("is serious"):
+                    if finding.get("is_serious") or finding.get("is serious"):
                         serious_findings = True
 
         return {
@@ -324,11 +331,11 @@ if __name__ == "__main__":
             },
             {
                 "tag_id": "medical_report",
-                "type of injury": "leg",
-                "list of all injuries mentioned": ["ACL tear", "meniscus damage"],
+                "type_of_injury": "leg",
+                "diagnosis": "ACL tear",
                 "anatomical_findings": [
-                    {"region": "knee", "is serious": True},
-                    {"region": "tibia", "is serious": False},
+                    {"region": "knee", "is_serious": True},
+                    {"region": "tibia", "is_serious": False},
                 ],
             },
         ]

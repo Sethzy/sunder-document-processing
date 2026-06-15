@@ -43,6 +43,7 @@ import {
 } from "@/components/ui/tooltip";
 import { StatusBadge } from "./status-badge";
 import { DuplicateIndicator } from "./duplicate-indicator";
+import { FileThumbnail } from "./file-thumbnail";
 import { cn, formatTagLabel } from "@/lib/utils";
 import type { Document } from "@/types/documents";
 
@@ -187,13 +188,22 @@ export const DocumentsTable = memo(function DocumentsTable({
         const showOriginal = doc.renamed_filename && doc.renamed_filename !== doc.original_filename;
 
         return (
-          <div className="flex flex-col">
-            <span>{displayName}</span>
-            {showOriginal && (
-              <span className="text-xs text-muted-foreground">
-                {doc.original_filename}
+          <div className="flex items-start gap-3">
+            <FileThumbnail
+              filename={displayName}
+              fileType={doc.file_type}
+              size="md"
+            />
+            <div className="min-w-0 pt-0.5">
+              <span className="block truncate font-medium text-foreground/85">
+                {displayName}
               </span>
-            )}
+              {showOriginal && (
+                <span className="block truncate text-xs text-muted-foreground">
+                  {doc.original_filename}
+                </span>
+              )}
+            </div>
           </div>
         );
       },
@@ -250,7 +260,7 @@ export const DocumentsTable = memo(function DocumentsTable({
                 className={cn(
                   "inline-flex h-7 w-7 items-center justify-center rounded-md text-sm font-medium transition-colors",
                   "hover:bg-accent hover:text-accent-foreground",
-                  isProcessing && "pointer-events-none opacity-50"
+                  isProcessing && "pointer-events-none opacity-45"
                 )}
                 aria-label="View document"
               >

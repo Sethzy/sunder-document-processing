@@ -115,8 +115,8 @@ describe("DocumentsSection", () => {
     await setupMockWithDocs([]);
     await renderWithProviders();
 
-    expect(screen.getByText("No documents yet")).toBeInTheDocument();
-    expect(screen.getByText(/Drag and drop files/)).toBeInTheDocument();
+    expect(screen.getByText("Drop claim documents here")).toBeInTheDocument();
+    expect(screen.getByText(/Upload medical expenses/)).toBeInTheDocument();
   });
 
   it("shows document count in header", async () => {
@@ -172,7 +172,7 @@ describe("DocumentsSection", () => {
       await setupMockWithDocs([]);
       await renderWithProviders();
 
-      expect(screen.getByText("No documents yet")).toBeInTheDocument();
+      expect(screen.getByText("Drop claim documents here")).toBeInTheDocument();
 
       await act(async () => {
         window.dispatchEvent(createDragEvent("dragenter", true));

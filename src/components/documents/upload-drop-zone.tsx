@@ -4,7 +4,7 @@
  * @module components/documents/upload-drop-zone
  */
 import { useState, useRef, useCallback, type DragEvent } from "react";
-import { Upload } from "lucide-react";
+import { FileCheck2, FileText, ShieldCheck, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   ALLOWED_FILE_EXTENSIONS,
@@ -76,15 +76,43 @@ export function UploadDropZone({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       className={cn(
-        "rounded-lg border-2 border-dashed p-12 text-center cursor-pointer transition-colors",
-        isDragOver ? "border-foreground bg-foreground/5" : "border-muted-foreground/25",
+        "group rounded-xl border border-dashed p-10 text-center cursor-pointer transition-all bg-card shadow-sm",
+        isDragOver
+          ? "border-foreground bg-foreground/[0.03] shadow-md ring-4 ring-foreground/5"
+          : "border-border/60 hover:border-foreground/40 hover:bg-muted/20",
         className
       )}
     >
-      <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
-      <p className="mt-4 text-muted-foreground">No documents yet</p>
-      <p className="text-sm text-muted-foreground">
-        Drag and drop files or click to upload ({ALLOWED_EXTENSIONS_DISPLAY})
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl border border-border/50 bg-background shadow-sm transition-transform group-hover:-translate-y-0.5">
+        <Upload className="h-6 w-6 text-foreground/70" />
+      </div>
+      <p className="mt-5 text-base font-medium text-foreground">
+        Drop claim documents here
+      </p>
+      <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
+        Upload medical expenses, medical reports, income records, combined PDFs,
+        and redacted claim files for classification and citation review.
+      </p>
+      <div className="mt-5 inline-flex h-8 items-center justify-center rounded-md bg-foreground px-3 text-xs font-medium text-background shadow-sm transition-colors group-hover:bg-foreground/90">
+        Browse files
+      </div>
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground/80">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background px-2.5 py-1">
+          <FileText className="h-3.5 w-3.5" />
+          {ALLOWED_EXTENSIONS_DISPLAY}
+        </span>
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background px-2.5 py-1">
+          <FileCheck2 className="h-3.5 w-3.5" />
+          Duplicates flagged
+        </span>
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background px-2.5 py-1">
+          <ShieldCheck className="h-3.5 w-3.5" />
+          Keep private PDFs out of git
+        </span>
+      </div>
+      <p className="mt-4 text-xs text-muted-foreground/60">
+        Each file is uploaded first, then queued for classification, splitting,
+        extraction, and citation review.
       </p>
 
       <input

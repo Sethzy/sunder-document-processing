@@ -5,7 +5,7 @@
  */
 import { useCallback, useState, useRef, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Upload, Search, Download } from "lucide-react";
+import { AlertCircle, Upload, Search, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { VisibilityState } from "@tanstack/react-table";
@@ -20,7 +20,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useDocuments, useDeleteDocument } from "@/hooks/use-documents";
-import { useUpload } from "@/contexts/upload-context";
+import { ALLOWED_FILE_EXTENSIONS, useUpload } from "@/contexts/upload-context";
 import { useFilePaste } from "@/hooks/use-file-paste";
 import { UploadDropZone } from "./upload-drop-zone";
 import { DocumentDropOverlay } from "./document-drop-overlay";
@@ -224,6 +224,7 @@ export function DocumentsSection({ caseId }: DocumentsSectionProps) {
 
   const hasDocuments = documents.length > 0;
   const hasFilteredDocuments = filteredDocuments.length > 0;
+  const uploadedCount = documents.filter((doc) => doc.status === "uploaded").length;
 
   return (
     <div className="pb-6">
@@ -234,7 +235,7 @@ export function DocumentsSection({ caseId }: DocumentsSectionProps) {
             Files ({documents.length})
           </h2>
           <p className="text-sm text-muted-foreground mt-1.5">
-            Uploaded files will appear here after processing.
+            Upload messy claim documents, then review classification, citations, and extracted fields.
           </p>
         </div>
         {hasDocuments && (
@@ -251,6 +252,16 @@ export function DocumentsSection({ caseId }: DocumentsSectionProps) {
       {/* Search and toolbar - show only when documents exist */}
       {hasDocuments && (
         <div className="mt-4 space-y-4">
+          {uploadedCount > 0 && (
+            <div className="flex items-start gap-2 rounded-lg border border-border/50 bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-foreground/50" />
+              <p>
+                {uploadedCount} file{uploadedCount === 1 ? "" : "s"} uploaded and
+                waiting for AI processing. Review actions unlock after
+                classification and extraction complete.
+              </p>
+            </div>
+          )}
           <div className="relative">
             <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60" />
             <Input
@@ -299,8 +310,14 @@ export function DocumentsSection({ caseId }: DocumentsSectionProps) {
               onColumnOrderChange={setColumnOrder}
             />
           ) : (
-            <div className="rounded-xl border border-border/40 bg-card p-12 text-center text-muted-foreground shadow-sm">
-              No documents match your search
+            <div className="rounded-xl border border-border/40 bg-card p-16 text-center shadow-sm">
+              <Search className="mx-auto h-10 w-10 text-muted-foreground/40" />
+              <p className="mt-5 text-sm font-medium text-foreground">
+                No documents match the current view
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground/70">
+                Clear search or tag filters to return to the full dossier.
+              </p>
             </div>
           )
         ) : (
@@ -316,7 +333,7 @@ export function DocumentsSection({ caseId }: DocumentsSectionProps) {
         ref={fileInputRef}
         type="file"
         multiple
-        accept=".pdf,.jpeg,.jpg,.png,.webp,.txt"
+        accept={ALLOWED_FILE_EXTENSIONS.map((ext) => `.${ext}`).join(",")}
         onChange={handleFileInputChange}
         className="hidden"
       />

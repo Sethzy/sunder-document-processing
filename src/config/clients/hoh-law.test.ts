@@ -4,6 +4,7 @@
  */
 import { describe, it, expect } from "vitest";
 import { hohLawConfig } from "./hoh-law";
+import medicalReportSchema from "../../clients/hoh-law/schemas/medical-report.json" with { type: "json" };
 
 describe("hoh-law validation rules", () => {
   describe("medical_expense tag", () => {
@@ -75,12 +76,39 @@ describe("hoh-law validation rules", () => {
       (t) => t.id === "medical_report"
     )!;
 
+    it("should keep medical report schema aligned with validation fields", () => {
+      const properties = medicalReportSchema.config.schema.properties as Record<string, unknown>;
+
+      expect(properties.patient_name).toBeDefined();
+      expect(properties.diagnosis).toBeDefined();
+      expect(properties.type_of_injury).toBeDefined();
+      expect(properties.summary_findings).toBeDefined();
+      expect(properties.anatomical_findings).toBeDefined();
+      expect(properties["patient name"]).toBeUndefined();
+      expect(properties["exam test scores"]).toBeUndefined();
+      expect(properties["high school test scores"]).toBeUndefined();
+    });
+
     it("should return failure with field='patient_name' when missing", () => {
       const failures = medicalReportTag.validate!({});
       const patientFailure = failures.find((f) => f.ruleId === "patient_required");
 
       expect(patientFailure).toBeDefined();
       expect(patientFailure!.field).toBe("patient_name");
+    });
+
+    it("should accept complete medical report extraction data", () => {
+      const failures = medicalReportTag.validate!({
+        patient_name: "John Doe",
+        diagnosis: "Left knee ligament injury",
+        type_of_injury: "leg",
+        summary_findings: ["Left knee pain", "MRI reviewed", "Physiotherapy recommended"],
+        anatomical_findings: [
+          { region: "knee", finding: "Ligament injury", is_serious: false },
+        ],
+      });
+
+      expect(failures).toEqual([]);
     });
   });
 });

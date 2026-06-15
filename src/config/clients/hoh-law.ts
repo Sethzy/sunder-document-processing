@@ -204,8 +204,8 @@ export const hohLawConfig: ClientConfig = {
 
     /**
      * Medical Report documents - discharge summaries and specialist reports.
-     * Extraction captures: patient_name, diagnosis, findings, doctor_name,
-     * report_date, hospital_name
+     * Extraction captures: patient_name, diagnosis, doctor_name, facility_name,
+     * report_date, type_of_injury, summary_findings, and anatomical_findings.
      */
     {
       id: "medical_report",
@@ -227,15 +227,26 @@ export const hohLawConfig: ClientConfig = {
             field: "patient_name",
           });
         }
+        if (!data.diagnosis) {
+          failures.push({
+            ruleId: "diagnosis_required",
+            ruleName: "Diagnosis required",
+            message: "diagnosis field is missing",
+            description:
+              "Diagnosis or clinical impression is required to establish the medical basis of the claim. Without it, the report may not support injury causation or damages assessment.",
+            field: "diagnosis",
+          });
+        }
+        const injuryType = data.type_of_injury ?? data["type of injury"];
         // Type of injury must be specific (leg or hand), not "others"
-        if (!data["type of injury"] || data["type of injury"] === "others") {
+        if (!injuryType || injuryType === "others") {
           failures.push({
             ruleId: "injury_type_specific",
             ruleName: "Injury type must be specific",
             message: "Injury type should be 'leg' or 'hand', not 'others' - review for accurate categorization",
             description:
               "Specific injury categorization (leg or hand) is required for accurate claim assessment and damages calculation. 'Others' category requires manual review to determine the correct classification based on the report findings.",
-            field: "type of injury",
+            field: "type_of_injury",
           });
         }
         // Summary findings should have multiple items for completeness
@@ -265,8 +276,8 @@ export const hohLawConfig: ClientConfig = {
         // Check for serious findings that need attention
         if (anatomicalFindings && Array.isArray(anatomicalFindings)) {
           const hasSerious = anatomicalFindings.some((f) => {
-            const finding = f as { "is serious"?: boolean } | null;
-            return finding?.["is serious"] === true;
+            const finding = f as { is_serious?: boolean; "is serious"?: boolean } | null;
+            return finding?.is_serious === true || finding?.["is serious"] === true;
           });
           if (hasSerious) {
             failures.push({

@@ -26,8 +26,18 @@ import type { QueueItem } from "@/contexts/upload-context";
  */
 export async function triggerGeminiProcessing(
   documentId: string,
-  accessToken: string
+  accessToken: string,
+  options: { isEnabled?: boolean } = {}
 ): Promise<void> {
+  const isLocalProcessingEnabled =
+    options.isEnabled ??
+    (!import.meta.env.DEV ||
+      import.meta.env.VITE_ENABLE_LOCAL_GEMINI_PROCESSING === "true");
+
+  if (!isLocalProcessingEnabled) {
+    return;
+  }
+
   try {
     await fetch("/api/gemini/process", {
       method: "POST",
@@ -148,6 +158,9 @@ export function useUploadProcessor() {
         // Invalidate documents query for this case
         queryClient.invalidateQueries({
           queryKey: documentKeys.list(caseId),
+        });
+        queryClient.invalidateQueries({
+          queryKey: documentKeys.listWithStatus(caseId),
         });
 
         // Trigger Gemini processing (fire-and-forget)

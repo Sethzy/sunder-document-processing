@@ -9,6 +9,7 @@ import { FaFileExcel, FaFilePdf, FaFileWord, FaFilePowerpoint, FaFileCsv, FaFile
 import type { IconBaseProps } from "react-icons";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
+import { FileThumbnail } from "@/components/documents/file-thumbnail";
 import { cn } from "@/lib/utils";
 import type { ReportHistoryItem } from "@/components/docgen/report-history";
 
@@ -108,7 +109,6 @@ export const LibraryFileCard = memo(function LibraryFileCard({
   const formattedDate = format(new Date(report.generated_at), "MMM d, h:mm a");
   // Use file_path for extension detection (name may not have extension, e.g., "Quick Report")
   const fileConfig = getFileTypeConfig(report.file_path);
-  const { Icon } = fileConfig;
 
   if (viewMode === "list") {
     return (
@@ -119,7 +119,7 @@ export const LibraryFileCard = memo(function LibraryFileCard({
         role="button"
         tabIndex={0}
       >
-        <Icon className={cn("h-4 w-4", fileConfig.colorClass)} />
+        <FileThumbnail filename={report.file_path || report.name} size="sm" />
         <div className="min-w-0">
           <span className="text-sm font-medium truncate block">{report.name}</span>
           {description && (
@@ -157,9 +157,7 @@ export const LibraryFileCard = memo(function LibraryFileCard({
     >
       {/* File icon and type badge */}
       <div className="flex items-start justify-between mb-2">
-        <div className="p-2 rounded-md bg-muted/50">
-          <Icon className={cn("h-5 w-5", fileConfig.colorClass)} />
-        </div>
+        <FileThumbnail filename={report.file_path || report.name} size="lg" />
         <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide px-1.5 py-0.5 bg-muted/60 rounded">
           {fileConfig.badge}
         </span>

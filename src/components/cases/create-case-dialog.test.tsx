@@ -70,7 +70,7 @@ describe("CreateCaseDialog", () => {
 
   it("renders dialog title when open", async () => {
     renderWithProviders(true);
-    expect(await screen.findByText("Create new case")).toBeInTheDocument();
+    expect(await screen.findByText("New claim case")).toBeInTheDocument();
   });
 
   it("renders all form fields", async () => {
@@ -80,7 +80,7 @@ describe("CreateCaseDialog", () => {
     expect(await screen.findByLabelText(/description/i)).toBeInTheDocument();
     // Date fields use Calendar popover instead of input, check by text
     expect(await screen.findByText(/case opened at/i)).toBeInTheDocument();
-    expect(await screen.findByText(/case event date/i)).toBeInTheDocument();
+    expect(await screen.findByText(/event date/i)).toBeInTheDocument();
   });
 
   it("shows validation errors for empty required fields", async () => {

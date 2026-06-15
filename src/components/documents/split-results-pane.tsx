@@ -29,6 +29,14 @@ function formatPageRange(start: number, end: number): string {
   return start === end ? `${start}` : `${start}-${end}`;
 }
 
+/**
+ * Formats a document tag count for the compact summary row.
+ */
+function formatTagCount(tag: string, count: number): string {
+  const label = tag.replace(/_/g, " ");
+  return `${count} ${count === 1 && label.endsWith("s") ? label.slice(0, -1) : label}`;
+}
+
 interface SplitResultsPaneProps {
   /** Array of splits to display */
   splits: PageRange[];
@@ -43,18 +51,45 @@ interface SplitResultsPaneProps {
 /**
  * Displays a scrollable list of split cards with header.
  */
-export function SplitResultsPane({ splits, tags: _tags, onPageClick, onBackToExtraction }: SplitResultsPaneProps) {
+export function SplitResultsPane({ splits, tags, onPageClick, onBackToExtraction }: SplitResultsPaneProps) {
   const duplicateSplits = splits.filter((s) => s.potential_duplicate);
   const label = splits.length === 1 ? "document" : "documents";
+  const duplicatePages = duplicateSplits.map((split) => split.startPage).join(", ");
+  const tagSummary = tags
+    ? Object.entries(tags)
+      .filter(([, count]) => count > 0)
+      .map(([tag, count]) => formatTagCount(tag, count))
+      .join(", ")
+    : null;
 
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="px-5 py-2 border-b border-border/40 bg-card">
-        <div className="flex items-center gap-2">
-          <div className="h-7 px-2.5 flex items-center">
-            <FileText className="h-4 w-4 mr-2" />
-            <span className="text-xs font-normal">{splits.length} {label}</span>
+      <div className="border-b border-border/40 bg-card px-5 py-2">
+        <div className="flex items-start gap-2">
+          <div className="min-w-0">
+            <div className="flex h-7 items-center">
+              <FileText className="mr-2 h-4 w-4" />
+              <span className="text-xs font-medium text-foreground/85">
+                Splitter Results
+              </span>
+              <span className="ml-1.5 text-xs text-muted-foreground">
+                ({splits.length})
+              </span>
+              <span className="ml-2 text-xs text-muted-foreground/70">
+                {splits.length} {label}
+              </span>
+            </div>
+            {tagSummary && (
+              <p className="mt-0.5 truncate text-xs text-muted-foreground/70">
+                {tagSummary}
+              </p>
+            )}
+            {duplicateSplits.length > 0 && (
+              <p className="mt-0.5 text-xs text-warning/80">
+                Potential duplicates on pages {duplicatePages}
+              </p>
+            )}
           </div>
           {duplicateSplits.length > 0 && (
             <TooltipProvider>
@@ -100,7 +135,17 @@ export function SplitResultsPane({ splits, tags: _tags, onPageClick, onBackToExt
       <div className="flex-1 overflow-y-auto p-5 space-y-5">
         {splits.length === 0 ? (
           <div className="rounded-xl border border-border/40 bg-card p-12 text-center">
-            <p className="text-muted-foreground">No splits found</p>
+            <FileText className="mx-auto h-10 w-10 text-muted-foreground/35" />
+            <p className="mt-5 text-sm font-medium text-foreground">
+              No page groups yet
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              No splits found
+            </p>
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-muted-foreground/70">
+              This document is uploaded, but processing has not produced split
+              metadata for review yet.
+            </p>
           </div>
         ) : (
           splits.map((split, index) => (

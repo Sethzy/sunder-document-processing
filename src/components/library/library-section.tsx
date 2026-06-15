@@ -1,6 +1,6 @@
 /**
- * Library section component for the case page Library tab.
- * Displays generated reports grouped by date with search and view toggle.
+ * Reports section component for the case page.
+ * Displays generated dossier artifacts grouped by date with search and view toggle.
  * @module components/library/library-section
  */
 import { useMemo, useState } from "react";
@@ -74,9 +74,9 @@ const DATE_GROUP_LABELS: Record<DateGroup, string> = {
 };
 
 /**
- * Library section displaying generated reports in a grid or list view.
+ * Reports section displaying generated dossier artifacts in a grid or list view.
  * Features:
- * - Search filtering by filename
+ * - Search filtering by report name
  * - Date grouping (Today, This Week, Older)
  * - Grid/List view toggle
  * - Click to download
@@ -123,14 +123,37 @@ export function LibrarySection({ caseId }: LibrarySectionProps) {
   // Empty state - no reports at all
   if (!reports || reports.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-full py-16">
-        <div className="p-4 rounded-full bg-muted/50 mb-4">
-          <FileSpreadsheet className="h-10 w-10 text-muted-foreground/50" />
+      <div className="flex h-full items-center justify-center py-16">
+        <div className="w-full max-w-2xl rounded-lg border border-border/50 bg-card p-10 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg border border-border/50 bg-muted/40">
+            <FileSpreadsheet className="h-6 w-6 text-muted-foreground" />
+          </div>
+          <p className="mt-6 text-base font-semibold text-foreground">
+            No dossier reports yet
+          </p>
+          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
+            Generate reports after extracted values have been reviewed against
+            their source documents. Finished artifacts will appear here for
+            download and handoff.
+          </p>
+          <div className="mt-6 grid grid-cols-3 gap-2 text-left">
+            {["Review fields", "Resolve issues", "Generate report"].map(
+              (step, index) => (
+                <div
+                  key={step}
+                  className="rounded-md border border-border/40 bg-background px-3 py-2"
+                >
+                  <span className="text-[11px] font-medium text-muted-foreground">
+                    {index + 1}
+                  </span>
+                  <p className="mt-1 text-xs font-medium text-foreground">
+                    {step}
+                  </p>
+                </div>
+              )
+            )}
+          </div>
         </div>
-        <p className="text-lg font-medium text-muted-foreground">No reports yet</p>
-        <p className="text-sm text-muted-foreground/70 mt-1">
-          Use AI Analyst to generate reports
-        </p>
       </div>
     );
   }
@@ -141,56 +164,64 @@ export function LibrarySection({ caseId }: LibrarySectionProps) {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Content area - centered like AI Analyst */}
       <div className="flex-1 overflow-auto">
-        <div className="max-w-3xl mx-auto px-4">
-          {/* Header toolbar */}
-          <div className="flex items-center gap-3 mb-6 pt-2 px-3">
-            {/* Search */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search files..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
-              />
+        <div className="mx-auto max-w-5xl px-2">
+          <div className="mb-5 flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-semibold text-foreground">
+                Reports ({reports.length})
+              </h2>
+              <p className="mt-1.5 text-sm text-muted-foreground">
+                Download generated claim dossiers and supporting exports.
+              </p>
             </div>
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search reports..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-9 w-72 pl-9"
+                />
+              </div>
 
-            {/* View toggle */}
-            <div className="flex border rounded-md overflow-hidden">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setViewMode("list")}
-                aria-label="List view"
-                className={cn(
-                  "rounded-none px-2",
-                  viewMode === "list" && "bg-muted"
-                )}
-              >
-                <List className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setViewMode("grid")}
-                aria-label="Grid view"
-                className={cn(
-                  "rounded-none px-2",
-                  viewMode === "grid" && "bg-muted"
-                )}
-              >
-                <LayoutGrid className="h-4 w-4" />
-              </Button>
+              <div className="flex overflow-hidden rounded-md border border-border/60 bg-background">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setViewMode("list")}
+                  aria-label="List view"
+                  className={cn(
+                    "rounded-none px-2",
+                    viewMode === "list" && "bg-muted"
+                  )}
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setViewMode("grid")}
+                  aria-label="Grid view"
+                  className={cn(
+                    "rounded-none px-2",
+                    viewMode === "grid" && "bg-muted"
+                  )}
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
 
           {noSearchResults ? (
-            <div className="flex flex-col items-center justify-center py-16">
+            <div className="flex flex-col items-center justify-center rounded-lg border border-border/50 bg-card py-16">
               <Search className="h-8 w-8 text-muted-foreground/50 mb-3" />
-              <p className="text-muted-foreground">No files match "{searchQuery}"</p>
+              <p className="text-sm font-medium text-foreground">
+                No reports match "{searchQuery}"
+              </p>
               <Button
                 variant="link"
                 size="sm"

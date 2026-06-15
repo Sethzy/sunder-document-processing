@@ -63,12 +63,14 @@ export function ReportHistory({ reports }: ReportHistoryProps) {
 
   if (!reports?.length) {
     return (
-      <Card>
+      <Card className="rounded-xl border-border/40 shadow-sm">
         <CardContent className="p-16 text-center">
           <FileSpreadsheet className="mx-auto h-12 w-12 text-muted-foreground/40" />
-          <p className="mt-6 text-muted-foreground">No reports generated yet</p>
-          <p className="mt-2 text-sm text-muted-foreground/60">
-            Generate your first report above
+          <p className="mt-6 text-base font-medium text-foreground">
+            No reports generated yet
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground/70">
+            Once claim fields are reviewed, generate a report to create a downloadable dossier artifact.
           </p>
         </CardContent>
       </Card>

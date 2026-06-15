@@ -2,7 +2,7 @@
  * @file Extraction list with multi-select field filtering
  * @description Scrollable list of extraction cards with document type navigator and field filters
  */
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DocumentNavigator } from "./document-navigator";
@@ -123,22 +123,6 @@ export function ExtractionList({
     return splits.filter((split) => splitHasMatchingFields(split, fieldFilters));
   }, [splits, fieldFilters]);
 
-  // Progressive rendering: render cards in batches to avoid blocking main thread
-  const [renderCount, setRenderCount] = useState(3);
-
-  // Reset render count when splits change (new document loaded)
-  useEffect(() => {
-    setRenderCount(3);
-  }, [splits]);
-
-  // Progressively increase render count until all cards are visible
-  useEffect(() => {
-    if (renderCount < visibleSplits.length) {
-      const id = setTimeout(() => setRenderCount((c) => c + 3), 0);
-      return () => clearTimeout(id);
-    }
-  }, [renderCount, visibleSplits.length]);
-
   return (
     <div className="h-full flex flex-col">
       {/* Header with filters */}
@@ -170,15 +154,26 @@ export function ExtractionList({
       {/* Scrollable list */}
       <div className="flex-1 overflow-y-auto p-5 space-y-5">
         {splits.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            No extractions available
-          </p>
+          <div className="rounded-xl border border-border/40 bg-card p-12 text-center shadow-sm">
+            <Layers className="mx-auto h-10 w-10 text-muted-foreground/40" />
+            <p className="mt-5 text-sm font-medium text-foreground">
+              No extracted sections yet
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground/70">
+              Upload and process claim documents to review citations and fields here.
+            </p>
+          </div>
         ) : visibleSplits.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            No extractions match the current filter
-          </p>
+          <div className="rounded-xl border border-border/40 bg-card p-12 text-center shadow-sm">
+            <p className="text-sm font-medium text-foreground">
+              No fields match the current filter
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground/70">
+              Clear low-confidence, needs-review, or non-empty filters to return to all extracted fields.
+            </p>
+          </div>
         ) : (
-          visibleSplits.slice(0, renderCount).map((split) => (
+          visibleSplits.map((split) => (
             <ExtractionCard
               key={split.id}
               split={split}

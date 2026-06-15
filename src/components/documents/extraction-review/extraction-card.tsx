@@ -3,7 +3,7 @@
  * @description Displays split header and all extraction fields with metadata
  */
 import { useCallback, memo, useMemo } from "react";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import { useSetHighlights } from "@/contexts/highlight-context";
 import {
   Tooltip,
@@ -266,7 +266,7 @@ export const ExtractionCard = memo(function ExtractionCard({
     <div id={`split-${split.id}`} className="rounded-xl border border-border/40 bg-card shadow-sm overflow-hidden">
       {/* Card Header */}
       <div
-        className="flex items-center justify-between px-5 py-4 border-b border-border/30 cursor-pointer bg-muted/70 hover:bg-muted transition-colors"
+        className="flex items-center justify-between gap-4 px-5 py-4 border-b border-border/30 cursor-pointer bg-muted/40 hover:bg-muted/70 transition-colors"
         onClick={() => onCardClick(split.startPage)}
       >
         <div className="flex items-center gap-3">
@@ -289,6 +289,10 @@ export const ExtractionCard = memo(function ExtractionCard({
               </Tooltip>
             </TooltipProvider>
           )}
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground/70">
+          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+          {visibleFields.length} field{visibleFields.length !== 1 ? "s" : ""}
         </div>
       </div>
 

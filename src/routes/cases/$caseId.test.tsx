@@ -44,10 +44,29 @@ vi.mock("@/hooks/use-documents", () => ({
     isLoading: false,
     isError: false,
   })),
+  useDocumentsWithStatus: vi.fn(() => ({
+    data: [],
+    isLoading: false,
+    isError: false,
+  })),
   useDeleteDocument: vi.fn(() => ({
     mutate: vi.fn(),
     isPending: false,
   })),
+}));
+
+vi.mock("@/hooks/use-docgen", () => ({
+  useReportHistory: vi.fn(() => ({
+    data: [],
+    isLoading: false,
+    isError: false,
+  })),
+}));
+
+vi.mock("@/components/analyst/analyst-section", () => ({
+  AnalystSection: ({ caseId }: { caseId: string }) => (
+    <div data-testid="analyst-section">AI Analyst for {caseId}</div>
+  ),
 }));
 
 vi.mock("@/hooks/use-session", () => ({
@@ -101,8 +120,8 @@ describe("CaseDetailPage", () => {
     // Multiple "CASE-001" elements exist (breadcrumb + header card), use findAllBy
     const caseRefs = await screen.findAllByText("CASE-001");
     expect(caseRefs.length).toBeGreaterThanOrEqual(1);
-    // Check nav element contains Cases link
-    const allCasesLinks = await screen.findAllByText("Cases");
+    // Check nav element contains the workspace breadcrumb.
+    const allCasesLinks = await screen.findAllByText("Workspace");
     expect(allCasesLinks.length).toBeGreaterThanOrEqual(1);
   });
 
@@ -111,10 +130,11 @@ describe("CaseDetailPage", () => {
     expect(await screen.findByText("Smith v Jones")).toBeInTheDocument();
   });
 
-  it("renders case reference and opened date", async () => {
+  it("renders created date and review progress", async () => {
     renderWithProviders();
-    expect(await screen.findByText("CASE REFERENCE")).toBeInTheDocument();
-    expect(await screen.findByText("CASE OPENED")).toBeInTheDocument();
+    expect(await screen.findByText("Created")).toBeInTheDocument();
+    expect(await screen.findByText("Reviewed")).toBeInTheDocument();
+    expect(await screen.findByText("19 Dec 2025")).toBeInTheDocument();
   });
 
   it("renders edit button", async () => {
@@ -124,14 +144,14 @@ describe("CaseDetailPage", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders Documents and DocGen tabs", async () => {
+  it("renders Files and Reports tabs", async () => {
     renderWithProviders();
-    expect(await screen.findByText("Documents")).toBeInTheDocument();
-    expect(await screen.findByText("DocGen")).toBeInTheDocument();
+    expect(await screen.findByText("Files")).toBeInTheDocument();
+    expect(await screen.findByText("Reports")).toBeInTheDocument();
   });
 
-  it("shows Documents tab content by default", async () => {
+  it("shows Files tab content by default", async () => {
     renderWithProviders();
-    expect(await screen.findByText(/no documents yet/i)).toBeInTheDocument();
+    expect(await screen.findByText("Drop claim documents here")).toBeInTheDocument();
   });
 });

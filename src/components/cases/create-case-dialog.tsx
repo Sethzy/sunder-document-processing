@@ -2,10 +2,10 @@
  * Dialog for creating a new case.
  * @module components/cases/create-case-dialog
  */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { AlertCircle, CalendarIcon } from "lucide-react";
 import { useCreateCase } from "@/hooks/use-cases";
 import { CreateCaseSchema } from "@/types/cases";
 import { cn } from "@/lib/utils";
@@ -59,13 +59,13 @@ export function CreateCaseDialog({ open, onOpenChange }: CreateCaseDialogProps) 
   const [formData, setFormData] = useState<FormData>(getInitialFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Reset form when dialog closes
-  useEffect(() => {
-    if (!open) {
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
       setFormData(getInitialFormData());
       setErrors({});
     }
-  }, [open]);
+    onOpenChange(nextOpen);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,7 +100,9 @@ export function CreateCaseDialog({ open, onOpenChange }: CreateCaseDialogProps) 
         if (error.message === "Case reference already exists") {
           setErrors({ case_ref: "Reference already exists" });
         } else {
-          setErrors({ form: "Failed to create folder. Please try again." });
+          setErrors({
+            form: `Could not create this case. ${error.message}`,
+          });
         }
       },
     });
@@ -118,19 +120,19 @@ export function CreateCaseDialog({ open, onOpenChange }: CreateCaseDialogProps) 
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Create new</DialogTitle>
+          <DialogTitle>New claim case</DialogTitle>
           <DialogDescription>
-            Fill in the details below.
+            Create a workspace for uploads, cited review, and reports.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Case Name */}
           <div className="space-y-2">
-            <Label htmlFor="case_name">Name</Label>
+            <Label htmlFor="case_name">Case name</Label>
             <Input
               id="case_name"
               placeholder="Something memorable and descriptive"
@@ -145,7 +147,7 @@ export function CreateCaseDialog({ open, onOpenChange }: CreateCaseDialogProps) 
 
           {/* Case Reference */}
           <div className="space-y-2">
-            <Label htmlFor="case_ref">Reference</Label>
+            <Label htmlFor="case_ref">Case reference</Label>
             <Input
               id="case_ref"
               placeholder="Your firm's internal reference"
@@ -175,7 +177,7 @@ export function CreateCaseDialog({ open, onOpenChange }: CreateCaseDialogProps) 
 
           {/* Case Opened At */}
           <div className="space-y-2">
-            <Label>Created at</Label>
+            <Label>Case opened at</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -199,7 +201,7 @@ export function CreateCaseDialog({ open, onOpenChange }: CreateCaseDialogProps) 
               </PopoverContent>
             </Popover>
             <p className="text-sm text-muted-foreground">
-              When you started working on this.
+              When you started working on this matter.
             </p>
           </div>
 
@@ -237,7 +239,10 @@ export function CreateCaseDialog({ open, onOpenChange }: CreateCaseDialogProps) 
 
           {/* Form error */}
           {errors.form && (
-            <p className="text-sm text-destructive">{errors.form}</p>
+            <div className="flex gap-2 rounded-lg border border-destructive/20 bg-destructive/5 p-3 text-sm text-destructive">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+              <p>{errors.form}</p>
+            </div>
           )}
 
           {/* Buttons */}
@@ -245,12 +250,12 @@ export function CreateCaseDialog({ open, onOpenChange }: CreateCaseDialogProps) 
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={() => handleOpenChange(false)}
             >
               Cancel
             </Button>
             <Button type="submit" disabled={createCase.isPending}>
-              {createCase.isPending ? "Creating..." : "Create"}
+              {createCase.isPending ? "Creating..." : "Create case"}
             </Button>
           </div>
         </form>

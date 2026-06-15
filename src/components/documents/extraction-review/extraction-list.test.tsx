@@ -136,7 +136,7 @@ describe("ExtractionList", () => {
 
   it("shows empty message when no extractions", () => {
     render(<ExtractionList {...defaultProps} splits={[]} />, { wrapper: createWrapper() });
-    expect(screen.getByText("No extractions available")).toBeInTheDocument();
+    expect(screen.getByText("No extracted sections yet")).toBeInTheDocument();
   });
 });
 

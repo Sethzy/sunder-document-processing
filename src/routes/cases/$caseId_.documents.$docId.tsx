@@ -16,6 +16,7 @@ const PdfViewerPane = lazy(() =>
   }))
 );
 import { SplitResultsPane } from "@/components/documents/split-results-pane";
+import { DocumentViewerSidebar } from "@/components/documents/document-viewer-sidebar";
 import {
   ExtractionList,
   ReviewActions,
@@ -157,8 +158,17 @@ function DocumentDetailPage() {
 
       {/* Split pane */}
       <div className="flex-1 flex min-h-0">
+        <DocumentViewerSidebar
+          document={document}
+          splits={splits ?? []}
+          viewMode={viewMode}
+          hasExtractionData={!!hasExtractionData}
+          isReviewed={isReviewed}
+          onViewModeChange={setViewMode}
+        />
+
         {/* Document Viewer - 50% */}
-        <div className="w-1/2 border-r border-[#E5E5E5]">
+        <div className="flex-1 border-r border-[#E5E5E5]">
           <Suspense
             fallback={
               <div className="h-full flex flex-col bg-neutral-50/50">
@@ -174,7 +184,7 @@ function DocumentDetailPage() {
         </div>
 
         {/* Extraction Results - 50% */}
-        <div className="w-1/2 bg-muted/10">
+        <div className="flex-1 bg-muted/10">
           {splitsLoading ? (
             <div className="p-6 text-muted-foreground">Loading extractions...</div>
           ) : viewMode === "split" || !hasExtractionData ? (

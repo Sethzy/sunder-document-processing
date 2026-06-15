@@ -90,20 +90,23 @@ describe("CasesPage", () => {
   it("renders New button", async () => {
     renderWithProviders();
     expect(
-      await screen.findByRole("button", { name: /new/i })
-    ).toBeInTheDocument();
+      await screen.findAllByRole("button", { name: /new claim case/i })
+    ).toHaveLength(2);
   });
 
   it("renders search input", async () => {
     renderWithProviders();
     expect(
-      await screen.findByPlaceholderText(/search your cases by name/i)
+      await screen.findByPlaceholderText(/search your folders by name/i)
     ).toBeInTheDocument();
   });
 
   it("shows empty state when no items", async () => {
     renderWithProviders();
-    expect(await screen.findByText(/nothing here yet/i)).toBeInTheDocument();
+    expect(await screen.findByText(/start with a claim case/i)).toBeInTheDocument();
+    expect(await screen.findByText("Create case")).toBeInTheDocument();
+    expect(await screen.findByText("Upload")).toBeInTheDocument();
+    expect(await screen.findByText("Review")).toBeInTheDocument();
   });
 
   it("does not render old header with Dossier", async () => {
