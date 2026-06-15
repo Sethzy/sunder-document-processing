@@ -6,15 +6,7 @@
  */
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
-  MessageCircle,
-  Gauge,
-  CheckSquare,
-  Zap,
-  Brain,
-  Users,
-  BookOpen,
   FileText,
-  Radio,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -35,22 +27,12 @@ import {
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
 
-/** AGENT section — primary operating surfaces */
-const agentNavItems = [
-  { label: "Chat", href: "/chat", icon: MessageCircle },
-  { label: "Mission Control", href: "/mission-control", icon: Gauge },
-  { label: "Tasks", href: "/tasks", icon: CheckSquare },
-  { label: "Automations", href: "/automations", icon: Zap },
-  { label: "Memory", href: "/memory", icon: Brain },
+/** Portfolio demo navigation: keep the visible app focused on the document workflow. */
+const workspaceNavItems = [
+  { label: "Workspace", href: "/cases", icon: FileText },
 ];
 
-/** DATABASE section — data-centric surfaces */
-const databaseNavItems = [
-  { label: "CRM", href: "/crm", icon: Users },
-  { label: "Knowledge", href: "/knowledge", icon: BookOpen },
-  { label: "Documents", href: "/cases", icon: FileText },
-  { label: "Channels", href: "/channels", icon: Radio },
-];
+type WorkspaceNavItem = (typeof workspaceNavItems)[number];
 
 export function AppSidebar() {
   const location = useLocation();
@@ -62,7 +44,7 @@ export function AppSidebar() {
     navigate({ to: "/login" });
   };
 
-  const renderNavItems = (items: typeof agentNavItems) =>
+  const renderNavItems = (items: WorkspaceNavItem[]) =>
     items.map((item) => {
       const isActive =
         item.href === "/cases"
@@ -101,16 +83,9 @@ export function AppSidebar() {
 
       {/* Navigation */}
       <SidebarContent className="px-2 pt-1">
-        {/* AGENT section */}
         <SidebarGroup>
-          <SidebarGroupLabel>Agent</SidebarGroupLabel>
-          <SidebarMenu>{renderNavItems(agentNavItems)}</SidebarMenu>
-        </SidebarGroup>
-
-        {/* DATABASE section */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Database</SidebarGroupLabel>
-          <SidebarMenu>{renderNavItems(databaseNavItems)}</SidebarMenu>
+          <SidebarGroupLabel>Documents</SidebarGroupLabel>
+          <SidebarMenu>{renderNavItems(workspaceNavItems)}</SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
 

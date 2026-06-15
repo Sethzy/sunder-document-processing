@@ -14,13 +14,6 @@ interface AppLayoutProps {
   children: React.ReactNode;
 }
 
-/** Read sidebar state from cookie, default to false (collapsed) if not set */
-function getSidebarDefaultOpen(): boolean {
-  if (typeof document === "undefined") return false;
-  const match = document.cookie.match(/sidebar_state=(\w+)/);
-  return match ? match[1] === "true" : false;
-}
-
 export function AppLayout({ children }: AppLayoutProps) {
   const { queue, isUploading, isPanelVisible, dismissPanel, reportTask, clearReportTask } = useUpload();
 
@@ -29,7 +22,7 @@ export function AppLayout({ children }: AppLayoutProps) {
 
   return (
     <TooltipProvider delayDuration={0}>
-      <SidebarProvider defaultOpen={getSidebarDefaultOpen()} className="h-svh">
+      <SidebarProvider defaultOpen={true} className="h-svh">
         <AppSidebar />
         <SidebarInset className="min-h-0">
           <div className="flex-1 min-h-0 flex flex-col overflow-hidden">{children}</div>

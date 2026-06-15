@@ -22,7 +22,7 @@ vi.mock("@/lib/supabase", () => ({
 }));
 
 // Configurable pathname for router mock
-let mockPathname = "/chat";
+let mockPathname = "/cases";
 
 // Mock TanStack Router
 vi.mock("@tanstack/react-router", () => ({
@@ -45,35 +45,34 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 
 describe("AppSidebar", () => {
   beforeEach(() => {
-    mockPathname = "/chat";
+    mockPathname = "/cases";
   });
 
   it("renders logo", () => {
     render(<AppSidebar />, { wrapper });
-    expect(screen.getByText("neobot")).toBeInTheDocument();
+    expect(screen.getByText("Sunder")).toBeInTheDocument();
   });
 
-  it("renders AGENT section nav items", () => {
+  it("renders the document workspace nav item", () => {
     render(<AppSidebar />, { wrapper });
-    expect(screen.getByText("Chat")).toBeInTheDocument();
-    expect(screen.getByText("Mission Control")).toBeInTheDocument();
-    expect(screen.getByText("Tasks")).toBeInTheDocument();
-    expect(screen.getByText("Automations")).toBeInTheDocument();
-    expect(screen.getByText("Memory")).toBeInTheDocument();
+    expect(screen.getByText("Workspace")).toBeInTheDocument();
   });
 
-  it("renders DATABASE section nav items", () => {
+  it("does not render non-demo nav items", () => {
     render(<AppSidebar />, { wrapper });
-    expect(screen.getByText("CRM")).toBeInTheDocument();
-    expect(screen.getByText("Knowledge")).toBeInTheDocument();
-    expect(screen.getByText("Documents")).toBeInTheDocument();
-    expect(screen.getByText("Channels")).toBeInTheDocument();
+    expect(screen.queryByText("Chat")).not.toBeInTheDocument();
+    expect(screen.queryByText("Mission Control")).not.toBeInTheDocument();
+    expect(screen.queryByText("Tasks")).not.toBeInTheDocument();
+    expect(screen.queryByText("Automations")).not.toBeInTheDocument();
+    expect(screen.queryByText("Memory")).not.toBeInTheDocument();
+    expect(screen.queryByText("CRM")).not.toBeInTheDocument();
+    expect(screen.queryByText("Knowledge")).not.toBeInTheDocument();
+    expect(screen.queryByText("Channels")).not.toBeInTheDocument();
   });
 
   it("renders section headers", () => {
     render(<AppSidebar />, { wrapper });
-    expect(screen.getByText("Agent")).toBeInTheDocument();
-    expect(screen.getByText("Database")).toBeInTheDocument();
+    expect(screen.getByText("Documents")).toBeInTheDocument();
   });
 
   it("renders Settings in footer", () => {
@@ -93,7 +92,6 @@ describe("AppSidebar", () => {
 
   it("does not render old nav items", () => {
     render(<AppSidebar />, { wrapper });
-    expect(screen.queryByText("Workspace")).not.toBeInTheDocument();
     expect(screen.queryByText("Instructions")).not.toBeInTheDocument();
   });
 });

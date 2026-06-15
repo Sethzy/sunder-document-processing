@@ -49,9 +49,9 @@ export function getAuthRedirect(
     return "/login";
   }
 
-  // Authenticated user on auth-only route -> redirect to chat (home)
+  // Authenticated user on auth-only route -> redirect to the document workspace.
   if (session && AUTH_ONLY_ROUTES.includes(pathname)) {
-    return "/chat";
+    return "/cases";
   }
 
   return null;
