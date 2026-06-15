@@ -37,3 +37,6 @@ supabase/.temp/
 .vercel
 .env*.local
 __pycache__/
+
+# Scratch screenshots at repo root
+/*.png
