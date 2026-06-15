@@ -12,6 +12,18 @@ dist
 dist-ssr
 *.local
 
+# Local agent/workspace state
+.agents/
+.codex/
+.cursor/
+.playwright-mcp/
+.understand-anything/
+.claude/skills/impeccable/
+AGENTS.md
+
+# Supabase CLI local link/cache files. Remote schema is recovered via migrations.
+supabase/.temp/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
