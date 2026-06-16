@@ -7,13 +7,6 @@
 <h2 align="center">AI document operations for claims teams</h2>
 
 <p align="center">
-  <a href="https://www.trysunder.com">Website</a> ·
-  <a href="./DEMO.md">Demo runbook</a> ·
-  <a href="./PRODUCT.md">Product notes</a> ·
-  <a href="#architecture">Architecture</a>
-</p>
-
-<p align="center">
   <a href="https://www.trysunder.com">
     <img src="./docs/assets/readme/sunder-cover.svg" alt="Sunder product banner" />
   </a>
