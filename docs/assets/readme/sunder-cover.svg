@@ -1,0 +1,106 @@
+<svg width="1400" height="720" viewBox="0 0 1400 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Sunder product banner</title>
+  <desc id="desc">A claim document workspace showing upload intake, document splitting, citation-backed extraction, human review, and report generation.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1400" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F5FFFC"/>
+      <stop offset="0.55" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F2F8FF"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#0C7C71"/>
+      <stop offset="1" stop-color="#2E9A8F"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2F6FEB"/>
+      <stop offset="1" stop-color="#67A5FF"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="22" stdDeviation="22" flood-color="#0B3B37" flood-opacity="0.16"/>
+    </filter>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.6" fill="#107066" opacity="0.16"/>
+    </pattern>
+  </defs>
+
+  <rect x="28" y="28" width="1344" height="664" rx="34" fill="url(#bg)" stroke="#0C7C71" stroke-width="3"/>
+  <rect x="72" y="84" width="390" height="430" rx="26" fill="url(#dots)"/>
+
+  <g transform="translate(118 108)">
+    <rect x="0" y="0" width="232" height="300" rx="20" fill="#FFFFFF" stroke="#D4E8E3" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="30" y="35" width="92" height="12" rx="6" fill="#0C7C71"/>
+    <rect x="30" y="67" width="168" height="7" rx="3.5" fill="#C8DDD8"/>
+    <rect x="30" y="86" width="150" height="7" rx="3.5" fill="#C8DDD8"/>
+    <rect x="30" y="105" width="164" height="7" rx="3.5" fill="#C8DDD8"/>
+    <rect x="30" y="145" width="70" height="70" rx="12" fill="#EAF6F3" stroke="#A8D8D0"/>
+    <rect x="116" y="151" width="80" height="8" rx="4" fill="#9CCBC4"/>
+    <rect x="116" y="173" width="58" height="8" rx="4" fill="#9CCBC4"/>
+    <rect x="116" y="195" width="68" height="8" rx="4" fill="#9CCBC4"/>
+    <rect x="30" y="246" width="172" height="10" rx="5" fill="#0C7C71" opacity="0.18"/>
+  </g>
+
+  <g transform="translate(244 148) rotate(-4)">
+    <rect x="0" y="0" width="224" height="286" rx="18" fill="#FFFFFF" stroke="#D4E8E3" stroke-width="2"/>
+    <rect x="28" y="34" width="116" height="10" rx="5" fill="#2F6FEB"/>
+    <rect x="28" y="70" width="160" height="7" rx="3.5" fill="#CEDAE8"/>
+    <rect x="28" y="91" width="142" height="7" rx="3.5" fill="#CEDAE8"/>
+    <rect x="28" y="112" width="154" height="7" rx="3.5" fill="#CEDAE8"/>
+    <rect x="28" y="157" width="168" height="68" rx="12" fill="#F4F7FA" stroke="#D8E0EA"/>
+    <path d="M48 200L82 176L113 203L138 187L177 218" stroke="#2F6FEB" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g transform="translate(506 72)" filter="url(#shadow)">
+    <rect x="0" y="0" width="536" height="506" rx="26" fill="#FFFFFF" stroke="#DDE7E5" stroke-width="2"/>
+    <rect x="0" y="0" width="536" height="60" rx="26" fill="#10201E"/>
+    <circle cx="34" cy="30" r="8" fill="#FF6B5E"/>
+    <circle cx="62" cy="30" r="8" fill="#F5C453"/>
+    <circle cx="90" cy="30" r="8" fill="#58C970"/>
+    <text x="126" y="38" fill="#E8F7F4" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Claim dossier</text>
+
+    <rect x="28" y="88" width="148" height="28" rx="14" fill="#E8F5F2"/>
+    <text x="48" y="108" fill="#0C6E64" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Processing</text>
+    <rect x="194" y="88" width="132" height="28" rx="14" fill="#EEF4FF"/>
+    <text x="214" y="108" fill="#2F62D5" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Review</text>
+
+    <rect x="28" y="146" width="214" height="284" rx="18" fill="#F8FAFC" stroke="#E3E9EF"/>
+    <text x="52" y="176" fill="#10201E" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">Source packet</text>
+    <rect x="52" y="205" width="130" height="10" rx="5" fill="#B9CCC8"/>
+    <rect x="52" y="232" width="156" height="10" rx="5" fill="#D1DDD9"/>
+    <rect x="52" y="259" width="120" height="10" rx="5" fill="#D1DDD9"/>
+    <rect x="52" y="306" width="78" height="84" rx="10" fill="#FFFFFF" stroke="#D8E3E0"/>
+    <rect x="144" y="306" width="74" height="84" rx="10" fill="#FFFFFF" stroke="#D8E3E0"/>
+    <path d="M70 354H112" stroke="#0C7C71" stroke-width="5" stroke-linecap="round"/>
+    <path d="M162 334H199M162 354H194M162 374H184" stroke="#2F6FEB" stroke-width="5" stroke-linecap="round"/>
+
+    <rect x="274" y="146" width="234" height="284" rx="18" fill="#FFFFFF" stroke="#DFE8E5"/>
+    <text x="300" y="176" fill="#10201E" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">Extracted evidence</text>
+    <rect x="300" y="206" width="182" height="46" rx="12" fill="#F5FFFC" stroke="#BFE3DC"/>
+    <text x="316" y="234" fill="#0B6159" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Medical expense</text>
+    <rect x="300" y="270" width="182" height="46" rx="12" fill="#F8FAFC" stroke="#E3E9EF"/>
+    <text x="316" y="298" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Income document</text>
+    <rect x="300" y="334" width="182" height="46" rx="12" fill="#FFF8ED" stroke="#F3D39B"/>
+    <text x="316" y="362" fill="#8A5B00" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Needs review</text>
+
+    <rect x="28" y="456" width="480" height="24" rx="12" fill="#EDF7F5"/>
+    <rect x="28" y="456" width="344" height="24" rx="12" fill="url(#teal)"/>
+  </g>
+
+  <g transform="translate(1074 166)" filter="url(#shadow)">
+    <rect x="0" y="0" width="230" height="330" rx="24" fill="#10201E"/>
+    <rect x="26" y="30" width="124" height="14" rx="7" fill="#E7FFF9"/>
+    <rect x="26" y="72" width="178" height="72" rx="14" fill="#193B36" stroke="#2B6C62"/>
+    <text x="44" y="102" fill="#E7FFF9" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Citations</text>
+    <rect x="44" y="118" width="110" height="8" rx="4" fill="#65BDB1"/>
+    <rect x="26" y="166" width="178" height="72" rx="14" fill="#193B36" stroke="#2B6C62"/>
+    <text x="44" y="196" fill="#E7FFF9" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Validation</text>
+    <rect x="44" y="212" width="130" height="8" rx="4" fill="#65BDB1"/>
+    <rect x="26" y="260" width="178" height="42" rx="21" fill="url(#blue)"/>
+    <text x="68" y="287" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800">Export report</text>
+  </g>
+
+  <path d="M456 337C492 337 479 337 506 337" stroke="#0C7C71" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 14"/>
+  <path d="M1042 337C1070 337 1052 337 1074 337" stroke="#0C7C71" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 14"/>
+
+  <text x="92" y="630" fill="#0E2A27" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="850">AI document operations for claims teams</text>
+  <text x="94" y="670" fill="#49645F" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500">Messy PDFs and scans become a citation-backed, human-reviewed case dossier.</text>
+</svg>

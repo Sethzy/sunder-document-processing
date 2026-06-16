@@ -1,10 +1,27 @@
-# Sunder
+<p align="center">
+  <a href="https://www.trysunder.com">
+    <img src="./demo-video/public/sunder-logo.svg" width="170" alt="Sunder logo" />
+  </a>
+</p>
 
-AI document operations for claims teams. Sunder turns messy legal and claims document packets into a reviewable dossier: upload the source files, classify and split them, extract structured evidence with citations, verify the fields against the originals, and generate report-ready outputs.
+<h2 align="center">AI document operations for claims teams</h2>
 
-https://www.trysunder.com
+<p align="center">
+  <a href="https://www.trysunder.com">Website</a> ·
+  <a href="./DEMO.md">Demo runbook</a> ·
+  <a href="./PRODUCT.md">Product notes</a> ·
+  <a href="#architecture">Architecture</a>
+</p>
 
-## Why I Built Sunder
+<p align="center">
+  <a href="https://www.trysunder.com">
+    <img src="./docs/assets/readme/sunder-cover.svg" alt="Sunder product banner" />
+  </a>
+</p>
+
+<br />
+
+# Why Sunder
 
 Claims review is not hard because one PDF is hard to read. It is hard because the source material arrives as a messy folder: medical bills, medical reports, income documents, duplicate scans, combined PDFs, missing fields, and numbers that need to be defensible.
 
