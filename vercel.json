@@ -1,0 +1,11 @@
+{
+  "framework": "vite",
+  "functions": {
+    "api/**/*.ts": {
+      "includeFiles": "src/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/((?!api/|@vite|@react-refresh|src/|node_modules/|favicon\\.svg|exports/|robots\\.txt|sitemap\\.xml).*)", "destination": "/" }
+  ]
+}
