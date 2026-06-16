@@ -4,7 +4,7 @@
  * The actual Vercel handler is in /api/gemini/process.ts
  */
 import { z } from "zod";
-import type { DynamicSplitterResponse } from "@/types/gemini";
+import type { DynamicSplitterResponse } from "../types/gemini.js";
 
 /**
  * Request body schema for document processing.

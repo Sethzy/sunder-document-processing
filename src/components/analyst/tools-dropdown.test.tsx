@@ -17,7 +17,7 @@ describe('ToolsDropdown', () => {
     await user.click(screen.getByRole('button', { name: /tools/i }));
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/search tools/i)).toBeInTheDocument();
+    expect(screen.getByText(/active tools/i)).toBeInTheDocument();
   });
 
   it('shows active and coming soon tools', async () => {
@@ -27,7 +27,10 @@ describe('ToolsDropdown', () => {
     await user.click(screen.getByRole('button', { name: /tools/i }));
 
     expect(screen.getByText(/active tools/i)).toBeInTheDocument();
-    expect(screen.getByText(/excel reports/i)).toBeInTheDocument();
+    expect(screen.getByText('Excel')).toBeInTheDocument();
+    expect(screen.getByText('Word')).toBeInTheDocument();
+    expect(screen.getByText('PowerPoint')).toBeInTheDocument();
+    expect(screen.getByText('PDF')).toBeInTheDocument();
     expect(screen.getByText(/coming soon/i)).toBeInTheDocument();
     expect(screen.getByText(/erp integration/i)).toBeInTheDocument();
   });

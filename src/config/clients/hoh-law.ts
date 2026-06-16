@@ -307,7 +307,7 @@ export const hohLawConfig: ClientConfig = {
       /** @see https://dashboard.extend.ai/processors/dp_pKFvcN7cRNNDqPQz0X-V3 */
       extendProcessorId: "dp_pKFvcN7cRNNDqPQz0X-V3",
       extractionConfig: asExtractionConfig(incomeDocumentSchema.config),
-      validate: (_data) => {
+      validate: () => {
         const failures: ValidationFailure[] = [];
         // No validation rules
         return failures;

@@ -9,6 +9,7 @@ import {
   type FieldFilters,
 } from "./field-filter-utils";
 import type { ValidationFailure } from "@/config/types";
+import type { SplitExtraction } from "@/types/extraction";
 
 describe("fieldMatchesFilters", () => {
   const noFilters: FieldFilters = {
@@ -115,7 +116,7 @@ describe("computeFieldCounts", () => {
           { ruleId: "r1", ruleName: "Rule", message: "msg", field: "field1" },
         ],
       },
-    ] as any;
+    ] as unknown as SplitExtraction[];
 
     const counts = computeFieldCounts(splits);
 
@@ -132,7 +133,7 @@ describe("computeFieldCounts", () => {
         extractionMetadata: {},
         validationFailures: [],
       },
-    ] as any;
+    ] as unknown as SplitExtraction[];
 
     const counts = computeFieldCounts(splits);
 
@@ -151,7 +152,7 @@ describe("computeFieldCounts", () => {
         },
         validationFailures: [],
       },
-    ] as any;
+    ] as unknown as SplitExtraction[];
 
     const counts = computeFieldCounts(splits);
 

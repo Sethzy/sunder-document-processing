@@ -77,9 +77,6 @@ export const ChatInput = memo(function ChatInput({
   templateFiles,
   onTemplateFilesChange,
 }: ChatInputProps) {
-  // Debug: log when component re-renders
-  console.log('[ChatInput] render, isLoading=', isLoading, Date.now());
-
   const imageInputRef = useRef<HTMLInputElement>(null);
   const templateInputRef = useRef<HTMLInputElement>(null);
 
@@ -165,24 +162,19 @@ export const ChatInput = memo(function ChatInput({
 
   /** Handle template file selection */
   const handleTemplateSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedCount = e.target.files?.length ?? 0;
-    console.log(`[ChatInput] handleTemplateSelect: selected=${selectedCount}, current=${templateFiles?.length}, max=${TEMPLATE_MAX_FILES}`);
     if (!onTemplateFilesChange || !templateFiles) return;
 
     const files = Array.from(e.target.files ?? []);
     const currentCount = templateFiles.length;
     const availableSlots = TEMPLATE_MAX_FILES - currentCount;
-    console.log(`[ChatInput] template check: files=${files.length} > slots=${availableSlots}? ${files.length > availableSlots}`);
 
     // Check if user is trying to add more than allowed
     if (files.length > availableSlots) {
       if (availableSlots === 0) {
-        console.log('[ChatInput] TOAST: at limit, rejecting all');
         toast.error(`You can only attach ${TEMPLATE_MAX_FILES} template files at a time`);
         e.target.value = '';
         return;
       }
-      console.log('[ChatInput] TOAST: partial rejection');
       toast.error(
         `Some files could not be added because you can only attach ${TEMPLATE_MAX_FILES} template files at a time`
       );

@@ -252,7 +252,7 @@ export function useDismissRule() {
       // First get current dismissed rules
       const { data: current, error: fetchError } = await supabase
         .from("splits")
-        .select("dismissed_rule_ids, document_id")
+        .select("*")
         .eq("id", splitId)
         .single();
 
@@ -264,12 +264,7 @@ export function useDismissRule() {
       const newRuleIds = ruleIds.filter((id) => !currentIds.includes(id));
       if (newRuleIds.length === 0) {
         // All rules already dismissed, return current state
-        const { data: fullRow } = await supabase
-          .from("splits")
-          .select("*")
-          .eq("id", splitId)
-          .single();
-        return mapRowToSplitExtraction(fullRow!);
+        return mapRowToSplitExtraction(current!);
       }
 
       const newIds = [...currentIds, ...newRuleIds];

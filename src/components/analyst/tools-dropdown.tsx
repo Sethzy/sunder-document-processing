@@ -1,4 +1,7 @@
-
+/**
+ * Compact tools popover for analyst workspace export and integration affordances.
+ * @module components/analyst/tools-dropdown
+ */
 import { Blocks, FileSpreadsheet, Building2, FileText, ChevronDown, Presentation, FileType, PenTool, Database } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';

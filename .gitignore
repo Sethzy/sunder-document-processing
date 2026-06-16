@@ -18,11 +18,27 @@ dist-ssr
 .cursor/
 .playwright-mcp/
 .understand-anything/
-.claude/skills/impeccable/
+.claude/
+.mcp.json
+.tanstack/tmp/
 AGENTS.md
 
 # Supabase CLI local link/cache files. Remote schema is recovered via migrations.
 supabase/.temp/
+
+# Internal planning, verification, and generated audit artifacts.
+docs/audits/
+docs/goals/
+docs/plans/
+docs/tasks/
+
+# Client onboarding notes can contain private interview context or account details.
+src/clients/**/checklist.json
+src/clients/**/intake-brief.md
+src/clients/**/transcript.md
+
+# Remotion recording workspace and generated media are kept outside the public app.
+demo-video/
 
 # Editor directories and files
 .vscode/*

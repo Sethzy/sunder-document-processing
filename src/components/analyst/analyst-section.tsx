@@ -97,7 +97,7 @@ export function AnalystSection({ caseId }: AnalystSectionProps) {
   };
 
   /** Handle Quick Export - calls /api/docgen/generate endpoint */
-  const handleQuickExport = async (format: 'excel' | 'csv') => {
+  const handleQuickExport = async () => {
     // Use selected tags, or all available tags if none selected
     const tagsToExport = effectiveTags.length > 0 ? effectiveTags : availableTags;
 
@@ -105,12 +105,6 @@ export function AnalystSection({ caseId }: AnalystSectionProps) {
       toast.error('No documents to export');
       return;
     }
-
-    console.log('[AnalystSection] handleQuickExport:', {
-      format,
-      caseId,
-      tagsToExport,
-    });
 
     setIsExporting(true);
     const loadingToast = toast.loading('Generating report...');

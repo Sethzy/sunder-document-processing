@@ -2,7 +2,7 @@
  * PDF viewer pane with highlight support.
  * @module components/documents/pdf-viewer-pane
  */
-import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { Viewer, Worker, type PdfJs } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import {
   highlightPlugin,
@@ -25,6 +25,22 @@ interface PdfViewerPaneProps {
 
 /** Image file types that should be rendered as <img> instead of PDF viewer */
 const IMAGE_FILE_TYPES = ["png", "jpg", "jpeg", "gif", "webp", "tiff", "tif", "heic", "bmp"];
+
+/** Bundled pdf.js worker URL; avoids loading executable viewer code from a CDN. */
+const PDF_WORKER_URL = new URL("pdfjs-dist/build/pdf.worker.min.js", import.meta.url).toString();
+
+/**
+ * Applies defensive pdf.js document options for untrusted uploaded PDFs.
+ * React PDF Viewer's type omits some pdf.js options, so the final cast keeps the
+ * boundary explicit while still passing supported options through to pdf.js.
+ */
+function hardenPdfDocumentParams(options: PdfJs.GetDocumentParams): PdfJs.GetDocumentParams {
+  return {
+    ...options,
+    enableScripting: false,
+    isEvalSupported: false,
+  } as PdfJs.GetDocumentParams;
+}
 
 /**
  * Renders a single highlight overlay.
@@ -156,10 +172,11 @@ export function PdfViewerPane({ pdfUrl, fileType = "pdf" }: PdfViewerPaneProps) 
   // PDF viewer
   return (
     <div className="h-full">
-      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+      <Worker workerUrl={PDF_WORKER_URL}>
         <Viewer
           fileUrl={pdfUrl}
           defaultScale={1} // 100% zoom
+          transformGetDocumentParams={hardenPdfDocumentParams}
           plugins={[defaultLayoutPluginInstance, highlightPluginInstance]}
         />
       </Worker>

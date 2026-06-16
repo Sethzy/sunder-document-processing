@@ -209,7 +209,7 @@ describe('ChatInput', () => {
       const input = document.querySelector('input[type="file"]') as HTMLInputElement;
       fireEvent.change(input, { target: { files: [newFile] } });
 
-      expect(toast.error).toHaveBeenCalledWith('Maximum 5 images per message');
+      expect(toast.error).toHaveBeenCalledWith('You can only attach 5 images at a time');
     });
 
     it('enables submit button when images attached without text', () => {
@@ -239,7 +239,7 @@ describe('ChatInput', () => {
         />
       );
 
-      expect(screen.getByRole('button', { name: /upload templates/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /attach template files/i })).toBeInTheDocument();
     });
 
     it('locks template upload after first message', () => {
@@ -252,8 +252,7 @@ describe('ChatInput', () => {
         />
       );
 
-      const uploadButton = screen.getByRole('button', { name: /upload templates/i });
-      expect(uploadButton).toBeDisabled();
+      expect(screen.queryByRole('button', { name: /attach template files/i })).not.toBeInTheDocument();
     });
 
     it('displays template file chips', () => {

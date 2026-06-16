@@ -18,8 +18,15 @@ export const config = {
   maxDuration: 300,
 };
 
+/** Logs report-generation details only when explicitly enabled for debugging. */
+function debugLog(...args: unknown[]): void {
+  if (process.env.SUNDER_DEBUG_LOGS === 'true') {
+    console.info(...args);
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  console.log('[docgen] Request received:', req.method, req.body?.reportType);
+  debugLog('[docgen] Request received:', req.method, req.body?.reportType);
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -102,7 +109,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // 7. Generate Excel report
-    console.log('[docgen] Generating quick report');
+    debugLog('[docgen] Generating quick report');
     const fileBuffer = await convertSplitsToExcel(
       splits.map(s => ({
         id: s.id,

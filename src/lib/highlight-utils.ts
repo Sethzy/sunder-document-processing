@@ -2,7 +2,7 @@
  * @file Highlight utilities for PDF bounding boxes
  * @description Converts ExtendAI polygon coordinates to react-pdf-viewer highlight areas
  */
-import type { Point, Citation } from "@/types/extraction";
+import type { Point, Citation } from "../types/extraction.js";
 
 /**
  * Offsets citation page numbers from child PDF coordinates to original PDF coordinates.

@@ -54,14 +54,12 @@ describe("ReviewActions", () => {
   it("has different visual style when reviewed vs not reviewed", () => {
     const { rerender } = render(<ReviewActions {...defaultProps} />);
 
-    // Not reviewed: dark style
     const unreviewedButton = screen.getByRole("button");
-    expect(unreviewedButton).toHaveClass("bg-gray-900");
+    expect(unreviewedButton).toHaveClass("bg-foreground");
 
     rerender(<ReviewActions {...defaultProps} isReviewed={true} />);
 
-    // Reviewed: blue style (info/80)
     const reviewedButton = screen.getByRole("button");
-    expect(reviewedButton).toHaveClass("bg-info/80");
+    expect(reviewedButton).toHaveClass("bg-emerald-600");
   });
 });

@@ -2,6 +2,8 @@
  * @fileoverview Tests for Report History helper - saves AI-generated files.
  */
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "../../types/database";
 
 // Mock Supabase client
 const mockInsert = vi.fn().mockReturnValue({
@@ -20,7 +22,7 @@ const mockSupabase = {
       upload: mockUpload,
     }),
   },
-} as any;
+} as unknown as SupabaseClient<Database>;
 
 // Mock Anthropic SDK - needs to be a class that can be instantiated
 const MockAnthropicClass = class {

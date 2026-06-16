@@ -127,7 +127,7 @@ interface TemplateFileData {
 
 /**
  * Stream message via Anthropic SDK with SSE streaming.
- * Includes visibility detection to handle tab switches gracefully.
+ * Cancels the reader when the stream stalls to avoid a permanently loading UI.
  */
 async function streamMessage(
   messages: UIMessage[],
@@ -135,12 +135,9 @@ async function streamMessage(
   containerId: string | null,
   selectedTags: string[] | undefined,
   onEvent: StreamEventCallback,
-  abortSignal?: AbortSignal,
   templateFiles?: TemplateFileData[],
   extendedThinking?: boolean
 ): Promise<{ interrupted: boolean }> {
-  console.log('[stream] Starting streamMessage', { caseId, containerId, timestamp: Date.now() });
-
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -163,7 +160,6 @@ async function streamMessage(
       templateFiles: templateFiles?.length ? templateFiles : undefined,
       extendedThinking,
     }),
-    signal: abortSignal,
   });
 
   if (!res.ok) {
@@ -197,7 +193,6 @@ async function streamMessage(
   const STALL_TIMEOUT_MS = 30000;
   const stallCheckInterval = setInterval(() => {
     const elapsed = Date.now() - lastActivityTime;
-    console.log('[stream] Stall check', { elapsed, eventCount, readCount, timestamp: Date.now() });
     if (elapsed > STALL_TIMEOUT_MS) {
       console.warn('[stream] Stream stalled - no activity for 30s, aborting', { eventCount, readCount });
       wasInterruptedByVisibility = true;
@@ -208,13 +203,6 @@ async function streamMessage(
 
   try {
     while (true) {
-      // Check abort signal
-      if (abortSignal?.aborted) {
-        console.log('[stream] Abort signal received');
-        wasInterruptedByVisibility = true;
-        break;
-      }
-
       const { done, value } = await reader.read();
       const now = Date.now();
       const readGap = now - lastReadTime;
@@ -233,7 +221,6 @@ async function streamMessage(
       }
 
       if (done) {
-        console.log('[stream] Reader done', { eventCount, readCount, timestamp: now });
         break;
       }
 
@@ -247,11 +234,6 @@ async function streamMessage(
 
         eventCount++;
         const evt = event as Record<string, unknown>;
-
-        // Log significant events
-        if (evt.type === "message_stop" || evt.type === "metadata" || evt.type === "error") {
-          console.log('[stream] Event received', { type: evt.type, eventCount, timestamp: Date.now() });
-        }
 
         switch (evt.type) {
           case "content_block_start": {
@@ -356,7 +338,6 @@ async function streamMessage(
       if (event && typeof event === "object") {
         const evt = event as Record<string, unknown>;
         if (evt.type === "metadata") {
-          console.log('[stream] Metadata from buffer', { timestamp: Date.now() });
           responseContainerId = (evt.containerId as string) ?? null;
           savedFiles = (evt.savedFiles as StreamingMetadataEvent["savedFiles"]) ?? [];
           onEvent({ type: "metadata", contentBlocks, containerId: responseContainerId, savedFiles, isDone: true, isTextComplete: true });
@@ -364,7 +345,6 @@ async function streamMessage(
       }
     }
 
-    console.log('[stream] Stream completed', { eventCount, readCount, wasInterruptedByVisibility, timestamp: Date.now() });
     return { interrupted: wasInterruptedByVisibility };
   } finally {
     clearInterval(stallCheckInterval);
@@ -574,12 +554,9 @@ export function useAnalystChat({ caseId, extendedThinking }: UseAnalystChatOptio
   const [rawStatus, setRawStatus] = useState<"ready" | "streaming" | "error">("ready");
   const [wasInterrupted, setWasInterrupted] = useState(false);
 
-  // Wrapper to log ALL status changes with stack trace
-  const setStatus = (newStatus: "ready" | "streaming" | "error") => {
-    console.log('[status-change]', rawStatus, '->', newStatus, Date.now());
-    console.trace('[status-change] call stack');
+  const setStatus = useCallback((newStatus: "ready" | "streaming" | "error") => {
     setRawStatus(newStatus);
-  };
+  }, []);
   const status = rawStatus;
   const lastUserMessageRef = useRef<{ text: string; tags?: string[] } | null>(null);
 
@@ -610,15 +587,6 @@ export function useAnalystChat({ caseId, extendedThinking }: UseAnalystChatOptio
       if (!silent) setIsCheckingStale(false);
     }
   }, [caseId, startedAt]);
-
-  // Track hook lifecycle
-  useEffect(() => {
-    const instanceId = Math.random().toString(36).slice(2, 8);
-    console.log('[hook-lifecycle] useAnalystChat MOUNTED', { instanceId, caseId, timestamp: Date.now() });
-    return () => {
-      console.log('[hook-lifecycle] useAnalystChat UNMOUNTED', { instanceId, caseId, timestamp: Date.now() });
-    };
-  }, [caseId]);
 
   // Keep messagesRef in sync with state
   useEffect(() => {
@@ -749,22 +717,6 @@ export function useAnalystChat({ caseId, extendedThinking }: UseAnalystChatOptio
       const assistantMsgId = `assistant-${Date.now()}`;
       let streamCompletedProperly = false;
 
-      // Create abort controller for visibility change handling
-      const abortController = new AbortController();
-      let visibilityChangedWhileStreaming = false;
-
-      // Track visibility changes during streaming
-      const handleVisibilityChange = () => {
-        if (document.hidden) {
-          console.log('[chat-client] Tab hidden during streaming', Date.now());
-          visibilityChangedWhileStreaming = true;
-          // Don't abort immediately - just track it happened
-        } else {
-          console.log('[chat-client] Tab visible again', Date.now());
-        }
-      };
-      document.addEventListener("visibilitychange", handleVisibilityChange);
-
       try {
         const result = await streamMessage(
           messagesToSend,
@@ -787,18 +739,15 @@ export function useAnalystChat({ caseId, extendedThinking }: UseAnalystChatOptio
 
             // Enable input immediately when text is complete (message_stop received)
             if (isTextComplete) {
-              console.log('[chat-client] isTextComplete=true, calling setStatus("ready")', Date.now());
               setStatus("ready");
               setIsFirstMessageProcessing(false);
             }
 
             // Track that stream completed properly (metadata received)
             if (isDone) {
-              console.log('[chat-client] isDone=true (metadata received)', Date.now());
               streamCompletedProperly = true;
             }
           },
-          abortController.signal,
           templateFilesData,
           extendedThinking
         );
@@ -806,12 +755,6 @@ export function useAnalystChat({ caseId, extendedThinking }: UseAnalystChatOptio
         // Handle stream ending without metadata (connection drop, timeout, stall)
         const wasInterruptedByStream = result?.interrupted ?? false;
         if (!streamCompletedProperly || wasInterruptedByStream) {
-          console.log('[chat-client] Stream incomplete', {
-            streamCompletedProperly,
-            wasInterruptedByStream,
-            visibilityChangedWhileStreaming,
-            timestamp: Date.now()
-          });
           setStatus("ready");
           setIsFirstMessageProcessing(false);
           setWasInterrupted(true);
@@ -826,7 +769,6 @@ export function useAnalystChat({ caseId, extendedThinking }: UseAnalystChatOptio
           chatError.message.includes("Stream stalled");
 
         if (isAbortError) {
-          console.log('[chat-client] Stream aborted/stalled', { visibilityChangedWhileStreaming, timestamp: Date.now() });
           setStatus("ready");
           setIsFirstMessageProcessing(false);
           setWasInterrupted(true);
@@ -861,11 +803,10 @@ export function useAnalystChat({ caseId, extendedThinking }: UseAnalystChatOptio
 
         setIsFirstMessageProcessing(false);
       } finally {
-        document.removeEventListener("visibilitychange", handleVisibilityChange);
         isSendingRef.current = false;
       }
     },
-    [caseId, containerId, sessionTags, extendedThinking]
+    [caseId, containerId, extendedThinking, sessionTags, setStatus]
   );
 
   const startFresh = useCallback(() => {
@@ -882,7 +823,7 @@ export function useAnalystChat({ caseId, extendedThinking }: UseAnalystChatOptio
     setWasInterrupted(false);
     lastUserMessageRef.current = null;
     isSendingRef.current = false;
-  }, [caseId]);
+  }, [caseId, setStatus]);
 
   const reload = useCallback(() => {
     const lastUserMsg = lastUserMessageRef.current;
@@ -907,11 +848,6 @@ export function useAnalystChat({ caseId, extendedThinking }: UseAnalystChatOptio
   }, [send]);
 
   const isLoading = status === "streaming" || isFirstMessageProcessing;
-
-  // Debug: log when isLoading changes
-  useEffect(() => {
-    console.log('[chat-client] isLoading changed to:', isLoading, 'status:', status, 'isFirstMessageProcessing:', isFirstMessageProcessing, Date.now());
-  }, [isLoading, status, isFirstMessageProcessing]);
 
   return {
     messages,

@@ -3,7 +3,11 @@
  * @module lib/docgen/claude-report.test
  */
 import { describe, it, expect } from 'vitest';
+import type Anthropic from '@anthropic-ai/sdk';
 import { extractExcelFileId, isNonRetryableError, extractTextContent } from './claude-report';
+
+const asAnthropicMessage = (response: unknown): Anthropic.Message =>
+  response as Anthropic.Message;
 
 describe('extractExcelFileId', () => {
   it('extracts file ID from bash_code_execution_tool_result block', () => {
@@ -20,7 +24,7 @@ describe('extractExcelFileId', () => {
       ],
     };
 
-    expect(extractExcelFileId(response as any)).toBe('file-123');
+    expect(extractExcelFileId(asAnthropicMessage(response))).toBe('file-123');
   });
 
   it('returns null when no bash_code_execution_tool_result block', () => {
@@ -30,7 +34,7 @@ describe('extractExcelFileId', () => {
       ],
     };
 
-    expect(extractExcelFileId(response as any)).toBeNull();
+    expect(extractExcelFileId(asAnthropicMessage(response))).toBeNull();
   });
 
   it('returns null when bash_code_execution_tool_result has no file_id', () => {
@@ -46,7 +50,7 @@ describe('extractExcelFileId', () => {
       ],
     };
 
-    expect(extractExcelFileId(response as any)).toBeNull();
+    expect(extractExcelFileId(asAnthropicMessage(response))).toBeNull();
   });
 });
 
@@ -83,7 +87,7 @@ describe('extractTextContent', () => {
       ],
     };
 
-    expect(extractTextContent(response as any)).toBe('Analyzed 20 invoices totaling $4,230.');
+    expect(extractTextContent(asAnthropicMessage(response))).toBe('Analyzed 20 invoices totaling $4,230.');
   });
 
   it('returns null when no text blocks present', () => {
@@ -97,11 +101,11 @@ describe('extractTextContent', () => {
       ],
     };
 
-    expect(extractTextContent(response as any)).toBeNull();
+    expect(extractTextContent(asAnthropicMessage(response))).toBeNull();
   });
 
   it('returns null for empty content array', () => {
     const response = { content: [] };
-    expect(extractTextContent(response as any)).toBeNull();
+    expect(extractTextContent(asAnthropicMessage(response))).toBeNull();
   });
 });

@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.trysunder.com">
-    <img src="./demo-video/public/sunder-logo.svg" width="170" alt="Sunder logo" />
+    <img src="./docs/assets/readme/sunder-logo.svg" width="170" alt="Sunder logo" />
   </a>
 </p>
 
@@ -23,11 +23,15 @@ Most AI document demos stop at extraction. Sunder is built around the next step:
 ## Quick Start
 
 ```bash
+nvm use 24
 npm install
+cp .env.example .env.local
 npm run dev
 ```
 
-For the final demo path, use Vercel Functions rather than plain Vite when document-processing API routes are required:
+Fill `.env.local` with your own Supabase, Gemini, Extend AI, and Anthropic credentials. Public `VITE_` variables are safe for browser use; service-role and AI provider keys must stay server-side in Vercel or local env files.
+
+For document-processing API routes, use Vercel Functions rather than plain Vite:
 
 ```bash
 VITE_ENABLE_LOCAL_GEMINI_PROCESSING=true vercel dev
@@ -86,7 +90,7 @@ The current walkthrough uses a private seeded legal claim case:
 5. Check rules and validation issues.
 6. Generate or inspect report artifacts from the case library.
 
-See [DEMO.md](./DEMO.md) for the recording runbook.
+See [DEMO.md](./DEMO.md) for a public-safe walkthrough guide.
 
 ## Architecture
 
@@ -127,7 +131,7 @@ The frontend is a React and TanStack workspace backed by Supabase. Vercel Functi
 - `src/config/clients/hoh-law.ts` - Hoh Law-style claim review configuration
 - `src/clients/hoh-law/` - client-specific schemas and report logic
 - `supabase/migrations/` - database schema recovery and portfolio demo migrations
-- `DEMO.md` - private demo recording runbook
+- `DEMO.md` - public demo walkthrough guide
 - `PRODUCT.md` - product principles and design constraints
 
 ## Health Checks
@@ -138,8 +142,6 @@ npm run test:run
 npm run lint
 ```
 
-Lint currently includes legacy/non-demo debt. Production readiness should prioritize build success, the legal claim demo path, and any lint failures touching upload, extraction review, report generation, auth, Supabase, or Vercel functions.
-
 ## Repository Notes
 
-The private product remote is `Sethzy/Sunder`. The public portfolio remote is `Sethzy/sunder-document-processing`.
+This repository is intended as a portfolio/open-source reference implementation. Do not commit `.env.local`, local Supabase cache files, generated build output, private demo PDFs, or recording workspaces.

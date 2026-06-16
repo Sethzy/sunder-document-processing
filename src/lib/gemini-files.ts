@@ -4,6 +4,13 @@
  */
 import { GoogleGenAI } from "@google/genai";
 
+/** Logs Gemini file-transfer details only when explicitly enabled for debugging. */
+function debugLog(...args: unknown[]): void {
+  if (process.env.SUNDER_DEBUG_LOGS === "true") {
+    console.info(...args);
+  }
+}
+
 /**
  * Parameters for uploading a file to Google Files API.
  */
@@ -44,8 +51,8 @@ export async function uploadToGoogleFiles(
 ): Promise<GoogleFileMetadata> {
   const { fileBuffer, mimeType, displayName, apiKey } = params;
 
-  console.log("[Gemini Files] Uploading to Google Files API...");
-  console.log("[Gemini Files] Size:", fileBuffer.length, "bytes, MIME:", mimeType);
+  debugLog("[Gemini Files] Uploading to Google Files API...");
+  debugLog("[Gemini Files] Size:", fileBuffer.length, "bytes, MIME:", mimeType);
   const ai = new GoogleGenAI({ apiKey });
 
   const blob = new Blob([new Uint8Array(fileBuffer)], { type: mimeType });
@@ -58,7 +65,7 @@ export async function uploadToGoogleFiles(
     },
   });
 
-  console.log("[Gemini Files] Upload complete:", file.name, "state:", file.state);
+  debugLog("[Gemini Files] Upload complete:", file.name, "state:", file.state);
   return file as GoogleFileMetadata;
 }
 
@@ -94,25 +101,25 @@ export async function waitForFileProcessing(
     maxAttempts = 30,
   } = params;
 
-  console.log("[Gemini Files] Waiting for processing:", fileName);
+  debugLog("[Gemini Files] Waiting for processing:", fileName);
   const ai = new GoogleGenAI({ apiKey });
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const file = await ai.files.get({ name: fileName });
 
     if (file.state === "ACTIVE") {
-      console.log("[Gemini Files] File ready (ACTIVE)");
+      debugLog("[Gemini Files] File ready (ACTIVE)");
       return file as GoogleFileMetadata;
     }
 
     if (file.state === "FAILED") {
-      console.log("[Gemini Files] File processing FAILED");
+      debugLog("[Gemini Files] File processing FAILED");
       throw new Error("File processing failed");
     }
 
     // Still PROCESSING, wait and retry
     if (attempt < maxAttempts) {
-      console.log(`[Gemini Files] Still PROCESSING, poll ${attempt}/${maxAttempts}...`);
+      debugLog(`[Gemini Files] Still PROCESSING, poll ${attempt}/${maxAttempts}...`);
       await new Promise((resolve) => setTimeout(resolve, pollIntervalMs));
     }
   }
@@ -180,7 +187,7 @@ export async function uploadAndWaitForFile(
  * @throws Error if download fails
  */
 export async function downloadFileFromUrl(url: string): Promise<Buffer> {
-  console.log("[Gemini Files] Downloading from Supabase...");
+  debugLog("[Gemini Files] Downloading from Supabase...");
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -191,7 +198,7 @@ export async function downloadFileFromUrl(url: string): Promise<Buffer> {
 
   const arrayBuffer = await response.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
-  console.log("[Gemini Files] Downloaded:", buffer.length, "bytes");
+  debugLog("[Gemini Files] Downloaded:", buffer.length, "bytes");
   return buffer;
 }
 
@@ -271,13 +278,13 @@ export async function deleteGoogleFile(
   const { fileName, apiKey } = params;
 
   try {
-    console.log("[Gemini Files] Deleting file:", fileName);
+    debugLog("[Gemini Files] Deleting file:", fileName);
     const ai = new GoogleGenAI({ apiKey });
     await ai.files.delete({ name: fileName });
-    console.log("[Gemini Files] File deleted");
+    debugLog("[Gemini Files] File deleted");
   } catch (error) {
     // Silent cleanup - don't fail the main operation if delete fails
     // File will be auto-deleted after 48 hours anyway
-    console.log("[Gemini Files] Delete failed (ignored):", (error as Error)?.message);
+    debugLog("[Gemini Files] Delete failed (ignored):", (error as Error)?.message);
   }
 }

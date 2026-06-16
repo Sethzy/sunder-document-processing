@@ -3,8 +3,15 @@
  * Called after Gemini processing completes to notify the user.
  */
 
-import { generateWebhookSignature } from "./hmac";
-import type { OpenClawCallbackPayload } from "./types";
+import { generateWebhookSignature } from "./hmac.js";
+import type { OpenClawCallbackPayload } from "./types.js";
+
+/** Logs callback delivery details only when explicitly enabled for debugging. */
+function debugLog(...args: unknown[]): void {
+  if (process.env.SUNDER_DEBUG_LOGS === "true") {
+    console.info(...args);
+  }
+}
 
 interface ProcessingResultSuccess {
   filename: string;
@@ -105,7 +112,7 @@ export async function sendWhatsAppResult(options: SendResultOptions): Promise<vo
     if (!response.ok) {
       console.error("[whatsapp/send-result] Callback failed:", response.status);
     } else {
-      console.log("[whatsapp/send-result] Result sent to", phone);
+      debugLog("[whatsapp/send-result] Result sent to", phone);
     }
   } catch (error) {
     console.error("[whatsapp/send-result] Error sending callback:", error);

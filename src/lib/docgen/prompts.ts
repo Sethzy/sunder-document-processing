@@ -2,7 +2,7 @@
  * Display names for DocGen report types.
  * @module lib/docgen/prompts
  */
-import type { ReportType } from './types';
+import type { ReportType } from "./types.js";
 
 /**
  * Gets display name for report type.

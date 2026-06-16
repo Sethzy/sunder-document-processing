@@ -1,6 +1,6 @@
 /**
- * @fileoverview Simple file logger for API debugging.
- * Writes logs to both console and logs/api.log in development.
+ * @fileoverview Debug logger for API diagnostics.
+ * Writes logs only outside production or when SUNDER_DEBUG_LOGS is enabled.
  */
 
 import { appendFileSync, mkdirSync, existsSync } from "fs";
@@ -8,6 +8,11 @@ import { join } from "path";
 
 const LOG_DIR = join(process.cwd(), "logs");
 const LOG_FILE = join(LOG_DIR, "api.log");
+
+/** Whether verbose API logging is enabled for this process. */
+function isDebugLoggingEnabled(): boolean {
+  return process.env.NODE_ENV !== "production" || process.env.SUNDER_DEBUG_LOGS === "true";
+}
 
 /** Ensure logs directory exists */
 function ensureLogDir() {
@@ -17,8 +22,7 @@ function ensureLogDir() {
 }
 
 /**
- * Log a message to console and file.
- * In development, also appends to logs/api.log.
+ * Log a message to console and file when debug logging is enabled.
  *
  * @param prefix - Log prefix (e.g., "[chat]")
  * @param args - Values to log (objects are JSON stringified)
@@ -28,6 +32,8 @@ function ensureLogDir() {
  * // Output: [2026-01-19T10:46:56.123Z] [chat] Request received {"caseId":"123"}
  */
 export function log(prefix: string, ...args: unknown[]) {
+  if (!isDebugLoggingEnabled()) return;
+
   const timestamp = new Date().toISOString();
 
   // Format args - stringify objects, keep primitives as-is
@@ -37,10 +43,9 @@ export function log(prefix: string, ...args: unknown[]) {
 
   const message = `[${timestamp}] ${prefix} ${formattedArgs.join(" ")}`;
 
-  // Always log to console
-  console.log(message);
+  console.info(message);
 
-  // In development, also write to file
+  // In development, also write to file.
   if (process.env.NODE_ENV !== "production") {
     try {
       ensureLogDir();

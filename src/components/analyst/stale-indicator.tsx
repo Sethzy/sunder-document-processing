@@ -48,13 +48,14 @@ export function StaleIndicator({ isStale, isCheckingStale, onCheckStale }: Stale
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div
-          className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
+        <button
+          type="button"
+          className="flex items-center justify-center rounded-sm cursor-pointer hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           aria-label="New uploads detected (click to recheck)"
           onClick={() => onCheckStale?.()}
         >
           <AlertTriangle className="h-4 w-4 text-amber-500" />
-        </div>
+        </button>
       </TooltipTrigger>
       <TooltipContent side="bottom" sideOffset={4}>
         <p>New uploads detected.</p>

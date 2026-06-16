@@ -11,9 +11,9 @@ describe('QuickActionCards', () => {
   it('renders all three action cards', () => {
     render(<QuickActionCards onSelectAction={vi.fn()} />);
 
-    expect(screen.getByText('Reconcile')).toBeInTheDocument();
-    expect(screen.getByText('Analyze patterns')).toBeInTheDocument();
-    expect(screen.getByText('Find issues')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /reconcile/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /analyze/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /audit/i })).toBeInTheDocument();
   });
 
   it('calls onSelectAction with reconcile prompt when clicked', async () => {
@@ -21,7 +21,7 @@ describe('QuickActionCards', () => {
     const onSelectAction = vi.fn();
     render(<QuickActionCards onSelectAction={onSelectAction} />);
 
-    await user.click(screen.getByText('Reconcile'));
+    await user.click(screen.getByRole('button', { name: /reconcile/i }));
 
     expect(onSelectAction).toHaveBeenCalledWith(
       expect.stringContaining('Cross-reference and match documents')
@@ -33,7 +33,7 @@ describe('QuickActionCards', () => {
     const onSelectAction = vi.fn();
     render(<QuickActionCards onSelectAction={onSelectAction} />);
 
-    await user.click(screen.getByText('Analyze patterns'));
+    await user.click(screen.getByRole('button', { name: /analyze/i }));
 
     expect(onSelectAction).toHaveBeenCalledWith(
       expect.stringContaining('Analyze patterns in this data')
@@ -45,7 +45,7 @@ describe('QuickActionCards', () => {
     const onSelectAction = vi.fn();
     render(<QuickActionCards onSelectAction={onSelectAction} />);
 
-    await user.click(screen.getByText('Find issues'));
+    await user.click(screen.getByRole('button', { name: /audit/i }));
 
     expect(onSelectAction).toHaveBeenCalledWith(
       expect.stringContaining('Audit these documents for issues')

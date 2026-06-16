@@ -31,6 +31,13 @@ vi.mock("@/lib/supabase", () => ({
         data: { session: { access_token: "test-token" } },
       }),
     },
+    from: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockReturnValue({
+          gt: vi.fn().mockResolvedValue({ count: 0, error: null }),
+        }),
+      }),
+    }),
   },
 }));
 
@@ -66,6 +73,7 @@ describe("useAnalystChat", () => {
           { id: "msg-2", role: "assistant", parts: [{ type: "text", text: "Hi" }] },
         ],
         containerId: "container-abc",
+        startedAt: "2024-01-15T10:00:00Z",
         dataVersion: "5:2024-01-15T10:00:00Z",
       };
       // Set localStorage directly
@@ -90,6 +98,7 @@ describe("useAnalystChat", () => {
           { id: "msg-1", role: "user", parts: [{ type: "text", text: "Hello" }] },
         ],
         containerId: "container-abc",
+        startedAt: "2024-01-15T10:00:00Z",
         dataVersion: "5:2024-01-15T10:00:00Z", // Old version
       };
       // Set localStorage directly
@@ -114,6 +123,7 @@ describe("useAnalystChat", () => {
           { id: "msg-1", role: "user", parts: [{ type: "text", text: "Hello" }] },
         ],
         containerId: "container-abc",
+        startedAt: "2024-01-15T10:00:00Z",
         dataVersion: "5:2024-01-15T10:00:00Z",
       };
       // Set localStorage directly
@@ -242,6 +252,7 @@ describe("useAnalystChat", () => {
           },
         ],
         containerId: "existing-container-123",
+        startedAt: "2024-01-15T10:00:00Z",
         dataVersion: "2:2024-01-15T10:00:00Z",
       });
 

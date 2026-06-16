@@ -25,6 +25,8 @@ export type Database = {
           event_date: string | null
           id: string
           updated_at: string
+          validation_review_completed_at: string | null
+          validation_review_completed_by: string | null
         }
         Insert: {
           case_name: string
@@ -36,6 +38,8 @@ export type Database = {
           event_date?: string | null
           id?: string
           updated_at?: string
+          validation_review_completed_at?: string | null
+          validation_review_completed_by?: string | null
         }
         Update: {
           case_name?: string
@@ -47,6 +51,8 @@ export type Database = {
           event_date?: string | null
           id?: string
           updated_at?: string
+          validation_review_completed_at?: string | null
+          validation_review_completed_by?: string | null
         }
         Relationships: []
       }

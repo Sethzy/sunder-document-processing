@@ -1,3 +1,4 @@
+/** ESLint configuration for the Sunder application workspace. */
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
@@ -6,7 +7,19 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores([
+    '.agents/**',
+    '.claude/**',
+    '.next/**',
+    '.tanstack/tmp/**',
+    '.vercel/**',
+    'demo-video/**',
+    'dist/**',
+    'dist-ssr/**',
+    'docs/audits/**',
+    'docs/goals/*.json',
+    'supabase/.temp/**',
+  ]),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -18,6 +31,11 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+    },
+    rules: {
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      'react-hooks/purity': 'warn',
+      'react-hooks/set-state-in-effect': 'warn',
     },
   },
 ])

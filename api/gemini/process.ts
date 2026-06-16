@@ -23,7 +23,7 @@ import {
   calculateBackoff,
   getProcessingErrorMessage,
 } from "../../src/lib/gemini.js";
-import imageSize from "image-size";
+import { imageSize } from "image-size";
 import {
   getClientConfig,
   buildSplitterPrompt,
@@ -37,7 +37,6 @@ import {
   validateRequest,
   extractToken,
   createSuccessResponse,
-  createErrorResponse,
 } from "../../src/api/gemini-process.js";
 import {
   prepareFileForGemini,
@@ -49,6 +48,13 @@ import {
 } from "../../src/lib/whatsapp/send-result.js";
 
 const MAX_RETRIES = 3;
+
+/** Logs verbose processing details only when explicitly enabled for debugging. */
+function debugLog(...args: unknown[]): void {
+  if (process.env.SUNDER_DEBUG_LOGS === "true") {
+    console.info(...args);
+  }
+}
 
 /**
  * Downloads PDF bytes from a signed URL.
@@ -146,7 +152,7 @@ async function processExtractionForSplit(
     }
 
     // Call ExtendAI with fileId or fileUrl
-    console.log(
+    debugLog(
       `[Gemini API] Extracting split ${splitId} with processor ${tag.extendProcessorId}`
     );
     const result = await runExtraction(
@@ -201,7 +207,7 @@ async function processExtractionForSplit(
       })
       .eq("id", splitId);
 
-    console.log(`[Gemini API] Split ${splitId} extraction ${status}`);
+    debugLog(`[Gemini API] Split ${splitId} extraction ${status}`);
   } catch (error) {
     // Mark split as failed
     const errorMessage =
@@ -252,17 +258,17 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
-  console.log("[Gemini API] === REQUEST START ===");
-  console.log("[Gemini API] ENV CHECK:");
-  console.log("  SUPABASE_URL:", process.env.SUPABASE_URL ? "SET" : "MISSING");
-  console.log("  SUPABASE_ANON_KEY:", process.env.SUPABASE_ANON_KEY ? "SET" : "MISSING");
-  console.log("  GEMINI_API_KEY:", process.env.GEMINI_API_KEY ? "SET" : "MISSING");
-  console.log("  EXTEND_API_KEY:", process.env.EXTEND_API_KEY ? "SET" : "MISSING");
+  debugLog("[Gemini API] === REQUEST START ===");
+  debugLog("[Gemini API] ENV CHECK:");
+  debugLog("  SUPABASE_URL:", process.env.SUPABASE_URL ? "SET" : "MISSING");
+  debugLog("  SUPABASE_ANON_KEY:", process.env.SUPABASE_ANON_KEY ? "SET" : "MISSING");
+  debugLog("  GEMINI_API_KEY:", process.env.GEMINI_API_KEY ? "SET" : "MISSING");
+  debugLog("  EXTEND_API_KEY:", process.env.EXTEND_API_KEY ? "SET" : "MISSING");
 
   // Check if extraction is enabled (API key configured)
   const extractionEnabled = !!process.env.EXTEND_API_KEY;
   if (!extractionEnabled) {
-    console.log("[Gemini API] EXTEND_API_KEY not configured - extraction disabled");
+    debugLog("[Gemini API] EXTEND_API_KEY not configured - extraction disabled");
   }
 
   try {
@@ -272,13 +278,13 @@ export default async function handler(
     }
 
     // Validate request body
-    console.log("[Gemini API] Body:", JSON.stringify(req.body));
+    debugLog("[Gemini API] Body:", JSON.stringify(req.body));
     const validation = validateRequest(req.body);
     if (!validation.success) {
       return res.status(400).json({ success: false, error: "Invalid documentId" });
     }
     const { documentId } = validation.data;
-    console.log("[Gemini API] Document ID:", documentId);
+    debugLog("[Gemini API] Document ID:", documentId);
 
     // Authenticate: internal secret (MCP / WhatsApp relay) OR JWT (browser)
     const internalSecret = req.headers["x-internal-secret"] as string | undefined;
@@ -287,7 +293,7 @@ export default async function handler(
     let supabase: ReturnType<typeof createClient<Database>>;
 
     if (isInternalCall) {
-      console.log("[Gemini API] Internal call authenticated via X-Internal-Secret");
+      debugLog("[Gemini API] Internal call authenticated via X-Internal-Secret");
       supabase = createClient<Database>(
         process.env.SUPABASE_URL!,
         process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -297,7 +303,7 @@ export default async function handler(
       if (!token) {
         return res.status(401).json({ success: false, error: "Unauthorized" });
       }
-      console.log("[Gemini API] Token extracted successfully");
+      debugLog("[Gemini API] Token extracted successfully");
       supabase = createClient<Database>(
         process.env.SUPABASE_URL!,
         process.env.SUPABASE_ANON_KEY!,
@@ -308,10 +314,10 @@ export default async function handler(
         }
       );
     }
-    console.log("[Gemini API] Supabase client created");
+    debugLog("[Gemini API] Supabase client created");
 
     // Fetch document (RLS enforces ownership for JWT calls; service role bypasses)
-    console.log("[Gemini API] Fetching document...");
+    debugLog("[Gemini API] Fetching document...");
     const { data: document, error: fetchError } = await supabase
       .from("documents")
       .select("*")
@@ -321,15 +327,15 @@ export default async function handler(
     if (fetchError || !document) {
       return res.status(404).json({ success: false, error: "Document not found" });
     }
-    console.log("[Gemini API] Document fetched:", document.original_filename);
-    console.log("[Gemini API] File size:", document.file_size, "bytes");
+    debugLog("[Gemini API] Document fetched:", document.original_filename);
+    debugLog("[Gemini API] File size:", document.file_size, "bytes");
 
     // Resolve client_config_id
     let clientConfigId: string | null = null;
 
     if (isInternalCall) {
       // Internal calls: derive user from document.created_by, query user_profiles directly
-      console.log("[Gemini API] Fetching client config for user:", document.created_by);
+      debugLog("[Gemini API] Fetching client config for user:", document.created_by);
       const { data: profile } = await supabase
         .from("user_profiles")
         .select("client_config_id")
@@ -338,7 +344,7 @@ export default async function handler(
       clientConfigId = profile?.client_config_id ?? null;
     } else {
       // JWT calls: verify user and use RPC
-      console.log("[Gemini API] Fetching user profile...");
+      debugLog("[Gemini API] Fetching user profile...");
       const {
         data: { user },
         error: userError,
@@ -350,12 +356,12 @@ export default async function handler(
       const { data: rpcResult } = await (supabase.rpc as any)("get_my_client_config");
       clientConfigId = rpcResult;
     }
-    console.log("[Gemini API] Client config:", clientConfigId ?? "default");
+    debugLog("[Gemini API] Client config:", clientConfigId ?? "default");
 
     // Get client configuration and build dynamic prompt
     const clientConfig = getClientConfig(clientConfigId);
     const dynamicPrompt = buildSplitterPrompt(clientConfig);
-    console.log(
+    debugLog(
       "[Gemini API] Using config:",
       clientConfig.id,
       "with",
@@ -364,14 +370,14 @@ export default async function handler(
     );
 
     // Update status to processing
-    console.log("[Gemini API] Updating status to processing...");
+    debugLog("[Gemini API] Updating status to processing...");
     await supabase
       .from("documents")
       .update({ status: "processing" })
       .eq("id", documentId);
 
     // Generate signed URL (300s expiry for large files)
-    console.log("[Gemini API] Generating signed URL...");
+    debugLog("[Gemini API] Generating signed URL...");
     const { data: signedUrlData, error: signedUrlError } = await supabase
       .storage
       .from("documents")
@@ -380,14 +386,14 @@ export default async function handler(
     if (signedUrlError || !signedUrlData) {
       throw new Error("Failed to generate signed URL");
     }
-    console.log("[Gemini API] Signed URL generated");
+    debugLog("[Gemini API] Signed URL generated");
 
     // Get MIME type from file extension
     const mimeType = getMimeType(document.file_type);
-    console.log("[Gemini API] MIME type:", mimeType);
+    debugLog("[Gemini API] MIME type:", mimeType);
 
     // Upload file to Google Files API
-    console.log("[Gemini API] Preparing file for Gemini (download → upload → wait)...");
+    debugLog("[Gemini API] Preparing file for Gemini (download → upload → wait)...");
     const uploadStart = Date.now();
     const googleFile = await prepareFileForGemini({
       sourceUrl: signedUrlData.signedUrl,
@@ -395,13 +401,13 @@ export default async function handler(
       displayName: document.original_filename,
       apiKey: process.env.GEMINI_API_KEY!,
     });
-    console.log(
+    debugLog(
       "[Gemini API] File ready:",
       googleFile.uri,
       `(${Date.now() - uploadStart}ms)`
     );
 
-    console.log("[Gemini API] Calling Gemini API...");
+    debugLog("[Gemini API] Calling Gemini API...");
 
     try {
       // Call Gemini with dynamic prompt and tag IDs from client config
@@ -420,7 +426,7 @@ export default async function handler(
       );
 
       // Create split rows from Gemini response
-      console.log("[Gemini API] Creating split rows...");
+      debugLog("[Gemini API] Creating split rows...");
       const splitIds: string[] = [];
 
       for (let i = 0; i < geminiResult.splits.length; i++) {
@@ -447,30 +453,30 @@ export default async function handler(
         });
 
         splitIds.push(splitId);
-        console.log(
+        debugLog(
           `[Gemini API] Created split ${i}: ${tag.id} (pages ${split.startPage}-${split.endPage})`
         );
       }
 
-      console.log("[Gemini API] Created", splitIds.length, "splits");
+      debugLog("[Gemini API] Created", splitIds.length, "splits");
 
       // Process extractions for splits that have processors configured
       if (extractionEnabled) {
-        console.log("[Gemini API] Processing extractions...");
-        console.log(`[Gemini API] File type: ${document.file_type}`);
+        debugLog("[Gemini API] Processing extractions...");
+        debugLog(`[Gemini API] File type: ${document.file_type}`);
 
         const isPdf = document.file_type.toLowerCase() === "pdf";
         const extractionPromises: Promise<void>[] = [];
 
         if (isPdf) {
           // ===== PDF PATH: Download, split if needed, upload child PDFs =====
-          console.log("[Gemini API] PDF detected - using PDF splitting logic");
+          debugLog("[Gemini API] PDF detected - using PDF splitting logic");
 
           // Download PDF bytes once for splitting
-          console.log("[Gemini API] Downloading PDF for splitting...");
+          debugLog("[Gemini API] Downloading PDF for splitting...");
           const pdfBytes = await downloadPdfBytes(signedUrlData.signedUrl);
           const totalPages = await getPdfPageCount(pdfBytes);
-          console.log(`[Gemini API] PDF has ${totalPages} pages`);
+          debugLog(`[Gemini API] PDF has ${totalPages} pages`);
 
           // Build split ranges from Gemini response
           const splitRanges = geminiResult.splits.map((s) => ({
@@ -481,14 +487,14 @@ export default async function handler(
           // Check if we can skip splitting (single split = whole PDF)
           const skipSplit = shouldSkipSplit(splitRanges, totalPages);
           if (skipSplit) {
-            console.log("[Gemini API] Single split = whole PDF, using original URL");
+            debugLog("[Gemini API] Single split = whole PDF, using original URL");
           }
 
           // For skip-split case, get dimensions from original PDF once
           let skipSplitDimensions: { pageWidth: number; pageHeight: number } | null = null;
           if (skipSplit) {
             skipSplitDimensions = await getPdfDimensions(pdfBytes, 1);
-            console.log("[Gemini API] Skip-split dimensions:", skipSplitDimensions);
+            debugLog("[Gemini API] Skip-split dimensions:", skipSplitDimensions);
           }
 
           for (let i = 0; i < geminiResult.splits.length; i++) {
@@ -516,7 +522,7 @@ export default async function handler(
                 pageHeight = skipSplitDimensions!.pageHeight;
               } else {
                 // Create child PDF for this split
-                console.log(
+                debugLog(
                   `[Gemini API] Splitting pages ${split.startPage}-${split.endPage}...`
                 );
                 const splitResult = await splitPdf(pdfBytes, {
@@ -525,7 +531,7 @@ export default async function handler(
                 });
                 pageWidth = splitResult.pageWidth;
                 pageHeight = splitResult.pageHeight;
-                console.log(
+                debugLog(
                   `[Gemini API] Child PDF created: ${splitResult.bytes.length} bytes (${pageWidth}x${pageHeight})`
                 );
 
@@ -537,7 +543,7 @@ export default async function handler(
                   filename
                 );
                 useFileId = true;
-                console.log(`[Gemini API] Child PDF uploaded: ${fileIdOrUrl}`);
+                debugLog(`[Gemini API] Child PDF uploaded: ${fileIdOrUrl}`);
               }
 
               // Update split row with dimensions
@@ -561,8 +567,8 @@ export default async function handler(
           }
         } else {
           // ===== IMAGE/NON-PDF PATH: Use fileUrl directly, skip PDF operations =====
-          console.log("[Gemini API] Non-PDF file detected (image/other) - using fileUrl directly");
-          console.log("[Gemini API] Skipping PDF download/split operations");
+          debugLog("[Gemini API] Non-PDF file detected (image/other) - using fileUrl directly");
+          debugLog("[Gemini API] Skipping PDF download/split operations");
 
           // Get image dimensions for citation bounding boxes
           let imageWidth: number | null = null;
@@ -575,10 +581,10 @@ export default async function handler(
             if (dimensions.width && dimensions.height) {
               imageWidth = dimensions.width;
               imageHeight = dimensions.height;
-              console.log(`[Gemini API] Image dimensions: ${imageWidth}x${imageHeight}`);
+              debugLog(`[Gemini API] Image dimensions: ${imageWidth}x${imageHeight}`);
             }
           } catch (e) {
-            console.log("[Gemini API] Could not get image dimensions:", e);
+            debugLog("[Gemini API] Could not get image dimensions:", e);
           }
 
           for (let i = 0; i < geminiResult.splits.length; i++) {
@@ -591,7 +597,7 @@ export default async function handler(
               clientConfig.tags.find((t) => t.id === "other") ??
               clientConfig.tags[clientConfig.tags.length - 1];
 
-            console.log(`[Gemini API] Split ${i}: tag=${tag.id}, processorId=${tag.extendProcessorId || "none"}`);
+            debugLog(`[Gemini API] Split ${i}: tag=${tag.id}, processorId=${tag.extendProcessorId || "none"}`);
 
             // Store image dimensions in split row (for citation highlights)
             if (imageWidth && imageHeight) {
@@ -603,7 +609,7 @@ export default async function handler(
 
             if (tag.extendProcessorId) {
               // Use signed URL directly for images - ExtendAI supports image URLs
-              console.log(`[Gemini API] Calling ExtendAI with fileUrl for split ${i}`);
+              debugLog(`[Gemini API] Calling ExtendAI with fileUrl for split ${i}`);
 
               extractionPromises.push(
                 processExtractionForSplit(
@@ -621,14 +627,14 @@ export default async function handler(
 
         // Wait for all extractions to complete
         if (extractionPromises.length > 0) {
-          console.log(
+          debugLog(
             `[Gemini API] Waiting for ${extractionPromises.length} extractions...`
           );
           await Promise.all(extractionPromises);
-          console.log("[Gemini API] All extractions complete");
+          debugLog("[Gemini API] All extractions complete");
         }
       } else {
-        console.log(
+        debugLog(
           "[Gemini API] Skipping extractions - EXTEND_API_KEY not configured"
         );
       }
@@ -650,12 +656,12 @@ export default async function handler(
         throw new Error(`Failed to update document: ${updateError.message}`);
       }
 
-      console.log("[Gemini API] Success:", documentId);
+      debugLog("[Gemini API] Success:", documentId);
 
       // Send WhatsApp callback if this was a WhatsApp-sourced document
       const whatsAppPhone = req.headers["x-whatsapp-phone"] as string | undefined;
       if (whatsAppPhone) {
-        console.log("[Gemini API] Sending WhatsApp callback to", whatsAppPhone);
+        debugLog("[Gemini API] Sending WhatsApp callback to", whatsAppPhone);
         const firstSplit = geminiResult.splits[0];
         const tag = clientConfig.tags.find((t) => t.id === firstSplit?.type);
         const message = formatProcessingResult({
@@ -680,10 +686,10 @@ export default async function handler(
       });
     }
   } catch (error) {
-    console.log("[Gemini API] === ERROR ===");
-    console.log("[Gemini API] Error type:", (error as Error)?.constructor?.name);
-    console.log("[Gemini API] Error message:", (error as Error)?.message);
-    console.log("[Gemini API] Error stack:", (error as Error)?.stack);
+    debugLog("[Gemini API] === ERROR ===");
+    debugLog("[Gemini API] Error type:", (error as Error)?.constructor?.name);
+    debugLog("[Gemini API] Error message:", (error as Error)?.message);
+    debugLog("[Gemini API] Error stack:", (error as Error)?.stack);
 
     const errorMessage = getProcessingErrorMessage(error);
 
@@ -717,7 +723,7 @@ export default async function handler(
             processing_error: errorMessage,
           })
           .eq("id", documentId);
-        console.log("[Gemini API] Document status updated to failed");
+        debugLog("[Gemini API] Document status updated to failed");
 
         // Send WhatsApp callback for failures too
         const whatsAppPhone = req.headers["x-whatsapp-phone"] as string | undefined;
@@ -761,7 +767,7 @@ async function callGeminiWithRetry(
   prompt: string,
   tagIds: string[]
 ): Promise<DynamicSplitterResponse> {
-  console.log("[Gemini API] Initializing Gemini client (splitter v2)...");
+  debugLog("[Gemini API] Initializing Gemini client (splitter v2)...");
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
   // Create dynamic schema from client config tag IDs
@@ -771,12 +777,12 @@ async function callGeminiWithRetry(
   const jsonSchema = z.toJSONSchema(dynamicSchema, {
     target: "draft-07",
   });
-  console.log("[Gemini API] JSON Schema (dynamic):", JSON.stringify(jsonSchema, null, 2));
+  debugLog("[Gemini API] JSON Schema (dynamic):", JSON.stringify(jsonSchema, null, 2));
 
   let lastError: Error = new Error("Unknown error");
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    console.log(`[Gemini API] Attempt ${attempt}/${MAX_RETRIES}`);
+    debugLog(`[Gemini API] Attempt ${attempt}/${MAX_RETRIES}`);
     try {
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
@@ -796,13 +802,13 @@ async function callGeminiWithRetry(
       });
 
       const responseText = response.text ?? "";
-      console.log("[Gemini API] Raw response:", responseText);
-      const parsed = dynamicSchema.parse(JSON.parse(responseText));
-      console.log("[Gemini API] Parsed response:", JSON.stringify(parsed, null, 2));
+      debugLog("[Gemini API] Raw response:", responseText);
+      const parsed = dynamicSchema.parse(JSON.parse(responseText)) as DynamicSplitterResponse;
+      debugLog("[Gemini API] Parsed response:", JSON.stringify(parsed, null, 2));
       return parsed;
     } catch (error) {
       lastError = error as Error;
-      console.log(`[Gemini API] Attempt ${attempt} failed:`, lastError.message);
+      debugLog(`[Gemini API] Attempt ${attempt} failed:`, lastError.message);
 
       if (!shouldRetry(error)) {
         throw error;
@@ -810,7 +816,7 @@ async function callGeminiWithRetry(
 
       if (attempt < MAX_RETRIES) {
         const backoff = calculateBackoff(attempt);
-        console.log(`[Gemini API] Waiting ${backoff}ms before retry...`);
+        debugLog(`[Gemini API] Waiting ${backoff}ms before retry...`);
         await sleep(backoff);
       }
     }

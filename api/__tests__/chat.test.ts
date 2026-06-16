@@ -48,11 +48,20 @@ class MockAnthropicClient {
   beta = {
     files: {
       upload: vi.fn().mockResolvedValue({ id: "file_123" }),
+      retrieveMetadata: vi.fn().mockResolvedValue({ filename: "data.json" }),
     },
     messages: {
-      create: vi.fn().mockResolvedValue({
-        content: [{ type: "text", text: "Hello" }],
-        container: { id: "container_abc" },
+      stream: vi.fn().mockReturnValue({
+        async *[Symbol.asyncIterator]() {
+          yield { type: "message_stop" };
+        },
+        finalMessage: vi.fn().mockResolvedValue({
+          content: [{ type: "text", text: "Hello" }],
+          container: { id: "container_abc" },
+          model: "claude-test",
+          stop_reason: "end_turn",
+          usage: {},
+        }),
       }),
     },
   };
@@ -74,6 +83,9 @@ function createMockReqRes(options: {
     status: vi.fn().mockReturnThis(),
     json: vi.fn().mockReturnThis(),
     setHeader: vi.fn().mockReturnThis(),
+    write: vi.fn().mockReturnThis(),
+    end: vi.fn().mockReturnThis(),
+    headersSent: false,
   } as unknown as VercelResponse;
 
   return { req, res };
@@ -184,12 +196,11 @@ describe("First message flow (Anthropic SDK)", () => {
     const handler = (await import("../chat")).default;
     await handler(req, res);
 
-    // Should return container ID
-    expect(res.json).toHaveBeenCalledWith(
-      expect.objectContaining({
-        containerId: "container_abc",
-      })
+    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "text/event-stream");
+    expect(res.write).toHaveBeenCalledWith(
+      expect.stringContaining('"containerId":"container_abc"')
     );
+    expect(res.end).toHaveBeenCalled();
   });
 
   it("returns 400 when no extracted documents found", async () => {
