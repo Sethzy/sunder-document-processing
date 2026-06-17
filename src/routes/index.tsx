@@ -108,17 +108,17 @@ function LandingPage() {
   return (
     <div className="min-h-screen bg-parchment p-1 font-sans text-[#163c34]">
       <div className="relative min-h-[calc(100vh-8px)] overflow-hidden rounded-[1.75rem] border border-lp-border-warm bg-[#f8f1e2] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
-        <div className="pointer-events-none absolute inset-x-[8rem] top-0 hidden h-full border-x border-dashed border-[#ddd4c3] md:block" />
-        <div className="pointer-events-none absolute left-[35.75%] top-[56%] hidden h-[44%] border-l border-dashed border-[#ddd4c3] md:block" />
-        <div className="pointer-events-none absolute left-[64.25%] top-[56%] hidden h-[44%] border-l border-dashed border-[#ddd4c3] md:block" />
+        <div className="pointer-events-none absolute inset-x-[clamp(1.5rem,7vw,8rem)] top-[72px] hidden h-[calc(100%-72px)] border-x border-dashed border-[#ddd4c3] md:block" />
+        <div className="pointer-events-none absolute left-[35.75%] top-[54%] hidden h-[46%] border-l border-dashed border-[#ddd4c3] md:block" />
+        <div className="pointer-events-none absolute left-[64.25%] top-[54%] hidden h-[46%] border-l border-dashed border-[#ddd4c3] md:block" />
         <div className="pointer-events-none absolute inset-x-0 top-[72px] border-t border-dashed border-[#ddd4c3]" />
-        <div className="pointer-events-none absolute inset-x-[8rem] top-[56%] hidden border-t border-dashed border-[#ddd4c3] md:block" />
+        <div className="pointer-events-none absolute inset-x-[clamp(1.5rem,7vw,8rem)] top-[54%] hidden border-t border-dashed border-[#ddd4c3] md:block" />
 
-        <header className="relative z-10 flex h-[72px] items-center justify-between px-5 sm:px-8 md:px-[8.5rem]">
+        <header className="relative z-10 grid h-[72px] grid-cols-[1fr_auto] items-center gap-4 px-5 sm:px-8 md:px-[clamp(1.5rem,7vw,8.5rem)] lg:grid-cols-[1fr_auto_1fr]">
           <Link
             to="/"
             aria-label="Sunder home"
-            className={`flex min-h-11 items-center gap-2.5 rounded-lg ${focusRing}`}
+            className={`flex min-h-11 w-fit items-center gap-2.5 rounded-lg justify-self-start ${focusRing}`}
           >
             <LogoMark />
             <span className="font-serif text-xl font-black tracking-[-0.02em] text-sunder-green">
@@ -126,7 +126,7 @@ function LandingPage() {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-12 text-[13px] font-semibold text-[#41544e] md:flex">
+          <nav className="hidden items-center gap-12 text-[13px] font-semibold text-[#41544e] lg:flex">
             <a
               href="#workflow"
               className={`rounded-md px-1.5 py-2 transition hover:text-sunder-green ${focusRing}`}
@@ -147,7 +147,7 @@ function LandingPage() {
             </a>
           </nav>
 
-          <div className="flex items-center gap-3 sm:gap-5">
+          <div className="flex items-center justify-end gap-3 sm:gap-5">
             <Link
               to="/login"
               className={`hidden rounded-md px-1.5 py-2 text-[13px] font-bold text-[#334a43] transition hover:text-sunder-green sm:inline ${focusRing}`}
@@ -156,7 +156,7 @@ function LandingPage() {
             </Link>
             <Link
               to="/register"
-              className={`flex min-h-11 items-center rounded-full bg-sunder-green px-5 text-[13px] font-black text-white shadow-[0_10px_22px_rgba(31,106,87,0.24)] transition hover:bg-sunder-green-dark sm:px-7 ${focusRing}`}
+              className={`flex min-h-11 items-center whitespace-nowrap rounded-full bg-sunder-green px-5 text-[13px] font-black text-white shadow-[0_10px_22px_rgba(31,106,87,0.24)] transition hover:bg-sunder-green-dark sm:px-7 ${focusRing}`}
             >
               Get Started
             </Link>
@@ -164,8 +164,8 @@ function LandingPage() {
         </header>
 
         <main className="relative z-10">
-          <section className="mx-auto flex min-h-[410px] max-w-[1120px] flex-col items-center justify-center px-5 pb-12 pt-12 text-center sm:pb-16 sm:pt-16 md:min-h-[440px]">
-            <h1 className="max-w-[980px] text-balance font-serif text-[42px] font-black leading-[0.95] tracking-[-0.035em] text-sunder-green sm:text-6xl md:text-[68px]">
+          <section className="mx-auto flex min-h-[calc(54vh-72px)] max-w-[1120px] flex-col items-center justify-center px-5 pb-10 pt-10 text-center sm:pb-12 sm:pt-12 md:min-h-[calc(54vh-72px)]">
+            <h1 className="max-w-[980px] text-balance font-serif text-[42px] font-black leading-[0.95] tracking-[-0.035em] text-sunder-green sm:text-6xl md:text-[60px] lg:text-[68px]">
               AI document agent that actually understands claims
             </h1>
             <p className="mt-8 max-w-xl text-pretty text-base font-semibold leading-6 text-[#52605b] sm:text-[17px]">
@@ -191,7 +191,7 @@ function LandingPage() {
           <section
             id="workflow"
             aria-label="Claims document workflow preview"
-            className="mx-auto grid max-w-[1408px] grid-cols-1 items-center gap-8 px-5 pb-12 pt-8 sm:px-8 md:grid-cols-[1fr_1.15fr_1fr] md:gap-4 md:px-0 md:pb-16 md:pt-14"
+            className="mx-auto grid min-h-[46vh] max-w-[1408px] grid-cols-1 items-center gap-8 px-5 pb-12 pt-8 sm:px-8 md:grid-cols-[1fr_1.15fr_1fr] md:gap-4 md:px-0 md:pb-12 md:pt-10"
           >
             <div id="review" className="flex flex-col items-center gap-4 md:items-end">
               {promptCards.map((prompt, index) => (
