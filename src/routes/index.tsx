@@ -77,10 +77,12 @@ const promptCards = [
 ];
 
 const promptOffsets = ["", "md:mr-[-2.5rem]", "md:mr-[-1rem]"];
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunder-green/45 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment";
 
 function LogoMark() {
   return (
-    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#1f6a57] text-[13px] font-black text-[#fbf6e8] shadow-sm">
+    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sunder-green text-[13px] font-black text-parchment shadow-sm">
       S
     </div>
   );
@@ -89,23 +91,23 @@ function LogoMark() {
 function DocumentIllustration() {
   return (
     <div className="relative mx-auto h-44 w-56 sm:h-56 sm:w-72" aria-hidden="true">
-      <div className="absolute left-14 top-20 h-20 w-36 rotate-[31deg] rounded-xl border border-[#d9d0bf] bg-[#f7f1e3]" />
-      <div className="absolute left-8 top-16 h-24 w-44 rotate-[31deg] rounded-xl bg-[#145f4f] shadow-[0_22px_40px_rgba(21,80,67,0.16)]" />
-      <div className="absolute left-16 top-9 h-28 w-36 rotate-[31deg] rounded-xl border-2 border-[#2f7b67] bg-[#fbf6e8] shadow-sm">
+      <div className="absolute left-14 top-20 h-20 w-36 rotate-[31deg] rounded-xl border border-lp-border-warm bg-parchment" />
+      <div className="absolute left-8 top-16 h-24 w-44 rotate-[31deg] rounded-xl bg-sunder-green-dark shadow-[0_22px_40px_rgba(21,80,67,0.16)]" />
+      <div className="absolute left-16 top-9 h-28 w-36 rotate-[31deg] rounded-xl border-2 border-sunder-green bg-[#fbf6e8] shadow-sm">
         <div className="absolute left-8 top-8 h-1.5 w-16 rounded-full bg-[#cad7cd]" />
         <div className="absolute left-7 top-14 h-1.5 w-20 rounded-full bg-[#cad7cd]" />
         <div className="absolute left-8 top-20 h-1.5 w-12 rounded-full bg-[#cad7cd]" />
-        <div className="absolute left-24 top-16 h-9 w-1.5 rotate-[-12deg] rounded-full bg-[#2f7b67]" />
+        <div className="absolute left-24 top-16 h-9 w-1.5 rotate-[-12deg] rounded-full bg-sunder-green" />
       </div>
-      <div className="absolute right-16 top-16 h-10 w-14 rounded-[50%] bg-[#1f6a57]" />
+      <div className="absolute right-16 top-16 h-10 w-14 rounded-[50%] bg-sunder-green" />
     </div>
   );
 }
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#f7f1e3] p-1 font-sans text-[#163c34]">
-      <div className="relative min-h-[calc(100vh-8px)] overflow-hidden rounded-[2rem] border border-[#d6cebe] bg-[#f8f1e2] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
+    <div className="min-h-screen bg-parchment p-1 font-sans text-[#163c34]">
+      <div className="relative min-h-[calc(100vh-8px)] overflow-hidden rounded-[1.75rem] border border-lp-border-warm bg-[#f8f1e2] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
         <div className="pointer-events-none absolute inset-x-[8rem] top-0 hidden h-full border-x border-dashed border-[#ddd4c3] md:block" />
         <div className="pointer-events-none absolute left-[35.75%] top-[56%] hidden h-[44%] border-l border-dashed border-[#ddd4c3] md:block" />
         <div className="pointer-events-none absolute left-[64.25%] top-[56%] hidden h-[44%] border-l border-dashed border-[#ddd4c3] md:block" />
@@ -113,21 +115,34 @@ function LandingPage() {
         <div className="pointer-events-none absolute inset-x-[8rem] top-[56%] hidden border-t border-dashed border-[#ddd4c3] md:block" />
 
         <header className="relative z-10 flex h-[72px] items-center justify-between px-5 sm:px-8 md:px-[8.5rem]">
-          <Link to="/" aria-label="Sunder home" className="flex items-center gap-2.5">
+          <Link
+            to="/"
+            aria-label="Sunder home"
+            className={`flex min-h-11 items-center gap-2.5 rounded-lg ${focusRing}`}
+          >
             <LogoMark />
-            <span className="font-serif text-xl font-black tracking-[-0.02em] text-[#1f6a57]">
+            <span className="font-serif text-xl font-black tracking-[-0.02em] text-sunder-green">
               Sunder
             </span>
           </Link>
 
           <nav className="hidden items-center gap-12 text-[13px] font-semibold text-[#41544e] md:flex">
-            <a href="#workflow" className="transition hover:text-[#1f6a57]">
+            <a
+              href="#workflow"
+              className={`rounded-md px-1.5 py-2 transition hover:text-sunder-green ${focusRing}`}
+            >
               Workflow
             </a>
-            <a href="#review" className="transition hover:text-[#1f6a57]">
+            <a
+              href="#review"
+              className={`rounded-md px-1.5 py-2 transition hover:text-sunder-green ${focusRing}`}
+            >
               Review
             </a>
-            <a href="#evidence" className="transition hover:text-[#1f6a57]">
+            <a
+              href="#evidence"
+              className={`rounded-md px-1.5 py-2 transition hover:text-sunder-green ${focusRing}`}
+            >
               Evidence
             </a>
           </nav>
@@ -135,13 +150,13 @@ function LandingPage() {
           <div className="flex items-center gap-3 sm:gap-5">
             <Link
               to="/login"
-              className="hidden text-[13px] font-bold text-[#334a43] transition hover:text-[#1f6a57] sm:inline"
+              className={`hidden rounded-md px-1.5 py-2 text-[13px] font-bold text-[#334a43] transition hover:text-sunder-green sm:inline ${focusRing}`}
             >
               Login
             </Link>
             <Link
               to="/register"
-              className="rounded-full bg-[#1f6a57] px-5 py-2.5 text-[13px] font-black text-white shadow-[0_10px_22px_rgba(31,106,87,0.24)] transition hover:bg-[#185746] sm:px-7"
+              className={`flex min-h-11 items-center rounded-full bg-sunder-green px-5 text-[13px] font-black text-white shadow-[0_10px_22px_rgba(31,106,87,0.24)] transition hover:bg-sunder-green-dark sm:px-7 ${focusRing}`}
             >
               Get Started
             </Link>
@@ -150,23 +165,23 @@ function LandingPage() {
 
         <main className="relative z-10">
           <section className="mx-auto flex min-h-[410px] max-w-[1120px] flex-col items-center justify-center px-5 pb-12 pt-12 text-center sm:pb-16 sm:pt-16 md:min-h-[440px]">
-            <h1 className="max-w-[980px] font-serif text-[42px] font-black leading-[0.95] tracking-[-0.045em] text-[#1f6a57] sm:text-6xl md:text-[68px]">
+            <h1 className="max-w-[980px] text-balance font-serif text-[42px] font-black leading-[0.95] tracking-[-0.035em] text-sunder-green sm:text-6xl md:text-[68px]">
               AI document agent that actually understands claims
             </h1>
-            <p className="mt-8 max-w-xl text-base font-semibold leading-6 text-[#52605b] sm:text-[17px]">
+            <p className="mt-8 max-w-xl text-pretty text-base font-semibold leading-6 text-[#52605b] sm:text-[17px]">
               Transform messy PDFs and scans into citation-backed claim dossiers
               with extraction, review, and export in one workflow.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link
                 to="/register"
-                className="rounded-full bg-[#1f6a57] px-6 py-3 text-sm font-black text-white shadow-[0_14px_28px_rgba(31,106,87,0.22)] transition hover:bg-[#185746]"
+                className={`flex min-h-11 items-center rounded-full bg-sunder-green px-6 text-sm font-black text-white shadow-[0_14px_28px_rgba(31,106,87,0.22)] transition hover:bg-sunder-green-dark ${focusRing}`}
               >
-                Process a Packet <span aria-hidden="true">→</span>
+                Process a Packet <span className="ml-1" aria-hidden="true">→</span>
               </Link>
               <Link
                 to="/demo"
-                className="rounded-full border border-[#d8d0c0] bg-white/80 px-6 py-3 text-sm font-black text-[#354b43] shadow-[0_8px_18px_rgba(41,35,22,0.08)] transition hover:border-[#c8bda8]"
+                className={`flex min-h-11 items-center rounded-full border border-lp-border-warm bg-white/80 px-6 text-sm font-black text-[#354b43] shadow-[0_4px_8px_rgba(41,35,22,0.08)] transition hover:border-[#c8bda8] ${focusRing}`}
               >
                 View Demo
               </Link>
@@ -182,7 +197,7 @@ function LandingPage() {
               {promptCards.map((prompt, index) => (
                 <div
                   key={prompt}
-                  className={`w-full max-w-[280px] rounded-lg border border-[#d9d0bf] bg-[#fbf8ef] px-5 py-3 text-[13px] font-bold leading-4 text-[#65716c] shadow-[0_7px_16px_rgba(42,36,24,0.08)] md:max-w-none ${promptOffsets[index]}`}
+                  className={`w-full max-w-[280px] rounded-lg border border-lp-border-warm bg-[#fbf8ef] px-5 py-3 text-[13px] font-bold leading-4 text-[#65716c] shadow-[0_4px_8px_rgba(42,36,24,0.08)] md:max-w-none ${promptOffsets[index]}`}
                 >
                   {prompt}
                 </div>
@@ -197,7 +212,7 @@ function LandingPage() {
               {proofCards.map((card) => (
                 <div
                   key={card}
-                  className="w-full max-w-[295px] rounded-xl bg-[#21805f] px-5 py-4 text-[13px] font-black leading-4 text-white shadow-[0_12px_22px_rgba(24,94,73,0.24)]"
+                  className="w-full max-w-[295px] rounded-xl bg-sunder-green px-5 py-4 text-[13px] font-black leading-4 text-white shadow-[0_12px_22px_rgba(24,94,73,0.24)]"
                 >
                   {card}
                 </div>
