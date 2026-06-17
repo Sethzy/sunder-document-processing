@@ -109,10 +109,10 @@ function LandingPage() {
     <div className="min-h-screen bg-parchment p-1 font-sans text-[#163c34]">
       <div className="relative min-h-[calc(100vh-8px)] overflow-hidden rounded-[1.75rem] border border-lp-border-warm bg-[#f8f1e2] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
         <div className="pointer-events-none absolute inset-x-[clamp(1.5rem,7vw,8rem)] top-[72px] hidden h-[calc(100%-72px)] border-x border-dashed border-[#ddd4c3] md:block" />
-        <div className="pointer-events-none absolute left-[35.75%] top-[54%] hidden h-[46%] border-l border-dashed border-[#ddd4c3] md:block" />
-        <div className="pointer-events-none absolute left-[64.25%] top-[54%] hidden h-[46%] border-l border-dashed border-[#ddd4c3] md:block" />
+        <div className="pointer-events-none absolute left-[35.75%] top-[52%] hidden h-[48%] border-l border-dashed border-[#ddd4c3] md:block" />
+        <div className="pointer-events-none absolute left-[64.25%] top-[52%] hidden h-[48%] border-l border-dashed border-[#ddd4c3] md:block" />
         <div className="pointer-events-none absolute inset-x-0 top-[72px] border-t border-dashed border-[#ddd4c3]" />
-        <div className="pointer-events-none absolute inset-x-[clamp(1.5rem,7vw,8rem)] top-[54%] hidden border-t border-dashed border-[#ddd4c3] md:block" />
+        <div className="pointer-events-none absolute inset-x-[clamp(1.5rem,7vw,8rem)] top-[52%] hidden border-t border-dashed border-[#ddd4c3] md:block" />
 
         <header className="relative z-10 grid h-[72px] grid-cols-[1fr_auto] items-center gap-4 px-5 sm:px-8 md:px-[clamp(1.5rem,7vw,8.5rem)] lg:grid-cols-[1fr_auto_1fr]">
           <Link
@@ -164,7 +164,7 @@ function LandingPage() {
         </header>
 
         <main className="relative z-10">
-          <section className="mx-auto flex min-h-[calc(54vh-72px)] max-w-[1120px] flex-col items-center justify-center px-5 pb-10 pt-10 text-center sm:pb-12 sm:pt-12 md:min-h-[calc(54vh-72px)]">
+          <section className="mx-auto flex min-h-[calc(52vh-72px)] max-w-[1120px] flex-col items-center justify-center px-5 pb-8 pt-10 text-center sm:pb-10 sm:pt-12 md:min-h-[calc(52vh-72px)]">
             <h1 className="max-w-[980px] text-balance font-serif text-[42px] font-black leading-[0.95] tracking-[-0.035em] text-sunder-green sm:text-6xl md:text-[60px] lg:text-[68px]">
               AI document agent that actually understands claims
             </h1>
@@ -191,7 +191,7 @@ function LandingPage() {
           <section
             id="workflow"
             aria-label="Claims document workflow preview"
-            className="mx-auto grid min-h-[46vh] max-w-[1408px] grid-cols-1 items-center gap-8 px-5 pb-12 pt-8 sm:px-8 md:grid-cols-[1fr_1.15fr_1fr] md:gap-4 md:px-0 md:pb-12 md:pt-10"
+            className="mx-auto grid min-h-[48vh] max-w-[1408px] grid-cols-1 items-start gap-8 px-5 pb-12 pt-8 sm:px-8 md:grid-cols-[1fr_1.15fr_1fr] md:gap-4 md:px-0 md:pb-12 md:pt-12"
           >
             <div id="review" className="flex flex-col items-center gap-4 md:items-end">
               {promptCards.map((prompt, index) => (
