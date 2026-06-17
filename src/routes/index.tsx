@@ -113,38 +113,17 @@ function LandingPage() {
         <div className="pointer-events-none absolute inset-x-0 top-[72px] border-t border-dashed border-[#ddd4c3]" />
         <div className="pointer-events-none absolute inset-x-[clamp(1.5rem,7vw,8rem)] top-[52%] hidden border-t border-dashed border-[#ddd4c3] md:block" />
 
-        <header className="relative z-10 grid h-[72px] grid-cols-[1fr_auto] items-center gap-4 px-5 sm:px-8 md:px-[clamp(1.5rem,7vw,8.5rem)] lg:grid-cols-[1fr_auto_1fr]">
+        <header className="relative z-10 flex h-[72px] items-center justify-between gap-4 px-5 sm:px-8 md:px-[clamp(1.5rem,7vw,8.5rem)]">
           <Link
             to="/"
             aria-label="Sunder home"
-            className={`flex min-h-11 w-fit items-center gap-2.5 rounded-lg justify-self-start ${focusRing}`}
+            className={`flex min-h-11 w-fit items-center gap-2.5 rounded-lg ${focusRing}`}
           >
             <LogoMark />
             <span className="font-serif text-xl font-black tracking-[-0.02em] text-sunder-green">
               Sunder
             </span>
           </Link>
-
-          <nav className="hidden items-center gap-12 text-[13px] font-semibold text-[#41544e] lg:flex">
-            <a
-              href="#workflow"
-              className={`rounded-md px-1.5 py-2 transition hover:text-sunder-green ${focusRing}`}
-            >
-              Workflow
-            </a>
-            <a
-              href="#review"
-              className={`rounded-md px-1.5 py-2 transition hover:text-sunder-green ${focusRing}`}
-            >
-              Review
-            </a>
-            <a
-              href="#evidence"
-              className={`rounded-md px-1.5 py-2 transition hover:text-sunder-green ${focusRing}`}
-            >
-              Evidence
-            </a>
-          </nav>
 
           <div className="flex items-center justify-end gap-3 sm:gap-5">
             <Link
