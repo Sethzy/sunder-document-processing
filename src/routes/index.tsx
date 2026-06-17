@@ -76,7 +76,6 @@ const promptCards = [
   "Can I trust this extraction?",
 ];
 
-const promptOffsets = ["", "md:mr-[-2.5rem]", "md:mr-[-1rem]"];
 const focusRing =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunder-green/45 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment";
 
@@ -191,13 +190,13 @@ function LandingPage() {
           <section
             id="workflow"
             aria-label="Claims document workflow preview"
-            className="mx-auto grid min-h-[48vh] max-w-[1408px] grid-cols-1 items-start gap-8 px-5 pb-12 pt-8 sm:px-8 md:grid-cols-[1fr_1.15fr_1fr] md:gap-4 md:px-0 md:pb-12 md:pt-12"
+            className="mx-auto grid min-h-[48vh] max-w-[1160px] grid-cols-1 items-start justify-center gap-8 px-5 pb-12 pt-8 sm:px-8 lg:grid-cols-[minmax(260px,340px)_minmax(260px,320px)_minmax(260px,340px)] lg:gap-8 lg:px-0 lg:pb-12 lg:pt-12"
           >
-            <div id="review" className="flex flex-col items-center gap-4 md:items-end">
-              {promptCards.map((prompt, index) => (
+            <div id="review" className="flex flex-col items-center gap-4">
+              {promptCards.map((prompt) => (
                 <div
                   key={prompt}
-                  className={`w-full max-w-[280px] rounded-lg border border-lp-border-warm bg-[#fbf8ef] px-5 py-3 text-[13px] font-bold leading-4 text-[#65716c] shadow-[0_4px_8px_rgba(42,36,24,0.08)] md:max-w-none ${promptOffsets[index]}`}
+                  className="w-full max-w-[340px] rounded-lg border border-lp-border-warm bg-[#fbf8ef] px-5 py-3 text-[13px] font-bold leading-4 text-[#65716c] shadow-[0_4px_8px_rgba(42,36,24,0.08)]"
                 >
                   {prompt}
                 </div>
@@ -208,11 +207,11 @@ function LandingPage() {
               <DocumentIllustration />
             </div>
 
-            <div id="evidence" className="flex flex-col items-center gap-5 md:items-start">
+            <div id="evidence" className="flex flex-col items-center gap-5">
               {proofCards.map((card) => (
                 <div
                   key={card}
-                  className="w-full max-w-[295px] rounded-xl bg-sunder-green px-5 py-4 text-[13px] font-black leading-4 text-white shadow-[0_12px_22px_rgba(24,94,73,0.24)]"
+                  className="w-full max-w-[340px] rounded-xl bg-sunder-green px-5 py-4 text-[13px] font-black leading-4 text-white shadow-[0_12px_22px_rgba(24,94,73,0.24)]"
                 >
                   {card}
                 </div>
