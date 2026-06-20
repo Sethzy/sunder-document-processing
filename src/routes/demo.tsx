@@ -82,7 +82,7 @@ function DemoPage() {
             <div className="flex flex-col justify-center order-2 lg:order-1">
               <h1 className="font-serif text-4xl font-medium tracking-tight text-zinc-900 sm:text-5xl">
                 See Sunder Process{' '}
-                <span className="text-sunder-green italic">Your Documents</span>
+                <span className="text-sunder-green italic">a Claim Packet</span>
               </h1>
               <p className="mt-6 text-lg text-zinc-600 leading-relaxed">
                 Get a personalized walkthrough of the legal claim dossier flow:

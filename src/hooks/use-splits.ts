@@ -8,6 +8,7 @@ import {
   useQueryClient,
   queryOptions,
 } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import type { SplitExtraction } from "@/types/extraction";
 import type { Json } from "@/types/database";
@@ -306,7 +307,7 @@ export function useDismissRule() {
 
       return { previousSplits, documentId };
     },
-    onError: (err, _variables, context) => {
+    onError: (_err, _variables, context) => {
       // Rollback on error
       if (context?.previousSplits) {
         queryClient.setQueryData(
@@ -314,12 +315,13 @@ export function useDismissRule() {
           context.previousSplits
         );
       }
-      // TODO: Replace with toast.error() when sonner is installed
-      console.error("Failed to dismiss rule:", err);
+      toast.error("Failed to dismiss validation rule");
       // Only invalidate on error to sync with server state
-      queryClient.invalidateQueries({
-        queryKey: splitKeys.list(context!.documentId),
-      });
+      if (context?.documentId) {
+        queryClient.invalidateQueries({
+          queryKey: splitKeys.list(context.documentId),
+        });
+      }
     },
     // NOTE: Removed onSettled invalidation - optimistic update is sufficient
     // and invalidation was causing race condition where refetch overwrote optimistic data

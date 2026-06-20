@@ -1,109 +1,92 @@
 /**
- * ProductShowcase section with responsive rendering:
- * - Desktop (lg+): Interactive TaskDashboardMockup with 3D tilt effect
- * - Mobile/Tablet: Static PNG with "peek" effect
+ * Report generation section for reviewed claim data.
  */
-import { useState } from 'react'
+import { FileCheck2, FileSpreadsheet, LibraryBig, ShieldCheck } from 'lucide-react'
 import { Container } from '@/components/landing/Container'
-import { useScrollReveal } from '@/hooks/useScrollReveal'
-import { TaskDashboardMockup } from '@/components/landing/TaskDashboardMockup'
+
+const artifactRows = [
+  {
+    name: 'Special damages summary',
+    status: 'Reviewed',
+    owner: 'Case library',
+  },
+  {
+    name: 'Medical expense schedule',
+    status: 'Needs citation check',
+    owner: 'Reviewer queue',
+  },
+  {
+    name: 'Income loss workbook',
+    status: 'Draft generated',
+    owner: 'Reports',
+  },
+]
+
+const guarantees = [
+  {
+    title: 'Generated from reviewed data',
+    icon: ShieldCheck,
+  },
+  {
+    title: 'Stored with case artifacts',
+    icon: LibraryBig,
+  },
+  {
+    title: 'Exportable work product',
+    icon: FileSpreadsheet,
+  },
+]
 
 export function ProductShowcase() {
-  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal<HTMLDivElement>()
-  const { ref: imageRef, isVisible: imageVisible } = useScrollReveal<HTMLDivElement>()
-  const { ref: mockupRef, isVisible: mockupVisible } = useScrollReveal<HTMLDivElement>({ threshold: 0.3 })
-  const [tiltStyle, setTiltStyle] = useState({ transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)' })
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    const centerX = rect.width / 2
-    const centerY = rect.height / 2
-    const rotateX = ((y - centerY) / centerY) * -3
-    const rotateY = ((x - centerX) / centerX) * 3
-    setTiltStyle({
-      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
-    })
-  }
-
-  const handleMouseLeave = () => {
-    setTiltStyle({ transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)' })
-  }
-
   return (
     <section
-      id="product-showcase"
-      aria-label="Product demonstration"
-      className="py-12 sm:py-16 md:py-28 bg-white"
+      id="reports"
+      aria-labelledby="reports-title"
+      className="border-y border-zinc-200 bg-zinc-50 py-20 sm:py-24"
     >
-      {/* Mobile/Tablet: Centered header + PNG with peek effect */}
-      <div className="lg:hidden">
-        <Container>
-          <div
-            ref={headerRef}
-            className={`mx-auto max-w-2xl text-center scroll-reveal ${headerVisible ? 'is-visible' : ''}`}
-          >
-            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-gray-900 leading-tight tracking-tight">
-              Everything you do,
-              <br />
-              <span className="italic text-sunder-green">supercharged</span>
+      <Container>
+        <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+          <div>
+            <h2
+              id="reports-title"
+              className="font-serif text-3xl font-medium tracking-tight text-zinc-950 sm:text-4xl"
+            >
+              Reviewed evidence becomes submission-ready work product.
             </h2>
-            <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-              Powerful AI for documents. Juniors work like seniors. Seniors deliver what used to take a team.
+            <p className="mt-4 text-base leading-7 text-zinc-700 sm:text-lg">
+              Sunder does not stop at a table of fields. The case library keeps
+              generated reports, exports, and supporting schedules tied back to
+              the same reviewed dossier.
             </p>
-          </div>
-        </Container>
-
-        {/* Mockup with peek effect */}
-        <div
-          ref={imageRef}
-          className={`-mx-4 overflow-hidden px-4 sm:-mx-6 sm:px-6 scroll-reveal-scale ${imageVisible ? 'is-visible' : ''}`}
-        >
-          <div className="mt-16 pb-10">
-            <div className="ml-4 sm:ml-6 min-w-[600px] w-[140%] sm:w-[130%] overflow-hidden rounded-xl bg-white shadow-lg shadow-zinc-200/50 ring-1 ring-zinc-900/5">
-              {/* macOS window chrome */}
-              <div className="bg-[#f6f6f6] px-3 py-2.5 flex items-center gap-1.5 border-b border-gray-200">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-              </div>
-              <TaskDashboardMockup isVisible={imageVisible} />
+            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+              {guarantees.map((item) => (
+                <div key={item.title} className="flex items-center gap-2 text-sm text-zinc-700">
+                  <item.icon className="h-4 w-4 text-sunder-green" />
+                  <span>{item.title}</span>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Desktop: Two-column grid with interactive mockup */}
-      <Container className="hidden lg:block">
-        <div className="grid grid-cols-12 gap-8 items-center">
-          {/* Text - left aligned */}
-          <div className="col-span-4">
-            <h2 className="font-serif text-4xl lg:text-5xl text-gray-900 leading-tight tracking-tight">
-              Everything you do,
-              <br />
-              <span className="italic text-sunder-green">supercharged</span>
-            </h2>
-            <p className="mt-4 text-base lg:text-lg text-muted-foreground leading-relaxed">
-              Powerful AI for documents. Juniors work like seniors. Seniors deliver what used to take a team.
-            </p>
-          </div>
-
-          {/* Interactive mockup with 3D tilt */}
-          <div ref={mockupRef} className="col-span-8">
-            <div
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              style={{ ...tiltStyle, transition: 'transform 0.1s ease-out' }}
-              className="max-w-3xl ml-auto rounded-xl overflow-hidden shadow-2xl ring-1 ring-zinc-900/5"
-            >
-              {/* macOS window chrome */}
-              <div className="bg-[#f6f6f6] px-4 py-3 flex items-center gap-2 border-b border-gray-200">
-                <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-                <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
-                <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+          <div className="rounded-lg border border-zinc-200 bg-white">
+            <div className="flex items-center justify-between border-b border-zinc-200 px-5 py-4">
+              <div>
+                <h3 className="text-sm font-semibold text-zinc-950">Case artifacts</h3>
+                <p className="mt-1 text-xs text-zinc-500">Generated from reviewed claim data</p>
               </div>
-              <TaskDashboardMockup isVisible={mockupVisible} />
+              <FileCheck2 className="h-5 w-5 text-sunder-green" />
+            </div>
+            <div className="divide-y divide-zinc-200">
+              {artifactRows.map((row) => (
+                <div
+                  key={row.name}
+                  className="grid gap-3 px-5 py-4 text-sm sm:grid-cols-[1fr_10rem_8rem]"
+                >
+                  <span className="font-medium text-zinc-900">{row.name}</span>
+                  <span className="text-zinc-600">{row.status}</span>
+                  <span className="text-zinc-500">{row.owner}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>

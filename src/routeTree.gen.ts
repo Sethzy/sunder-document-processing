@@ -10,25 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UpdatePasswordRouteImport } from './routes/update-password'
-import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as RegisterRouteImport } from './routes/register'
-import { Route as MissionControlRouteImport } from './routes/mission-control'
-import { Route as MemoryRouteImport } from './routes/memory'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as KnowledgeRouteImport } from './routes/knowledge'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DemoRouteImport } from './routes/demo'
-import { Route as CrmRouteImport } from './routes/crm'
-import { Route as ChatRouteImport } from './routes/chat'
-import { Route as ChannelsRouteImport } from './routes/channels'
-import { Route as AutomationsRouteImport } from './routes/automations'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as UseCasesIndexRouteImport } from './routes/use-cases/index'
-import { Route as IndustriesIndexRouteImport } from './routes/industries/index'
 import { Route as CasesIndexRouteImport } from './routes/cases/index'
-import { Route as UseCasesSlugRouteImport } from './routes/use-cases/$slug'
-import { Route as IndustriesSlugRouteImport } from './routes/industries/$slug'
 import { Route as CasesCaseIdRouteImport } from './routes/cases/$caseId'
 import { Route as AuthConfirmRouteImport } from './routes/auth/confirm'
 import { Route as CasesCaseIdDocumentsDocIdRouteImport } from './routes/cases/$caseId_.documents.$docId'
@@ -36,11 +24,6 @@ import { Route as CasesCaseIdDocumentsDocIdRouteImport } from './routes/cases/$c
 const UpdatePasswordRoute = UpdatePasswordRouteImport.update({
   id: '/update-password',
   path: '/update-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TasksRoute = TasksRouteImport.update({
-  id: '/tasks',
-  path: '/tasks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -53,24 +36,9 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MissionControlRoute = MissionControlRouteImport.update({
-  id: '/mission-control',
-  path: '/mission-control',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MemoryRoute = MemoryRouteImport.update({
-  id: '/memory',
-  path: '/memory',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KnowledgeRoute = KnowledgeRouteImport.update({
-  id: '/knowledge',
-  path: '/knowledge',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -83,39 +51,9 @@ const DemoRoute = DemoRouteImport.update({
   path: '/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CrmRoute = CrmRouteImport.update({
-  id: '/crm',
-  path: '/crm',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChatRoute = ChatRouteImport.update({
-  id: '/chat',
-  path: '/chat',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChannelsRoute = ChannelsRouteImport.update({
-  id: '/channels',
-  path: '/channels',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AutomationsRoute = AutomationsRouteImport.update({
-  id: '/automations',
-  path: '/automations',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UseCasesIndexRoute = UseCasesIndexRouteImport.update({
-  id: '/use-cases/',
-  path: '/use-cases/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndustriesIndexRoute = IndustriesIndexRouteImport.update({
-  id: '/industries/',
-  path: '/industries/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CasesIndexRoute = CasesIndexRouteImport.update({
@@ -123,16 +61,6 @@ const CasesIndexRoute = CasesIndexRouteImport.update({
   path: '/cases/',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/cases/index.lazy').then((d) => d.Route))
-const UseCasesSlugRoute = UseCasesSlugRouteImport.update({
-  id: '/use-cases/$slug',
-  path: '/use-cases/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndustriesSlugRoute = IndustriesSlugRouteImport.update({
-  id: '/industries/$slug',
-  path: '/industries/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CasesCaseIdRoute = CasesCaseIdRouteImport.update({
   id: '/cases/$caseId',
   path: '/cases/$caseId',
@@ -152,181 +80,97 @@ const CasesCaseIdDocumentsDocIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/automations': typeof AutomationsRoute
-  '/channels': typeof ChannelsRoute
-  '/chat': typeof ChatRoute
-  '/crm': typeof CrmRoute
   '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/knowledge': typeof KnowledgeRoute
   '/login': typeof LoginRoute
-  '/memory': typeof MemoryRoute
-  '/mission-control': typeof MissionControlRoute
   '/register': typeof RegisterRoute
   '/settings': typeof SettingsRoute
-  '/tasks': typeof TasksRoute
   '/update-password': typeof UpdatePasswordRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/cases/$caseId': typeof CasesCaseIdRoute
-  '/industries/$slug': typeof IndustriesSlugRoute
-  '/use-cases/$slug': typeof UseCasesSlugRoute
   '/cases/': typeof CasesIndexRoute
-  '/industries/': typeof IndustriesIndexRoute
-  '/use-cases/': typeof UseCasesIndexRoute
   '/cases/$caseId/documents/$docId': typeof CasesCaseIdDocumentsDocIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/automations': typeof AutomationsRoute
-  '/channels': typeof ChannelsRoute
-  '/chat': typeof ChatRoute
-  '/crm': typeof CrmRoute
   '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/knowledge': typeof KnowledgeRoute
   '/login': typeof LoginRoute
-  '/memory': typeof MemoryRoute
-  '/mission-control': typeof MissionControlRoute
   '/register': typeof RegisterRoute
   '/settings': typeof SettingsRoute
-  '/tasks': typeof TasksRoute
   '/update-password': typeof UpdatePasswordRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/cases/$caseId': typeof CasesCaseIdRoute
-  '/industries/$slug': typeof IndustriesSlugRoute
-  '/use-cases/$slug': typeof UseCasesSlugRoute
   '/cases': typeof CasesIndexRoute
-  '/industries': typeof IndustriesIndexRoute
-  '/use-cases': typeof UseCasesIndexRoute
   '/cases/$caseId/documents/$docId': typeof CasesCaseIdDocumentsDocIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/automations': typeof AutomationsRoute
-  '/channels': typeof ChannelsRoute
-  '/chat': typeof ChatRoute
-  '/crm': typeof CrmRoute
   '/demo': typeof DemoRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/knowledge': typeof KnowledgeRoute
   '/login': typeof LoginRoute
-  '/memory': typeof MemoryRoute
-  '/mission-control': typeof MissionControlRoute
   '/register': typeof RegisterRoute
   '/settings': typeof SettingsRoute
-  '/tasks': typeof TasksRoute
   '/update-password': typeof UpdatePasswordRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/cases/$caseId': typeof CasesCaseIdRoute
-  '/industries/$slug': typeof IndustriesSlugRoute
-  '/use-cases/$slug': typeof UseCasesSlugRoute
   '/cases/': typeof CasesIndexRoute
-  '/industries/': typeof IndustriesIndexRoute
-  '/use-cases/': typeof UseCasesIndexRoute
   '/cases/$caseId_/documents/$docId': typeof CasesCaseIdDocumentsDocIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/automations'
-    | '/channels'
-    | '/chat'
-    | '/crm'
     | '/demo'
     | '/forgot-password'
-    | '/knowledge'
     | '/login'
-    | '/memory'
-    | '/mission-control'
     | '/register'
     | '/settings'
-    | '/tasks'
     | '/update-password'
     | '/auth/confirm'
     | '/cases/$caseId'
-    | '/industries/$slug'
-    | '/use-cases/$slug'
     | '/cases/'
-    | '/industries/'
-    | '/use-cases/'
     | '/cases/$caseId/documents/$docId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/automations'
-    | '/channels'
-    | '/chat'
-    | '/crm'
     | '/demo'
     | '/forgot-password'
-    | '/knowledge'
     | '/login'
-    | '/memory'
-    | '/mission-control'
     | '/register'
     | '/settings'
-    | '/tasks'
     | '/update-password'
     | '/auth/confirm'
     | '/cases/$caseId'
-    | '/industries/$slug'
-    | '/use-cases/$slug'
     | '/cases'
-    | '/industries'
-    | '/use-cases'
     | '/cases/$caseId/documents/$docId'
   id:
     | '__root__'
     | '/'
-    | '/automations'
-    | '/channels'
-    | '/chat'
-    | '/crm'
     | '/demo'
     | '/forgot-password'
-    | '/knowledge'
     | '/login'
-    | '/memory'
-    | '/mission-control'
     | '/register'
     | '/settings'
-    | '/tasks'
     | '/update-password'
     | '/auth/confirm'
     | '/cases/$caseId'
-    | '/industries/$slug'
-    | '/use-cases/$slug'
     | '/cases/'
-    | '/industries/'
-    | '/use-cases/'
     | '/cases/$caseId_/documents/$docId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AutomationsRoute: typeof AutomationsRoute
-  ChannelsRoute: typeof ChannelsRoute
-  ChatRoute: typeof ChatRoute
-  CrmRoute: typeof CrmRoute
   DemoRoute: typeof DemoRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
-  KnowledgeRoute: typeof KnowledgeRoute
   LoginRoute: typeof LoginRoute
-  MemoryRoute: typeof MemoryRoute
-  MissionControlRoute: typeof MissionControlRoute
   RegisterRoute: typeof RegisterRoute
   SettingsRoute: typeof SettingsRoute
-  TasksRoute: typeof TasksRoute
   UpdatePasswordRoute: typeof UpdatePasswordRoute
   AuthConfirmRoute: typeof AuthConfirmRoute
   CasesCaseIdRoute: typeof CasesCaseIdRoute
-  IndustriesSlugRoute: typeof IndustriesSlugRoute
-  UseCasesSlugRoute: typeof UseCasesSlugRoute
   CasesIndexRoute: typeof CasesIndexRoute
-  IndustriesIndexRoute: typeof IndustriesIndexRoute
-  UseCasesIndexRoute: typeof UseCasesIndexRoute
   CasesCaseIdDocumentsDocIdRoute: typeof CasesCaseIdDocumentsDocIdRoute
 }
 
@@ -337,13 +181,6 @@ declare module '@tanstack/react-router' {
       path: '/update-password'
       fullPath: '/update-password'
       preLoaderRoute: typeof UpdatePasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tasks': {
-      id: '/tasks'
-      path: '/tasks'
-      fullPath: '/tasks'
-      preLoaderRoute: typeof TasksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -360,32 +197,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/mission-control': {
-      id: '/mission-control'
-      path: '/mission-control'
-      fullPath: '/mission-control'
-      preLoaderRoute: typeof MissionControlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/memory': {
-      id: '/memory'
-      path: '/memory'
-      fullPath: '/memory'
-      preLoaderRoute: typeof MemoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/knowledge': {
-      id: '/knowledge'
-      path: '/knowledge'
-      fullPath: '/knowledge'
-      preLoaderRoute: typeof KnowledgeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -402,34 +218,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/crm': {
-      id: '/crm'
-      path: '/crm'
-      fullPath: '/crm'
-      preLoaderRoute: typeof CrmRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/chat': {
-      id: '/chat'
-      path: '/chat'
-      fullPath: '/chat'
-      preLoaderRoute: typeof ChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/channels': {
-      id: '/channels'
-      path: '/channels'
-      fullPath: '/channels'
-      preLoaderRoute: typeof ChannelsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/automations': {
-      id: '/automations'
-      path: '/automations'
-      fullPath: '/automations'
-      preLoaderRoute: typeof AutomationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -437,39 +225,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/use-cases/': {
-      id: '/use-cases/'
-      path: '/use-cases'
-      fullPath: '/use-cases/'
-      preLoaderRoute: typeof UseCasesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/industries/': {
-      id: '/industries/'
-      path: '/industries'
-      fullPath: '/industries/'
-      preLoaderRoute: typeof IndustriesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/cases/': {
       id: '/cases/'
       path: '/cases'
       fullPath: '/cases/'
       preLoaderRoute: typeof CasesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/use-cases/$slug': {
-      id: '/use-cases/$slug'
-      path: '/use-cases/$slug'
-      fullPath: '/use-cases/$slug'
-      preLoaderRoute: typeof UseCasesSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/industries/$slug': {
-      id: '/industries/$slug'
-      path: '/industries/$slug'
-      fullPath: '/industries/$slug'
-      preLoaderRoute: typeof IndustriesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cases/$caseId': {
@@ -498,27 +258,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AutomationsRoute: AutomationsRoute,
-  ChannelsRoute: ChannelsRoute,
-  ChatRoute: ChatRoute,
-  CrmRoute: CrmRoute,
   DemoRoute: DemoRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
-  KnowledgeRoute: KnowledgeRoute,
   LoginRoute: LoginRoute,
-  MemoryRoute: MemoryRoute,
-  MissionControlRoute: MissionControlRoute,
   RegisterRoute: RegisterRoute,
   SettingsRoute: SettingsRoute,
-  TasksRoute: TasksRoute,
   UpdatePasswordRoute: UpdatePasswordRoute,
   AuthConfirmRoute: AuthConfirmRoute,
   CasesCaseIdRoute: CasesCaseIdRoute,
-  IndustriesSlugRoute: IndustriesSlugRoute,
-  UseCasesSlugRoute: UseCasesSlugRoute,
   CasesIndexRoute: CasesIndexRoute,
-  IndustriesIndexRoute: IndustriesIndexRoute,
-  UseCasesIndexRoute: UseCasesIndexRoute,
   CasesCaseIdDocumentsDocIdRoute: CasesCaseIdDocumentsDocIdRoute,
 }
 export const routeTree = rootRouteImport

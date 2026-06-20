@@ -26,9 +26,7 @@ const AUTH_ONLY_ROUTES = ["/login", "/register"];
 export function isPublicRoute(pathname: string): boolean {
   return (
     PUBLIC_ROUTES.includes(pathname) ||
-    pathname.startsWith("/auth/") ||
-    pathname.startsWith("/use-cases") ||
-    pathname.startsWith("/industries")
+    pathname.startsWith("/auth/")
   );
 }
 

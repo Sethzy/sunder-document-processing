@@ -1,91 +1,86 @@
 /**
- * Hero section with headline, CTA button, and promo video.
+ * Hero section for the claims document operations landing page.
  */
-import { useState, useEffect, useMemo } from 'react'
+import { CheckCircle2, FileSearch, ShieldCheck } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
 import { Container } from '@/components/landing/Container'
-import { PromoVideo } from '@/components/landing/PromoVideo'
+import reviewScreenshot from '@/assets/landing/screenshots/verifyv1.png'
+
+const proofPoints = [
+  {
+    label: 'Source-visible review',
+    icon: FileSearch,
+  },
+  {
+    label: 'Citation-backed fields',
+    icon: CheckCircle2,
+  },
+  {
+    label: 'Human approval required',
+    icon: ShieldCheck,
+  },
+]
 
 export function Hero() {
-  const [taskIndex, setTaskIndex] = useState(0)
-  const tasks = useMemo(
-    () => ['processing invoices', 'extracting data', 'excel reconciliation', 'organising pdfs'],
-    []
-  )
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setTaskIndex((prev) => (prev + 1) % tasks.length)
-    }, 2000)
-    return () => clearTimeout(timeout)
-  }, [taskIndex, tasks])
-
   return (
-    <div className="relative overflow-hidden bg-background pt-28 pb-0 sm:pt-36">
-      <div className="grid-pattern absolute inset-0 opacity-50" />
-      <div className="glow-accent absolute -top-24 -left-20 h-[500px] w-[500px]" />
-      <div className="glow-accent absolute top-1/2 -right-20 h-[600px] w-[600px] opacity-40" />
-
-      <Container className="relative">
-        <div className="flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-sunder-green/10 bg-sunder-green/5 px-4 py-1.5 text-sm font-medium text-sunder-green mb-8 transition-colors hover:bg-sunder-green/10 sm:px-5 sm:text-base">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sunder-green-light opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-sunder-green"></span>
-            </span>
-            Made for Singapore SMEs
+    <section className="relative overflow-hidden bg-white pt-28 sm:pt-32">
+      <Container>
+        <div className="grid items-center gap-12 pb-16 lg:grid-cols-[0.86fr_1.14fr] lg:gap-14 lg:pb-20">
+          <div>
+            <div className="inline-flex items-center rounded-full border border-sunder-green/20 bg-sunder-green/5 px-4 py-1.5 text-sm font-medium text-sunder-green">
+              Built for messy claim packets
+            </div>
+            <h1 className="mt-7 max-w-3xl font-serif text-4xl font-medium tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl">
+              AI document operations for claims teams.
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-700">
+              Upload scattered legal, medical, and financial documents. Sunder
+              classifies the packet, extracts structured evidence, and keeps the
+              source page beside every field a reviewer needs to trust.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                to="/demo"
+                className="inline-flex items-center justify-center rounded-md bg-sunder-green px-5 py-3 text-sm font-semibold text-white transition hover:bg-sunder-green-dark focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sunder-green"
+              >
+                Book a demo
+              </Link>
+              <a
+                href="#workflow"
+                className="inline-flex items-center justify-center rounded-md border border-zinc-300 px-5 py-3 text-sm font-semibold text-zinc-800 transition hover:border-zinc-400 hover:bg-zinc-50 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sunder-green"
+              >
+                See the workflow
+              </a>
+            </div>
+            <dl className="mt-10 grid gap-3 sm:grid-cols-3">
+              {proofPoints.map((item) => (
+                <div key={item.label} className="flex items-center gap-2 text-sm text-zinc-700">
+                  <item.icon className="h-4 w-4 text-sunder-green" />
+                  <dt>{item.label}</dt>
+                </div>
+              ))}
+            </dl>
           </div>
 
-          <h1 className="max-w-5xl font-serif text-5xl font-medium tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-8xl">
-            Your assistant for
-            <span className="relative flex w-[120%] -ml-[10%] justify-center overflow-y-hidden text-center pt-1 pb-2 md:pt-2 md:pb-4">
-                &nbsp;
-                {tasks.map((task, index) => (
-                  <motion.span
-                    key={index}
-                    className="absolute italic text-sunder-green whitespace-nowrap"
-                    initial={{ opacity: 0, y: "-100" }}
-                    transition={{ type: "spring", stiffness: 50 }}
-                    animate={
-                      taskIndex === index
-                        ? {
-                            y: 0,
-                            opacity: 1,
-                          }
-                        : {
-                            y: taskIndex > index ? -150 : 150,
-                            opacity: 0,
-                          }
-                    }
-                  >
-                    {task}
-                  </motion.span>
-                ))}
-              </span>
-          </h1>
-
-          <p className="mt-6 max-w-xl text-base leading-7 text-muted-foreground px-2 sm:mt-6 sm:max-w-2xl sm:text-lg sm:leading-8 sm:px-0">
-            Upload your documents. Invoices, receipts, contracts, anything.{' '}
-            <br className="hidden sm:inline" />
-            Come back to an organized Excel report. No prompts needed.
-          </p>
-
-          <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-4 sm:mt-10">
-            <Link
-              to="/demo"
-              className="press-effect rounded-full bg-sunder-green px-10 py-4 text-base font-semibold text-white shadow-lg shadow-sunder-green/20 transition hover:shadow-sunder-green/30 hover:scale-[1.02] active:scale-[0.98]"
-            >
-              Book a demo
-            </Link>
-          </div>
-
-          {/* Promo video - peeks at the fold */}
-          <div className="mt-16 w-full px-2 pb-16 sm:px-4 sm:mt-20 sm:pb-24 lg:mt-24">
-            <PromoVideo />
+          <div className="relative">
+            <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm">
+              <div className="flex items-center gap-2 border-b border-zinc-200 bg-zinc-50 px-4 py-3">
+                <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+                <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
+                <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                <span className="ml-3 text-xs font-medium text-zinc-500">
+                  Citation review workspace
+                </span>
+              </div>
+              <img
+                src={reviewScreenshot}
+                alt="Sunder document review workspace showing a source PDF beside extracted fields and citations"
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
       </Container>
-    </div>
+    </section>
   )
 }

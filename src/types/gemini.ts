@@ -76,11 +76,11 @@ export function createSplitterSchema(tagIds: string[]) {
 
 /**
  * Schema for a single document split.
- * Chain-of-thought: observation MUST be populated first for accuracy.
+ * The observation field stores a concise evidence rationale for reviewer audit.
  */
 export const SplitSchema = z
   .object({
-    /** CoT reasoning - MUST be populated first */
+    /** Reviewer-facing evidence rationale. */
     observation: z.string().min(1),
     /** First page of this subdocument (1-indexed) */
     startPage: z.coerce.number().int().positive(),
@@ -255,4 +255,3 @@ export function mapSplitterResponseToDocument(
     gemini_response: response,
   };
 }
-

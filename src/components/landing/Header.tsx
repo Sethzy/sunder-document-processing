@@ -87,9 +87,9 @@ function MobileNavigation() {
         <SheetTitle className="sr-only">Navigation menu</SheetTitle>
         <SheetDescription className="sr-only">Main site navigation links</SheetDescription>
         <nav className="flex flex-col text-lg tracking-tight text-foreground">
-          <MobileNavLink href="#features">Features</MobileNavLink>
-          <MobileNavLink href="#testimonials">Testimonials</MobileNavLink>
-          <MobileNavLink href="#pricing">Pricing</MobileNavLink>
+          <MobileNavLink href="#workflow">Workflow</MobileNavLink>
+          <MobileNavLink href="#review">Review</MobileNavLink>
+          <MobileNavLink href="#demo-limitations">Limitations</MobileNavLink>
           <hr className="m-2 border-border/40" />
           <MobileNavLink href="/login">Sign in</MobileNavLink>
         </nav>
@@ -110,9 +110,9 @@ export function Header() {
 
         {/* Desktop nav links */}
         <div className="hidden items-center gap-x-6 md:flex">
-          <NavLink href="#features">Features</NavLink>
-          <NavLink href="#testimonials">Testimonials</NavLink>
-          <NavLink href="#pricing">Pricing</NavLink>
+          <NavLink href="#workflow">Workflow</NavLink>
+          <NavLink href="#review">Review</NavLink>
+          <NavLink href="#demo-limitations">Limitations</NavLink>
         </div>
         <div className="hidden h-4 w-px bg-zinc-200 md:block" />
 

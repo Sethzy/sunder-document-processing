@@ -16,20 +16,29 @@
 
 # Why Sunder
 
-Claims review is not hard because one PDF is hard to read. It is hard because the source material arrives as a messy folder: medical bills, medical reports, income documents, duplicate scans, combined PDFs, missing fields, and numbers that need to be defensible.
+Claims review is not hard because one PDF is hard to read. It is hard because the
+source material arrives as a messy folder: medical bills, medical reports, income
+documents, duplicate scans, combined PDFs, missing fields, and numbers that need
+to be defensible.
 
-Most AI document demos stop at extraction. Sunder is built around the next step: giving a human reviewer enough structure, source traceability, and workflow state to trust what happened. The product keeps the original documents visible, turns review policy into a checklist, and treats AI output as evidence to verify rather than magic to accept.
+Most AI document demos stop at extraction. Sunder is built around the next step:
+giving a human reviewer enough structure, source traceability, and workflow state
+to trust what happened. The product keeps the original documents visible, turns
+review policy into a checklist, and treats AI output as evidence to verify rather
+than magic to accept.
 
 ## Quick Start
 
 ```bash
 nvm use 24
-npm install
+npm ci
 cp .env.example .env.local
 npm run dev
 ```
 
-Fill `.env.local` with your own Supabase, Gemini, Extend AI, and Anthropic credentials. Public `VITE_` variables are safe for browser use; service-role and AI provider keys must stay server-side in Vercel or local env files.
+Fill `.env.local` with your own Supabase, Gemini, Extend AI, and Anthropic
+credentials. Public `VITE_` variables are safe for browser use. Service-role and
+AI provider keys must stay server-side in Vercel or local env files.
 
 For document-processing API routes, use Vercel Functions rather than plain Vite:
 
@@ -37,47 +46,63 @@ For document-processing API routes, use Vercel Functions rather than plain Vite:
 VITE_ENABLE_LOCAL_GEMINI_PROCESSING=true vercel dev
 ```
 
-Private legal and medical PDFs are not committed to this repository. Demo documents live outside git and must be checked for redaction before any recording or live walkthrough.
+Private legal and medical PDFs are not committed to this repository. Demo
+documents live outside git and must be checked for redaction before any recording
+or live walkthrough.
 
 ## Philosophy
 
-Evidence over theater. Sunder should make the review work inspectable: source documents, citations, field values, duplicate flags, processing status, and generated artifacts.
+Evidence over theater. Sunder should make the review work inspectable: source
+documents, citations, field values, duplicate flags, processing status, and
+generated artifacts.
 
-Human in control. AI classifies, splits, extracts, and flags. The reviewer still decides what is accepted, what is missing, and what should be escalated.
+Human in control. AI classifies, splits, extracts, and flags. The reviewer still
+decides what is accepted, what is missing, and what should be escalated.
 
-Workflow before chat. The core product is a dossier workspace, not a generic assistant shell. Chat and analyst features are useful only when they operate over structured case evidence.
+Workflow before chat. The core product is a dossier workspace, not a generic
+assistant shell. Chat and analyst features are useful only when they operate over
+structured case evidence.
 
-Built for messy inputs. The happy path assumes real-world claim packets: scans, photos, combined PDFs, duplicates, partial uploads, and documents arriving over time.
+Built for messy inputs. The happy path assumes real-world claim packets: scans,
+photos, combined PDFs, duplicates, partial uploads, and documents arriving over
+time.
 
 ## What It Supports
 
-Multi-file intake - upload scattered PDFs and images into a case workspace.
-
-Document triage - classify files, write reviewer-friendly descriptions, and track processing status.
-
-PDF splitting - turn combined PDFs into logical review sections instead of treating the whole file as one blob.
-
-Duplicate detection - flag repeated material so reviewers are less likely to double-count evidence.
-
-Structured extraction - extract fields for medical expenses, medical reports, income documents, and configured claim schemas.
-
-Citation review - show extracted values beside the source document so reviewers can verify the evidence.
-
-Rules and validation - surface missing fields, payer classifications, and review issues as checklist-style work.
-
-Report generation - produce downstream claim/report artifacts from reviewed case data.
+- Multi-file intake: upload scattered PDFs and images into a case workspace.
+- Document triage: classify files, write reviewer-friendly descriptions, and
+  track processing status.
+- PDF splitting: turn combined PDFs into logical review sections instead of
+  treating the whole file as one blob.
+- Duplicate detection: flag repeated material so reviewers are less likely to
+  double-count evidence.
+- Structured extraction: extract fields for medical expenses, medical reports,
+  income documents, and configured claim schemas.
+- Citation review: show extracted values beside the source document so reviewers
+  can verify the evidence.
+- Rules and validation: surface missing fields, payer classifications, and review
+  issues as checklist-style work.
+- Report generation: produce downstream claim/report artifacts from reviewed case
+  data.
 
 ## System Shape
 
 Sunder is easiest to understand as a five-stage evidence pipeline:
 
-1. **Ingest** - a case workspace collects source documents, stores files, records metadata, and checks duplicate hashes.
-2. **Triage** - Gemini classifies files, describes them for reviewers, and splits combined PDFs into logical document sections.
-3. **Extract** - typed document sections are routed to extraction processors for structured fields, citations, confidence metadata, and dashboard traces.
-4. **Review** - humans inspect fields beside the source documents, edit values, dismiss validation issues, and mark work as reviewed.
-5. **Generate** - reviewed case data becomes report artifacts and exportable work product.
+1. **Ingest**: a case workspace collects source documents, stores files, records
+   metadata, and checks duplicate hashes.
+2. **Triage**: Gemini classifies files, describes them for reviewers, and splits
+   combined PDFs into logical document sections.
+3. **Extract**: typed document sections are routed to extraction processors for
+   structured fields, citations, confidence metadata, and dashboard traces.
+4. **Review**: humans inspect fields beside the source documents, edit values,
+   dismiss validation issues, and mark work as reviewed.
+5. **Generate**: reviewed case data becomes report artifacts and exportable work
+   product.
 
-The important boundary is intentional: Sunder prepares review packs and first-draft operational artifacts. It does not replace legal judgment, decide liability, or treat AI output as final without human review.
+The important boundary is intentional: Sunder prepares review packs and
+first-draft operational artifacts. It does not replace legal judgment, decide
+liability, or treat AI output as final without human review.
 
 ## Demo Flow
 
@@ -91,6 +116,18 @@ The current walkthrough uses a private seeded legal claim case:
 6. Generate or inspect report artifacts from the case library.
 
 See [DEMO.md](./DEMO.md) for a public-safe walkthrough guide.
+
+## Demo Limitations
+
+- Demo documents are not included in git because claim files can contain private
+  legal, medical, and financial information.
+- The repository is configured for a real provider-backed workflow. Full document
+  processing requires Supabase, Gemini, Extend AI, Anthropic, and Vercel
+  environment variables.
+- AI output is draft evidence, not a final decision. Reviewers must verify values,
+  citations, missing fields, and generated artifacts before use.
+- Sunder does not provide legal advice, decide liability, or replace claim
+  strategy.
 
 ## Architecture
 
@@ -108,7 +145,11 @@ flowchart LR
   Review --> Reports["Report artifacts"]
 ```
 
-The frontend is a React and TanStack workspace backed by Supabase. Vercel Functions coordinate document triage and extraction. Gemini handles classification and splitting, Extend AI handles structured extraction and citations, and Supabase stores case records, source files, split state, validation state, reviewer edits, and generated artifacts.
+The frontend is a React and TanStack workspace backed by Supabase. Vercel
+Functions coordinate document triage and extraction. Gemini handles
+classification and splitting, Extend AI handles structured extraction and
+citations, and Supabase stores case records, source files, split state,
+validation state, reviewer edits, and generated artifacts.
 
 ## Stack
 
@@ -125,23 +166,33 @@ The frontend is a React and TanStack workspace backed by Supabase. Vercel Functi
 
 ## Key Files
 
-- `src/routes/cases/` - case list, case detail, and document review routes
-- `src/components/documents/` - upload, file table, extraction review, viewer, and split panes
-- `src/components/docgen/` - report history and generated artifact surfaces
-- `src/config/clients/hoh-law.ts` - Hoh Law-style claim review configuration
-- `src/clients/hoh-law/` - client-specific schemas and report logic
-- `supabase/migrations/` - database schema recovery and portfolio demo migrations
-- `DEMO.md` - public demo walkthrough guide
-- `PRODUCT.md` - product principles and design constraints
+- `src/routes/cases/`: case list, case detail, and document review routes
+- `src/components/documents/`: upload, file table, extraction review, viewer, and
+  split panes
+- `src/components/docgen/`: report history and generated artifact surfaces
+- `src/config/clients/hoh-law.ts`: Hoh Law-style demo claim review
+  configuration
+- `src/clients/hoh-law/`: demo schemas and report logic for claim review
+- `supabase/migrations/`: database schema recovery and portfolio demo migrations
+- `DEMO.md`: public demo walkthrough guide
+- `PRODUCT.md`: product principles and design constraints
 
 ## Health Checks
 
 ```bash
-npm run build
-npm run test:run
 npm run lint
+npm run test:run
+npm run build
 ```
 
 ## Repository Notes
 
-This repository is intended as a portfolio/open-source reference implementation. Do not commit `.env.local`, local Supabase cache files, generated build output, private demo PDFs, or recording workspaces.
+This repository is intended as a portfolio/open-source reference implementation.
+Do not commit `.env.local`, local Supabase cache files, generated build output,
+private demo PDFs, or recording workspaces.
+
+The tracked Hoh Law files are the public demo configuration surface. Private
+intake notes, transcripts, checklists, sample documents, and generated media are
+kept out of git. Provider processor IDs are deployment-specific routing
+references, not API credentials; use your own Supabase project, provider keys,
+and extraction processors for a fresh deployment.

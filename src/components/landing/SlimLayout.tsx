@@ -72,8 +72,8 @@ export function SlimLayout({ children }: { children: React.ReactNode }) {
               <FeatureItem
                 index={1}
                 icon={<CheckCircleIcon />}
-                title="99%+ extraction accuracy"
-                description="AI-powered precision with expert human review."
+                title="Draft evidence, not autopilot"
+                description="Reviewers verify citations before work product is accepted."
               />
               <FeatureItem
                 index={2}

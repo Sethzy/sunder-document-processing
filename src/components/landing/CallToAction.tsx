@@ -22,10 +22,11 @@ export function CallToAction() {
           className={`mx-auto max-w-lg text-center scroll-reveal ${isVisible ? 'is-visible' : ''}`}
         >
           <h2 className="font-serif text-2xl tracking-tight text-white sm:text-3xl md:text-4xl">
-            Ready to make the <span className="italic">hire?</span>
+            Review a redacted claim packet end to end.
           </h2>
           <p className="mt-4 text-base tracking-tight text-emerald-100 sm:mt-6 sm:text-lg">
-            Sunder handles the document work. Your team handles the decisions.
+            See upload, triage, citation review, validation, and report output
+            in one focused walkthrough.
           </p>
           <Button
             href="/demo"

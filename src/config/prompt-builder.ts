@@ -121,7 +121,7 @@ Available types: ${tagList}
 
 ## OBSERVATION GUIDELINES
 
-For every split, the observation field must be populated FIRST. This chain-of-thought reasoning improves accuracy.
+For every split, the observation field must be populated FIRST. This brief evidence rationale improves review consistency.
 
 Your observation should reference:
 1. Split boundaries — Why this page starts a new subdocument
